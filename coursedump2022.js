@@ -1,4 +1,5 @@
 url = window.location.toString();
+const MAX_ERR_ABORT = 5;
 course = url.split("/");
 function sleep(ms) {
 	return new Promise(resolve => setTimeout(resolve, ms));
@@ -11,6 +12,7 @@ next = true;
 //https://gist.github.com/baroxyton/01a53533ff49a62b5a94dd8b26f38d31
 result = "";
 (async function () {
+	let err_count = 0;
 	for (let i = 1; next; i++) {
 		let empty_set_err = false;
 		try {
@@ -27,18 +29,23 @@ result = "";
 				empty_set_err = true;
 			}
 			// Escape double quotes and commas
-			result += response.learnables.map(learnable => `"${learnable.learning_element.replace('"', '""')}","${learnable.definition_element.replace('"', '""')}"`).join("\n") + "\n"
+			result += response.learnables.map(learnable => `"${learnable.learning_element.replace('"', '""')}","${learnable.definition_element.replace('"', '""')}"`).join("\n") + "\n";
+			err_count = 0;
 		} catch (error) {
+			console.log(err_count);
 			if (empty_set_err) continue;
-			next = false;
+			err_count++;
+			if (err_count >= MAX_ERR_ABORT) {
+				next = false;
+			}
 		}
 	}
 
 	var hiddenElement = document.createElement('a');
-	hiddenElement.href = 'data:text/csv;charset=utf-8;base64,' + btoa(result);
+	hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(result);
 	hiddenElement.target = '_blank';
 
 	hiddenElement.download = course[5] + '.csv';
 	hiddenElement.click();
 
-})()
+})();
