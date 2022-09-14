@@ -31,7 +31,7 @@ result = "";
 	}
 
 	var hiddenElement = document.createElement('a');
-	hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(result);
+	hiddenElement.href = 'data:text/csv;charset=utf-8;base64,' + btoa(result);
 	hiddenElement.target = '_blank';
 
 	hiddenElement.download = course[5] + '.csv';
