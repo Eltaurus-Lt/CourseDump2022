@@ -1,5 +1,8 @@
 url = window.location.toString();
 course = url.split("/");
+function sleep(ms) {
+	return new Promise(resolve => setTimeout(resolve, ms));
+}
 if (course[3] === "course") { id = course[4]; } else { alert("Please go to a Memrise course page first"); throw ''; };
 
 next = true;
@@ -11,6 +14,7 @@ result = "";
 	for (let i = 1; next; i++) {
 		let empty_set_err = false;
 		try {
+			await sleep(200);
 			// get CSRF header
 			token = document.cookie.split(" ").find(cookie => cookie.includes("csrftoken")).split(/[=;]/g)[1];
 			response = await (await fetch("https://app.memrise.com/v1.18/learning_sessions/preview/", {
