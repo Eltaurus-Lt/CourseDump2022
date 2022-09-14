@@ -1,6 +1,6 @@
 url = window.location.toString();
 course = url.split("/");
-if (course[3] === "course") {id = course[4];} else {alert("not a course page");throw '';};
+if (course[3] === "course") {id = course[4];} else {alert("Please go to a Memrise course page first");throw '';};
 
 next = true;
 
@@ -23,9 +23,6 @@ for (let i = 1; next; i++) {
 		next = false;
 	}
 }
-//document.body.innerText = result;
-
-document.write(result);  
   
 var hiddenElement = document.createElement('a');  
 hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(result);  
