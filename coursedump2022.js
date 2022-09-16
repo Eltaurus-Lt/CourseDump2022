@@ -1,3 +1,6 @@
+let media_asked = false;
+let download_media = false;
+let anki_media = false;
 url = window.location.toString();
 const MAX_ERR_ABORT = 5;
 course = url.split("/");
@@ -28,10 +31,26 @@ result = "";
 			if (response.code == "PREVIEW_DOESNT_LOAD") {
 				empty_set_err = true;
 			}
+			// Check for media
+			if(!media_asked && response.learnables.find(learnable=>{return (learnable.screens["1"].audio||learnable.screens["1"].video)})){
+				media_asked = true;
+				
+				const enable_downloads = confirm("Embedded media was detected. Would you like to download it?");
+				if(enable_downloads){
+					download_media = true;
+					if(confirm("Would you like to intergrate the media with Anki?")){
+						anki_media = true;
+					}
+				}
+			}
 			// Escape double quotes and commas
-			result += response.learnables.map(learnable => `"${learnable.learning_element.replace('"', '""')}","${learnable.definition_element.replace('"', '""')}"`).join("\n") + "\n";
+			result += response.learnables.map(learnable =>{
+				return `"${learnable.learning_element.replace('"', '""')}","${learnable.definition_element.replace('"', '""')}"`
+			}).join("\n") + "\n";
+			
 			err_count = 0;
 		} catch (error) {
+			console.log(error)
 			console.log(err_count);
 			if (empty_set_err) continue;
 			err_count++;
