@@ -14,7 +14,8 @@
   },
   "permissions": [
 	"activeTab",
-	"tabs"
+	"tabs",
+	"downloads"
 	],
   "background" : {
     "scripts" : ["background.js"]
