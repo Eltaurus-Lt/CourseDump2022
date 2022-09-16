@@ -1,7 +1,9 @@
 let media_asked = false;
 let download_media = false;
 let anki_media = false;
-url = window.location.toString();
+let media_urls = [];
+let url = window.location.toString();
+let id;
 const MAX_ERR_ABORT = 5;
 course = url.split("/");
 function sleep(ms) {
@@ -45,6 +47,22 @@ result = "";
 			}
 			// Escape double quotes and commas
 			result += response.learnables.map(learnable =>{
+				let mediaUrl;
+				if(download_media){
+					if(learnable.screens["1"].audio){
+						mediaUrl = learnable.screens["1"].audio.value[0].normal;
+					}
+					if(learnable.screens["1"].video){
+						mediaUrl = learnable.screens["1"].video.value[0];
+					}
+				}
+				if(mediaUrl){
+					media_urls.push(mediaUrl);
+				}
+				if(anki_media && mediaUrl){
+					let filename = `${id}_media/${mediaUrl.split("/").slice(-1)}`; 
+					return `"${learnable.learning_element.replace('"', '""')} [sound:${filename}]","${learnable.definition_element.replace('"', '""')}"`
+				}
 				return `"${learnable.learning_element.replace('"', '""')}","${learnable.definition_element.replace('"', '""')}"`
 			}).join("\n") + "\n";
 			
@@ -59,6 +77,7 @@ result = "";
 			}
 		}
 	}
+	console.log(media_urls)
 
 	var hiddenElement = document.createElement('a');
 	hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(result);
