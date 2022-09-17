@@ -78,7 +78,7 @@ result = "";
 				}
 				if (anki_media && mediaUrl) {
 					let filename = `${id}_media/${mediaUrl.split("/").slice(-1)}`;
-					return `"${learnable.learning_element.replace('"', '""')} [sound:${filename}]","${learnable.definition_element.replace('"', '""')}"`
+					return `"${learnable.learning_element.replace('"', '""')}" [sound:${filename}],"${learnable.definition_element.replace('"', '""')}"`
 				}
 				return `"${learnable.learning_element.replace('"', '""')}","${learnable.definition_element.replace('"', '""')}"`
 			}).join("\n") + "\n";
@@ -109,5 +109,8 @@ result = "";
 			folder: `${id}_media`
 		};
 		chrome.runtime.sendMessage(param);
+		if (anki_media) {
+			anki_media_help()
+		}
 	}
 })();
