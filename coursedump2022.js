@@ -102,4 +102,12 @@ result = "";
 
 	hiddenElement.download = course[5] + '.csv';
 	hiddenElement.click();
+
+	if (download_media) {
+		var param = {
+			collection: media_urls,
+			folder: `${id}_media`
+		};
+		chrome.runtime.sendMessage(param);
+	}
 })();
