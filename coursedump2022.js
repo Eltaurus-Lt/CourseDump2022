@@ -57,7 +57,7 @@ function sleep(ms) {
 					learnable.screens["1"].audio.value.map(audio_item => {temp_audio_urls.push(audio_item.normal)});
 					media_download_urls.push(...temp_audio_urls);
 				}
-				row.push(`"` + temp_audio_urls.map(url => `[sound:${name}_media/${url.split("/").slice(-1)}]`).join("") + `"`);
+				row.push(`"` + temp_audio_urls.map(url => `[sound:${url.split("/").slice(-1)}]`).join("") + `"`);
 
 				//video
 				let temp_video_urls = [];
@@ -66,7 +66,7 @@ function sleep(ms) {
 					learnable.screens["1"].video.value.map(video_item => {temp_video_urls.push(video_item)});
 					media_download_urls.push(...temp_video_urls);
 				}
-				row.push(`"` + temp_video_urls.map(url => `[sound:${name}_media/${url.split("/").slice(-1)}]`).join("") + `"`);
+				row.push(`"` + temp_video_urls.map(url => `[sound:${url.split("/").slice(-1)}]`).join("") + `"`);
 					
 				table.push(row);
 			});
@@ -100,11 +100,6 @@ function sleep(ms) {
 	hiddenElement.download = name + '.csv';
 	hiddenElement.click();
 
-	//help
-	if (confirm('Would you like some help with Anki integration?')) {
-		window.open('https://github.com/Eltaurus-Lt/CourseDump2022#importing-in-anki', '_blank').focus();
-	};
-
 	//downloading audio and video files
 	if (download_media) {
 
@@ -114,5 +109,10 @@ function sleep(ms) {
 		};
 		chrome.runtime.sendMessage(param);
 	}
+
+	//help
+	if (confirm('Would you like some help with Anki integration?')) {
+		window.open('https://github.com/Eltaurus-Lt/CourseDump2022#importing-in-anki', '_blank').focus();
+	};
 
 })();
