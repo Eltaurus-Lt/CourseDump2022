@@ -11,7 +11,7 @@ This Google Chrome extension downloads Memrise courses (media included) and outp
 
 ## Usage
 1. Make sure you are logged in on [memrise.com](https://memrise.com/)
-2. Navigate to a course's main page ([example](https://app.memrise.com/course/1105/speak-esperanto-like-a-nativetm-1/))
+2. Navigate to any page belonging to a course you want to download ([example-1](https://app.memrise.com/course/1105/speak-esperanto-like-a-nativetm-1/), [example-2](https://app.memrise.com/course/2021573/french-1/3/))
 3. ![Chrome extensions icon](https://user-images.githubusercontent.com/4579891/196231354-fc8bb79d-96cf-4930-a9f6-2292fbdbc836.jpg) -> ![CourseDump2022 extension menu entry](https://user-images.githubusercontent.com/4579891/196231410-6530011e-4a53-487e-8cfc-9099181adfc1.jpg)
 
 ## Importing in Anki
@@ -21,5 +21,4 @@ This Google Chrome extension downloads Memrise courses (media included) and outp
 3. `Deck` -> `Add` -> Enter a name -> `Ok`
 4. `Import` 
 
-
-Meanwhile, if you have questions regarding the extention or need any help using the data it produces in Anki, please leave a comment in this thread: [Memrise2Anki Replacement](https://community.memrise.com/t/memrise2anki-replacement/77107)
+If you have further questions regarding the extention or need any help with using the data it produces in Anki, please leave a comment in this thread: [Memrise2Anki Replacement](https://community.memrise.com/t/memrise2anki-replacement/77107)
