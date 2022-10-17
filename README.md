@@ -1,6 +1,8 @@
 # CourseDump2022
 Google Chrome extension to download Memrise courses as csv files
 
+## Downloading from GitHub
+
 ## Installation
 
 ## Use
