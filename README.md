@@ -27,7 +27,7 @@ When the scanning of the course is finished (this might take up to several minut
 
 ### Simple import without media
 1. In *Anki* click `File` and then `Import`
-2. Navigate to the `.csv` file created after [step 3 of course downloading](https://github.com/Eltaurus-Lt/CourseDump2022#downloading-a-memrise-course)
+2. Navigate to the `.csv` file created after [step 3 of downloading a course](https://github.com/Eltaurus-Lt/CourseDump2022#downloading-a-memrise-course)
 3. Adjust the import settings:
     1. Indicate the Note Type you want to use in the `Type` field (if you don't have any particular Note Type in mind, the Basic one will do)
     2. In the `Deck` field select the Deck you want cards to go into (you can create a new one from this menu by clicking a deck name after the `Deck`field and then `Add`)
@@ -35,9 +35,9 @@ When the scanning of the course is finished (this might take up to several minut
   ![image](https://user-images.githubusercontent.com/93875472/196941455-b0a3a3e7-6e33-4510-aff7-fbf079dc7915.png)</p>
   (if you downloaded the `.csv` table with media, but don't want to use that media in Anki, just select `Change` -> `Ignore field` for any fields after the first two)
 
-After you click the `Import` button you should see a message indicating how many notes have been improted:<p>
+After you click the `Import` button you should see a message indicating how many notes have been imported:<p>
   ![Anki Import message](https://user-images.githubusercontent.com/93875472/196944166-5fbbfec8-2415-46cd-919a-73330ca67dbb.png)</p>
-You can compare this number against the total number of words in the Memrise course you've been downloading. You can also check out the imported notes after clicking `Close` by going to `Browse` and selecting your deck in the decks list on the left side ![Anki Browser Decks list](https://user-images.githubusercontent.com/93875472/196944394-95712a57-c13c-4bf2-bce3-574e55c02a1b.png)
+You can compare this number against the total number of words in the Memrise course you've been downloading. You can also check out the imported notes after clicking `Close` by going to `Browse` and selecting your deck in the deck list on the left side ![Anki Browser Deck list](https://user-images.githubusercontent.com/93875472/196944394-95712a57-c13c-4bf2-bce3-574e55c02a1b.png)
 
 ### Full import with media
 The overal process is the same as [importing without media](https://github.com/Eltaurus-Lt/CourseDump2022#simple-import-without-media) with a couple of differences:
