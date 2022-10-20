@@ -3,7 +3,7 @@ This ***Google Chrome*** extension downloads [***Memrise***](https://memrise.com
 
 ## Downloading from GitHub
 Click `Code` and then `Download ZIP` (Note, that the `Code` button might not be visible, if your browser window is not wide enough)
-![image](https://user-images.githubusercontent.com/93875472/197013145-902c0361-6030-4fbf-9f97-9516eaa8137e.png)
+<p align="middle">![image](https://user-images.githubusercontent.com/93875472/197013145-902c0361-6030-4fbf-9f97-9516eaa8137e.png)</p>
 
 ## Installation
 1. [Download](https://github.com/Eltaurus-Lt/CourseDump2022/archive/refs/heads/main.zip) and unpack **CourseDump2022-main.zip**
@@ -51,6 +51,9 @@ The overal process is the same as [importing without media](https://github.com/E
         1. In *Anki* go to `Tools` -> `Manage Note Types`
         2. Select a Note Type you would like to edit from the list (e.g. the `Basic` one)
         3. Press `Fields` then `Add` buttons, and type a name (e.g. _Audio_. Repeat the adding if you need the _Video_ field as well). <br><sub>You might want to clone the existing Note Type before adding fields though, so as to preserve the original. For that, instead of just selecting the Note Type from the list, click Add, select the Note Type from the list there and enter a new name, then proceed to adding fields to the new Note Type.</sub>
+    
     For further editing of any of the Note Types please refer to [this section of Anki manual](https://docs.ankiweb.net/templates/fields.html#basic-replacements). 
 
-If you encounter any errors, have further questions regarding the extention or need any help with using the downloaded materials in Anki, please leave a comment in this thread: [Memrise2Anki Replacement](https://community.memrise.com/t/memrise2anki-replacement/77107)
+
+## Discussion
+If you encounter errors, have further questions regarding the extention or need any help with using the downloaded materials in Anki, please leave a comment in this thread: [Memrise2Anki Replacement](https://community.memrise.com/t/memrise2anki-replacement/77107)
