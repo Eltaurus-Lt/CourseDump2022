@@ -1,25 +1,25 @@
 # CourseDump2022
-This **Google Chrome** extension downloads word lists from [**Memrise**](https://memrise.com/) courses as `.csv` tables alongside with all the associated audio and video files. The format of downloaded data is suitable for further import into [**Anki**](https://apps.ankiweb.net/).
+This **Google Chrome** extension downloads word lists from [**Memrise**](https://memrise.com/) courses as `.csv` spreadsheets along with all the associated audio and video files. The format of downloaded data is suitable for further import into [**Anki**](https://apps.ankiweb.net/).
 
 ## Downloading from GitHub
-Click `Code` and then `Download ZIP` (Note, that the `Code` button might not be visible, if your browser window is not wide enough)<p>
+Click `Code` and then `Download ZIP` (Note, that the `Code` button might be hidden if your browser window is not wide enough)<p>
  ![image](https://user-images.githubusercontent.com/93875472/197013145-902c0361-6030-4fbf-9f97-9516eaa8137e.png) 
  </p>
 
 ## Installation
-1. [Download](https://github.com/Eltaurus-Lt/CourseDump2022/archive/refs/heads/main.zip) and unpack ***CourseDump2022-main.zip***
-2. In *Google Chrome* click the `Extentions` button ![Chrome extension icon](https://user-images.githubusercontent.com/93875472/197036859-7c3ff1ab-a171-4408-8255-29ba6d8d8139.png) and then ![Manage extensions](https://user-images.githubusercontent.com/93875472/197037928-6c6c52f9-472f-44c0-9cbd-ef18d6a2cdda.png) 
+1. [Download](https://github.com/Eltaurus-Lt/CourseDump2022/archive/refs/heads/main.zip) the ***CourseDump2022-main.zip*** archive and extract ***CourseDump2022-main*** folder from it
+2. In *Google Chrome* click the `Extensions` button ![Chrome extension icon](https://user-images.githubusercontent.com/93875472/197036859-7c3ff1ab-a171-4408-8255-29ba6d8d8139.png) and then ![Manage extensions](https://user-images.githubusercontent.com/93875472/197037928-6c6c52f9-472f-44c0-9cbd-ef18d6a2cdda.png)<br> 
   (alternatively go to the Main menu ![`Menu`](https://user-images.githubusercontent.com/93875472/197037696-a6258293-5de9-42c7-b971-d430abc5c7c5.png) in the top right corner and click `More tools` -> `Extensions`) 
 3. Enable `Developer mode` (top right corner of the page)<br> ![Developer mode off->on](https://user-images.githubusercontent.com/93875472/197039106-acc2abba-2a2d-4b4f-acc6-e2708341fc74.png)
-4. Choose `Load unpacked` (top left corner of the page) and select the ***CourseDump2022-main*** folder extracted in step 2 (ignore the error with the manifest version)
-5. (_optional_) Go back to the Extensions menu from step 3 and pin the extension by clicking the pin button<p>
+4. Choose `Load unpacked` (top left corner of the page) and select the ***CourseDump2022-main*** folder extracted in step 1 (ignore the error with the manifest version)
+5. (_optional_) Click the `Extensions` button from step 2 again and pin the extension to the toolbar by clicking the pin button<p>
   ![image](https://user-images.githubusercontent.com/93875472/197015305-f743eec3-2555-427e-b474-00898f4a520b.png)</p>
 
 ## Downloading a Memrise Course
 1. Make sure you are logged in on [Memrise](https://memrise.com/)
 2. Navigate to any page belonging to a course you want to download ([example-1](https://app.memrise.com/course/1105/speak-esperanto-like-a-nativetm-1/), [example-2](https://app.memrise.com/course/2021573/french-1/3/))
 3. Simply **click the extension icon** ![CourseDump2022 icon](https://user-images.githubusercontent.com/93875472/197039734-bd2efdf8-a6c6-4327-8617-f2d3a95fcb3a.png) on the toolbar
-    <br>(if you skipped the last installation step, click the `Extentions` button ![Chrome extension icon](https://user-images.githubusercontent.com/93875472/197036859-7c3ff1ab-a171-4408-8255-29ba6d8d8139.png) and then ![`CourseDump2022`](https://user-images.githubusercontent.com/93875472/197040206-6c5298bd-0f68-418d-9efb-a3ce1b8d275d.png))
+    <br>(if you skipped the last installation step, click the `Extensions` button ![Chrome extension icon](https://user-images.githubusercontent.com/93875472/197036859-7c3ff1ab-a171-4408-8255-29ba6d8d8139.png) and then ![`CourseDump2022`](https://user-images.githubusercontent.com/93875472/197040206-6c5298bd-0f68-418d-9efb-a3ce1b8d275d.png))
  
 When the scanning of the course is finished (this might take up to several minutes for large courses!), a `.csv` file with all the table data should appear in your downloads folder. After that, if you chose to download media, the extension will proceed to downloading all the audio and video files from the course to a subfolder containing the course's name.
 
