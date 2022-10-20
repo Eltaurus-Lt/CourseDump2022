@@ -9,9 +9,10 @@ Click `Code` and then `Download ZIP` (Note, that the `Code` button might not be 
 ## Installation
 1. [Download](https://github.com/Eltaurus-Lt/CourseDump2022/archive/refs/heads/main.zip) and unpack ***CourseDump2022-main.zip***
 2. In *Google Chrome* click the `Extentions` button ![Chrome extension icon](https://user-images.githubusercontent.com/93875472/197014059-e733d033-690e-4fbc-9ba6-d6485b8467f7.png) and then ![Manage extensions](https://user-images.githubusercontent.com/93875472/197014178-5a4eae4f-2a8f-44f7-8a9c-0f39f26d47e3.png)
-  (alternatively go to Menu in the top right corner ![`Menu`](https://user-images.githubusercontent.com/93875472/197014646-e9294a2f-6077-4f49-a9e7-cdea60b37298.png) -> `More tools` -> `Extensions`) 
+  (alternatively go to the Main menu in the top right corner ![`Menu`](https://user-images.githubusercontent.com/93875472/197014646-e9294a2f-6077-4f49-a9e7-cdea60b37298.png) -> `More tools` -> `Extensions`) 
 3. Enable `Developer mode` (top right corner of the page)<p> 
-![image](https://user-images.githubusercontent.com/93875472/197014808-9e6b5e55-08b3-4bb2-9e78-60bb504b95c3.png)</p>
+![Developer mode off](https://user-images.githubusercontent.com/93875472/197014808-9e6b5e55-08b3-4bb2-9e78-60bb504b95c3.png) -> ![Developer mode on](https://user-images.githubusercontent.com/93875472/197032468-5f06bcb0-661c-48d5-8c99-9810016cce47.png)
+</p>
 4. Choose `Load unpacked` (top left corner of the page) and select the ***CourseDump2022-main*** folder extracted in step 1 (ignore the error with the manifest version)
 5. (_optional_) Go back to the Extensions menu from step 3 and pin the extension by clicking the pin button<p>
   ![image](https://user-images.githubusercontent.com/93875472/197015305-f743eec3-2555-427e-b474-00898f4a520b.png)</p>
