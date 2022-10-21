@@ -19,7 +19,7 @@ function sleep(ms) {
 	let download_media = false;
 	let has_audio = false;
 	let has_video = false;
-	let media_download_urls = [];
+	let media_download_urls = new Set();
 	let table = [];
 
 	let next = true;
@@ -55,7 +55,7 @@ function sleep(ms) {
 				if (download_media && learnable.screens["1"].audio && learnable.screens["1"].audio.value.length > 0) {
 					has_audio = true;
 					learnable.screens["1"].audio.value.map(audio_item => {temp_audio_urls.push(audio_item.normal)});
-					media_download_urls.push(...temp_audio_urls);
+					temp_audio_urls.forEach(media_download_urls.add, media_download_urls);
 				}
 				row.push(`"` + temp_audio_urls.map(url => `[sound:${url.split("/").slice(-1)}]`).join("") + `"`);
 
@@ -64,7 +64,7 @@ function sleep(ms) {
 				if (download_media && learnable.screens["1"].video && learnable.screens["1"].video.value.length > 0) {
 					has_video = true;
 					learnable.screens["1"].video.value.map(video_item => {temp_video_urls.push(video_item)});
-					media_download_urls.push(...temp_video_urls);
+					temp_video_urls.forEach(media_download_urls.add, media_download_urls);
 				}
 				row.push(`"` + temp_video_urls.map(url => `[sound:${url.split("/").slice(-1)}]`).join("") + `"`);
 					
@@ -74,7 +74,7 @@ function sleep(ms) {
 			err_count = 0;
 		} catch (error) {
 			console.log(error);
-			console.log(err_count);
+			console.log(err_count + 1);
 			if (empty_set_err) continue;
 			err_count++;
 			if (err_count >= MAX_ERR_ABORT) {
@@ -100,12 +100,13 @@ function sleep(ms) {
 	hiddenElement.download = name + '.csv';
 	hiddenElement.click();
 
+
 	//downloading audio and video files
-	console.log(media_download_urls.length);
+	console.log(media_download_urls.size);
 	if (download_media) {
 
 		var param = {
-			collection: media_download_urls,
+			collection: Array.from(media_download_urls),
 			folder: `${name}_media`
 		};
 		chrome.runtime.sendMessage(param);
