@@ -33,7 +33,7 @@ When the scanning of the course is finished (this might take up to several minut
     2. In the `Deck` field select the Deck you want cards to go into (you can create a new one from this menu by clicking a deck name after the `Deck`field and then `Add`)
     3. Check the `Field mapping`<p> 
   ![image](https://user-images.githubusercontent.com/93875472/196941455-b0a3a3e7-6e33-4510-aff7-fbf079dc7915.png)</p>
-  (if you downloaded the `.csv` table with media, but don't want to use that media in Anki, just select `Change` -> `Ignore field` for any fields after the first two)
+  (if you downloaded the `.csv` table with media, but don't want to use that media in Anki, just select `Change` -> `Ignore field` for any Fields after the first two)
 
 After you click the `Import` button you should see a message indicating how many notes have been imported:<p>
   ![Anki Import message](https://user-images.githubusercontent.com/93875472/196944166-5fbbfec8-2415-46cd-919a-73330ca67dbb.png)</p>
