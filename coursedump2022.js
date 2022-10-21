@@ -101,6 +101,7 @@ function sleep(ms) {
 	hiddenElement.click();
 
 	//downloading audio and video files
+	console.log(media_download_urls.length);
 	if (download_media) {
 
 		var param = {
