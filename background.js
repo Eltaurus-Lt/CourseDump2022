@@ -1,9 +1,11 @@
 chrome.browserAction.onClicked.addListener(function (tab) {
    chrome.tabs.executeScript(null, { file: "coursedump2022.js" });
 });
+
 function sleep(ms) {
    return new Promise(resolve => setTimeout(resolve, ms));
 }
+
 chrome.runtime.onMessage.addListener(
    function (arg, sender, sendResponse) {
       var mediaurls = arg.collection;
