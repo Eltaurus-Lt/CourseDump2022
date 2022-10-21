@@ -114,7 +114,7 @@ function sleep(ms) {
 
 	//help
 	if (confirm('Would you like some help with Anki integration?')) {
-		window.open('https://github.com/Eltaurus-Lt/CourseDump2022#importing-in-anki', '_blank').focus();
+		window.open('https://github.com/Eltaurus-Lt/CourseDump2022#importing-into-anki', '_blank').focus();
 	};
 
 })();
