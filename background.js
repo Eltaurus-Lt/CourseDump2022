@@ -13,8 +13,8 @@ chrome.runtime.onMessage.addListener(
       (async function () {
          for (i in mediaurls) {
             await sleep(100);
-            var mediaUrl = mediaurls[i];
-            var saveas = subfolder + `/${mediaUrl.split("/").slice(-1)}`;
+            var mediaUrl = mediaurls[i][0];
+            var saveas = subfolder + `/` + mediaurls[i][1];
 
             chrome.downloads.download({
                url: mediaUrl,

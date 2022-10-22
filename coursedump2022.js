@@ -1,5 +1,6 @@
 
 const MAX_ERR_ABORT = 5;
+const MIN_FILENAME_LENGTH = 8;
 
 
 course = window.location.toString().split("/");
@@ -11,6 +12,14 @@ if (course[3] === "course") {
 
 function sleep(ms) {
 	return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+function PaddedFilename(url) {
+	let temp_filename = url.split("/").slice(-1);
+	if (temp_filename[0].length < MIN_FILENAME_LENGTH) {
+		temp_filename = name + "_" + url.split("/").slice(-2).join("_");
+	};
+	return temp_filename;
 }
 
 (async function () {
@@ -57,7 +66,7 @@ function sleep(ms) {
 					learnable.screens["1"].audio.value.map(audio_item => {temp_audio_urls.push(audio_item.normal)});
 					temp_audio_urls.forEach(media_download_urls.add, media_download_urls);
 				}
-				row.push(`"` + temp_audio_urls.map(url => `[sound:${url.split("/").slice(-1)}]`).join("") + `"`);
+				row.push(`"` + temp_audio_urls.map(url => `[sound:${PaddedFilename(url)}]`).join("") + `"`);
 
 				//video
 				let temp_video_urls = [];
@@ -66,7 +75,7 @@ function sleep(ms) {
 					learnable.screens["1"].video.value.map(video_item => {temp_video_urls.push(video_item)});
 					temp_video_urls.forEach(media_download_urls.add, media_download_urls);
 				}
-				row.push(`"` + temp_video_urls.map(url => `[sound:${url.split("/").slice(-1)}]`).join("") + `"`);
+				row.push(`"` + temp_video_urls.map(url => `[sound:${PaddedFilename(url)}]`).join("") + `"`);
 					
 				table.push(row);
 			});
@@ -106,7 +115,7 @@ function sleep(ms) {
 	if (download_media) {
 
 		var param = {
-			collection: Array.from(media_download_urls),
+			collection: Array.from(media_download_urls).map(url => [url, PaddedFilename(url)]),
 			folder: `${name}_media`
 		};
 		chrome.runtime.sendMessage(param);
