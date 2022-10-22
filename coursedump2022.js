@@ -58,7 +58,6 @@ function PaddedFilename(url) {
 			response.learnables.map(learnable => {
 
 				let row = [`"${learnable.learning_element.replace('"', '""')}"`,`"${learnable.definition_element.replace('"', '""')}"`];
-				let temp_filename;
 
 				//audio
 				let temp_audio_urls = [];
