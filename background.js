@@ -12,7 +12,7 @@ chrome.runtime.onMessage.addListener(
       var subfolder = arg.folder;
       (async function () {
          for (i in mediaurls) {
-            await sleep(1000);
+            await sleep(100);
             var mediaUrl = mediaurls[i][0];
             var saveas = subfolder + `/` + mediaurls[i][1];
 
