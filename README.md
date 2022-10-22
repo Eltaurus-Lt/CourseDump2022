@@ -56,6 +56,11 @@ The overall process is the same as [importing without media](https://github.com/
     
     For additional information regarding the Note Types editing please refer to [this section of Anki manual](https://docs.ankiweb.net/templates/fields.html#basic-replacements). 
 
+## Known issues
+
+There is a problem with encoding of a small subset of Unicode characters, which results in media filenames being written with _ where their entries in `.csv` tables are written with %. If you encounter such a case, the workaround is to replace all % in `.csv` file with _ in any text editor before importing it into Anki:
+
+![image](https://user-images.githubusercontent.com/93875472/197361505-70f2d10f-728b-4412-adc0-a19cd30aef04.png)
 
 ## Discussion
 If you encounter errors, have further questions regarding the extension, or need any help with using the downloaded materials in Anki, please leave a comment in this thread: [Memrise2Anki Replacement](https://community.memrise.com/t/memrise2anki-replacement/77107)
