@@ -1,5 +1,5 @@
 # CourseDump2022
-This **Google Chrome** extension downloads word lists from [**Memrise**](https://memrise.com/) courses as `.csv` spreadsheets along with all the associated audio and video files. The format of downloaded data is suitable for further import into [**Anki**](https://apps.ankiweb.net/).
+This **Google Chrome** extension downloads word lists from [**Memrise**](https://memrise.com/) courses as `.csv` spreadsheets along with all the associated <ins>audio</ins> and <ins>video</ins> files. The format of downloaded data is suitable for further import into [**Anki**](https://apps.ankiweb.net/).
 
 ## Downloading from GitHub
 Click `Code` and then `Download ZIP` (Note, that the `Code` button might be hidden if your browser window is not wide enough)<p>
