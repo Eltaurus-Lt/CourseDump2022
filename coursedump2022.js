@@ -1,12 +1,15 @@
-
+const ALWAYS_DWLD_MEDIA = false;
+const ANKI_HELP_PROMPT = true;
 const MAX_ERR_ABORT = 5;
 const MIN_FILENAME_LENGTH = 8;
+
 
 
 course = window.location.toString().split("/");
 if (course[3] === "course") { 
 	id = course[4]; 
 	name = course[5];
+	saveas = name + `-[` + id +`]`;
 } else { alert("Please use the extention on an open Memrise course tab"); throw ''; };
 
 
@@ -32,6 +35,11 @@ function PaddedFilename(url) {
 	let has_learnable = false;
 	let media_download_urls = new Set();
 	let table = [];
+
+	if (ALWAYS_DWLD_MEDIA) {
+		media_asked = true;
+		download_media = true;
+	}
 
 	let next = true;
 	for (let i = 1; next; i++) {
@@ -131,9 +139,9 @@ function PaddedFilename(url) {
 
 	//downloading the table
 	var hiddenElement = document.createElement('a');
-	hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(result);
+	hiddenElement.href = 'data:text/csv;charset=utf-8,%EF%BB%BF' + encodeURIComponent(result);
 	hiddenElement.target = '_blank';
-	hiddenElement.download = name + '.csv';
+	hiddenElement.download = saveas + '.csv';
 	hiddenElement.click();
 
 
@@ -143,13 +151,13 @@ function PaddedFilename(url) {
 
 		var param = {
 			collection: Array.from(media_download_urls).map(url => [url, PaddedFilename(url)]),
-			folder: `${name}_media`
+			folder: `${saveas}_media`
 		};
 		chrome.runtime.sendMessage(param);
 	}
 
 	//help
-	if (confirm('Would you like some help with Anki integration?')) {
+	if (ANKI_HELP_PROMPT && confirm('Would you like some help with Anki integration?')) {
 		window.open('https://github.com/Eltaurus-Lt/CourseDump2022#importing-into-anki', '_blank').focus();
 	};
 
