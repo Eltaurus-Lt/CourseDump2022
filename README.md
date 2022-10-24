@@ -61,7 +61,7 @@ The overall process is the same as [importing without media](https://github.com/
 If you want the extension to download media by default without asking every time:
 1. Open `cousedump2022.js` in any text editor 
 2. Set `const ALWAYS_DWLD_MEDIA = true;` in the first line
-3. Save, go to the [Extensions managing page](https://github.com/Eltaurus-Lt/CourseDump2022#installation), and click the refresh button ![image](https://user-images.githubusercontent.com/93875472/197563000-b5680392-a901-4e68-8996-fe20340128b3.png)
+3. Save, go to the [Extensions managing page](https://github.com/Eltaurus-Lt/CourseDump2022#installation), and click the refresh button ![image](https://user-images.githubusercontent.com/93875472/197623007-745c86ec-807f-4305-8f91-2b364ba1b000.png)
 
 To disable the popup after the download which links to this page similarly set `ANKI_HELP_PROMPT = false;`
 
