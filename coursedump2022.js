@@ -28,11 +28,14 @@ function PaddedFilename(url) {
 	let download_media = false;
 	let has_audio = false;
 	let has_video = false;
+	let has_definitions = false;
+	let has_learnable = false;
 	let media_download_urls = new Set();
 	let table = [];
 
 	let next = true;
 	for (let i = 1; next; i++) {
+		console.log(i);
 		let empty_set_err = false;
 		try {
 			await sleep(200);
@@ -48,7 +51,7 @@ function PaddedFilename(url) {
 				empty_set_err = true;
 			}
 			// Check for media
-			if (!media_asked && response.learnables.find(learnable => { return ( (learnable.screens["1"].audio && learnable.screens["1"].audio.value.length > 0) || (learnable.screens["1"].video && learnable.screens["1"].video.value.length > 0) ) })) {
+			if (!media_asked && response.learnables.find(learnable => { return ( (learnable.screens["1"].audio && learnable.screens["1"].audio.value.length > 0) || (learnable.screens["1"].video && learnable.screens["1"].video.value.length > 0) || (learnable.screens["1"].definition.kind === "audio" && learnable.screens["1"].definition.value.length > 0) ) })) {
 				media_asked = true;
 				download_media = confirm("Embedded media was detected. Would you like to download it?");
 			}
@@ -57,7 +60,29 @@ function PaddedFilename(url) {
 			// Creating the table and queueing media files
 			response.learnables.map(learnable => {
 
-				let row = [`"${learnable.learning_element.replace('"', '""')}"`,`"${learnable.definition_element.replace('"', '""')}"`];
+				let row = [];
+
+				//learning elements
+				let learnable_el = `""`;
+				if (learnable.learning_element) {
+					has_learnable = true;
+					learnable_el = `"${learnable.learning_element.replace('"', '""')}"`;
+				}
+				row.push(learnable_el);
+
+				//definitions
+				let definition = `""`;
+				if (learnable.definition_element) {
+					has_definitions = true;
+					definition = `"${learnable.definition_element.replace('"', '""')}"`;
+				} else if (download_media && learnable.screens["1"].definition.kind === "audio" && learnable.screens["1"].definition.value.length > 0) {
+					has_definitions = true;
+					let temp_audio_defs = [];
+					learnable.screens["1"].definition.value.map(audio_def => {temp_audio_defs.push(audio_def.normal)});
+					temp_audio_defs.forEach(media_download_urls.add, media_download_urls);
+					definition = `"` + temp_audio_defs.map(url => `[sound:${PaddedFilename(url)}]`).join("") + `"`;
+				}
+				row.push(definition);
 
 				//audio
 				let temp_audio_urls = [];
@@ -95,10 +120,12 @@ function PaddedFilename(url) {
 
 	//table to text conversion (global flags has_audio/has_video are needed since different number of cells in csv rows causes problems for Anki import)
 	let result = table.map(row => {
-		let line = row[0] + `,` + row[1];
-		if (has_audio) {line += `,` + row[2]}
-		if (has_video) {line += `,` + row[3]}
-		return line;
+		let line = [];
+		if (has_learnable) {line.push(row[0])};
+		if (has_definitions) {line.push(row[1])};
+		if (has_audio) {line.push(row[2])};
+		if (has_video) {line.push(row[3])};
+		return line.join(`,`);
 	}).join("\n") + "\n";
 
 
@@ -111,7 +138,7 @@ function PaddedFilename(url) {
 
 
 	//downloading audio and video files
-	console.log(media_download_urls.size);
+	console.log("media files found: " + media_download_urls.size);
 	if (download_media) {
 
 		var param = {
