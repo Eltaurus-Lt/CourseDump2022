@@ -68,7 +68,7 @@ The other available settings that can be changed in the same way:
 | ------------------ | ---------------------------------------------------------------------------------- |
 | `ANKI_HELP_PROMPT` | Setting to `false` disables the popup which links to this page after the download  |
 | `LEVEL_TAGS`       | Setting to `false` removes column with hierarchical course::level tags from `.csv` |
-| `COLLAPSE_COLUMNS` | Setting to `false` leaves empty columns in the `.csv` tables, so that the numbering of fields ([step 3.iii.](https://github.com/Eltaurus-Lt/CourseDump2022#simple-import-without-media)) is the same for any course: 1 - learned word, 2 - definition, 3 - audio, 4 - video, 5 - tags. |
+| `COLLAPSE_COLUMNS` | Setting to `false` leaves empty columns in the `.csv` tables, so that the numbering of fields ([step 3.iii.](https://github.com/Eltaurus-Lt/CourseDump2022#simple-import-without-media)) is the same for any course: 1 - `Learned word`, 2 - `Definition`, 3 - `Audio`, 4 - `Video`, 5 - `Tags`. |
 
 ## Known issues
 
