@@ -32,8 +32,8 @@ When the scanning of the course is finished (this might take up to several minut
     1. Indicate the Note Type you want to use in the `Type` field (if you don't have any particular Note Type in mind, the `Basic` one will do)
     2. In the `Deck` field select the Deck you want cards to go into (you can create a new one from this menu by clicking a deck name after the `Deck`field and then `Add`)
     3. Check the `Field mapping`<p> 
-  ![image](https://user-images.githubusercontent.com/93875472/196941455-b0a3a3e7-6e33-4510-aff7-fbf079dc7915.png)</p>
-  (if you downloaded the `.csv` table with media, but don't want to use that media in Anki, just select `Change` -> `Ignore field` for any Fields after the first two)
+  ![image](https://user-images.githubusercontent.com/93875472/198799349-feb5d729-c33a-41e7-aa24-3d1af37e2943.png)</p>
+  By default, the last column in `.csv` is filled with tags. All the fields from `.csv` that you don't want to import into Anki can be left out by selecting `Change` -> `Ignore field`. 
 
 After you click the `Import` button you should see a message indicating how many notes have been imported:<p>
   ![Anki Import message](https://user-images.githubusercontent.com/93875472/196944166-5fbbfec8-2415-46cd-919a-73330ca67dbb.png)</p>
@@ -60,10 +60,15 @@ The overall process is the same as [importing without media](https://github.com/
 
 If you want the extension to download media by default without asking every time:
 1. Open `cousedump2022.js` in any text editor 
-2. Set `const ALWAYS_DWLD_MEDIA = true;` in the first line
-3. Save, go to the [Extensions managing page](https://github.com/Eltaurus-Lt/CourseDump2022#installation), and click the refresh button ![image](https://user-images.githubusercontent.com/93875472/197623007-745c86ec-807f-4305-8f91-2b364ba1b000.png)
+2. Set `const ALWAYS_DWLD_MEDIA = true;` in the first line and save the file
 
-To disable the popup after the download which links to this page similarly set `ANKI_HELP_PROMPT = false;`
+The other available settings that can be changed in the same way:
+
+| option             | description                                                                        |
+| ------------------ | ---------------------------------------------------------------------------------- |
+| `ANKI_HELP_PROMPT` | Setting to `false` disables the popup which links to this page after the download  |
+| `LEVEL_TAGS`       | Setting to `false` removes column with hierarchical course::level tags from `.csv` |
+| `COLLAPSE_COLUMNS` | Setting to `false` leaves empty columns in the `.csv` tables, so that the numbering of fields ([step 3.iii.](https://github.com/Eltaurus-Lt/CourseDump2022#simple-import-without-media)) is the same for any course: 1 - learned word, 2 - definition, 3 - audio, 4 - video, 5 - tags. |
 
 ## Known issues
 
