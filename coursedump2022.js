@@ -1,7 +1,12 @@
 const ALWAYS_DWLD_MEDIA = false;
 const ANKI_HELP_PROMPT = true;
+const LEVEL_TAGS = true;
+const COLLAPSE_COLUMNS = true;
+
 const MAX_ERR_ABORT = 5;
 const MIN_FILENAME_LENGTH = 8;
+const LEARNABLE_IDS = false;
+const FAKE_DWLD = false;
 
 
 
@@ -64,6 +69,14 @@ function PaddedFilename(url) {
 				download_media = confirm("Embedded media was detected. Would you like to download it?");
 			}
 
+			let level_tag = `"` + name + `"`;
+			if (LEVEL_TAGS) {
+				try {
+					level_tag = `"` + response.session_source_info.name + `::` + ((i < 10) ? (`0` + i) : i) + `_` + response.session_source_info.level_name + `"`;
+				} catch (error) {console.log(`${error.name}: ${error.message}`);}
+				level_tag = level_tag.replaceAll(' ','_');
+			}
+
 
 			// Creating the table and queueing media files
 			response.learnables.map(learnable => {
@@ -74,7 +87,7 @@ function PaddedFilename(url) {
 				let learnable_el = `""`;
 				if (learnable.learning_element) {
 					has_learnable = true;
-					learnable_el = `"${learnable.learning_element.replace('"', '""')}"`;
+					learnable_el = `"${learnable.learning_element.replaceAll('"', '""')}"`;
 				}
 				row.push(learnable_el);
 
@@ -82,7 +95,7 @@ function PaddedFilename(url) {
 				let definition = `""`;
 				if (learnable.definition_element) {
 					has_definitions = true;
-					definition = `"${learnable.definition_element.replace('"', '""')}"`;
+					definition = `"${learnable.definition_element.replaceAll('"', '""')}"`;
 				} else if (download_media && learnable.screens["1"].definition.kind === "audio" && learnable.screens["1"].definition.value.length > 0) {
 					has_definitions = true;
 					let temp_audio_defs = [];
@@ -109,7 +122,18 @@ function PaddedFilename(url) {
 					temp_video_urls.forEach(media_download_urls.add, media_download_urls);
 				}
 				row.push(`"` + temp_video_urls.map(url => `[sound:${PaddedFilename(url)}]`).join("") + `"`);
-					
+				
+				row.push(level_tag);
+
+				if (LEARNABLE_IDS) {
+					try {
+						row.push(learnable.id);
+					} catch (error) {
+						console.log(`no learnable id! ${error.name}: ${error.message}`);
+						row.push(-1);
+					}
+				}
+
 				table.push(row);
 			});
 
@@ -128,12 +152,16 @@ function PaddedFilename(url) {
 
 	//table to text conversion (global flags has_audio/has_video are needed since different number of cells in csv rows causes problems for Anki import)
 	let result = table.map(row => {
-		let line = [];
-		if (has_learnable) {line.push(row[0])};
-		if (has_definitions) {line.push(row[1])};
-		if (has_audio) {line.push(row[2])};
-		if (has_video) {line.push(row[3])};
-		return line.join(`,`);
+		if (COLLAPSE_COLUMNS) {
+			let line = [];
+			if (has_learnable) {line.push(row[0])};
+			if (has_definitions) {line.push(row[1])};
+			if (has_audio) {line.push(row[2])};
+			if (has_video) {line.push(row[3])};
+			if (LEVEL_TAGS) {line.push(row[4])};
+			if (LEARNABLE_IDS) {line.push(row[5])}
+			return line.join(`,`);
+		} else {return row.join(`,`);}
 	}).join("\n") + "\n";
 
 
@@ -147,7 +175,7 @@ function PaddedFilename(url) {
 
 	//downloading audio and video files
 	console.log("media files found: " + media_download_urls.size);
-	if (download_media) {
+	if (download_media && !FAKE_DWLD) {
 
 		var param = {
 			collection: Array.from(media_download_urls).map(url => [url, PaddedFilename(url)]),
