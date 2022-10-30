@@ -12,9 +12,9 @@ chrome.runtime.onMessage.addListener(
       var subfolder = arg.folder;
       (async function () {
          for (i in mediaurls) {
-            await sleep(100);
+            await sleep(200);
             var mediaUrl = mediaurls[i][0];
-            var saveas = subfolder + `/` + mediaurls[i][1];
+            var saveas = mediaurls[i][1];
 
             chrome.downloads.download({
                url: mediaUrl,
