@@ -2,6 +2,7 @@ const ALWAYS_DWLD_MEDIA = false;
 const ANKI_HELP_PROMPT = true;
 const LEVEL_TAGS = true;
 const COLLAPSE_COLUMNS = true;
+const BATCH = false;
 
 const MAX_ERR_ABORT = 5;
 const MIN_FILENAME_LENGTH = 8;
@@ -9,28 +10,35 @@ const LEARNABLE_IDS = false;
 const FAKE_DWLD = false;
 
 
-
-course = window.location.toString().split("/");
-if (course[3] === "course") { 
-	id = course[4]; 
-	name = course[5];
-	saveas = name + `-[` + id +`]`;
-} else { alert("Please use the extention on an open Memrise course tab"); throw ''; };
-
-
 function sleep(ms) {
 	return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-function PaddedFilename(url) {
-	let temp_filename = url.split("/").slice(-1);
-	if (temp_filename[0].length < MIN_FILENAME_LENGTH) {
-		temp_filename = name + "_" + url.split("/").slice(-2).join("_");
-	};
-	return temp_filename;
-}
+async function CourseDownload(URLString) {
+	let course = URLString.split("/");
+	let id, name, saveas;
 
-(async function () {
+	if (course[3] === "course") { 
+		id = course[4]; 
+		name = course[5];
+		saveas = name + `-[` + id +`]`;
+	} else { 
+		if (!BATCH) {
+			alert("Please use the extention on an open Memrise course tab"); 
+		} else {
+			console.log('"' + URLString + '" in queue.txt is not a Memrise course url');
+		}
+		return -1; 
+	};
+
+	function PaddedFilename(url) {
+		let temp_filename = url.split("/").slice(-1);
+		if (temp_filename[0].length < MIN_FILENAME_LENGTH) {
+			temp_filename = name + "_" + url.split("/").slice(-2).join("_");
+		};
+		return temp_filename;
+	}
+
 	let err_count = 0;
 	let media_asked = false;
 	let download_media = false;
@@ -48,7 +56,7 @@ function PaddedFilename(url) {
 
 	let next = true;
 	for (let i = 1; next; i++) {
-		console.log(i);
+		console.log("[" + name + "] scanning level " + i + "...");
 		let empty_set_err = false;
 		try {
 			await sleep(200);
@@ -64,10 +72,11 @@ function PaddedFilename(url) {
 				empty_set_err = true;
 			}
 			// Check for media
-			if (!media_asked && response.learnables.find(learnable => { return ( (learnable.screens["1"].audio && learnable.screens["1"].audio.value.length > 0) || (learnable.screens["1"].video && learnable.screens["1"].video.value.length > 0) || (learnable.screens["1"].definition.kind === "audio" && learnable.screens["1"].definition.value.length > 0) ) })) {
+			if (!media_asked && !BATCH && response.learnables.find(learnable => { return ( (learnable.screens["1"].audio && learnable.screens["1"].audio.value.length > 0) || (learnable.screens["1"].video && learnable.screens["1"].video.value.length > 0) || (learnable.screens["1"].definition.kind === "audio" && learnable.screens["1"].definition.value.length > 0) ) })) {
 				media_asked = true;
 				download_media = confirm("Embedded media was detected. Would you like to download it?");
 			}
+			if (BATCH) {download_media = ALWAYS_DWLD_MEDIA};
 
 			let level_tag = `"` + name + `"`;
 			if (LEVEL_TAGS) {
@@ -172,21 +181,58 @@ function PaddedFilename(url) {
 	hiddenElement.download = saveas + '.csv';
 	hiddenElement.click();
 
+	//appending media files to media download queue
+	console.log("[" + name + "] media files found: " + media_download_urls.size);	
+	let downloads_pack = Array.from(media_download_urls).map(url => [url, `${saveas}_media/` + PaddedFilename(url)]);
+	media_downloads_all.push(...downloads_pack);
 
-	//downloading audio and video files
-	console.log("media files found: " + media_download_urls.size);
-	if (download_media && !FAKE_DWLD) {
+};
 
+
+function mediaDownload(all_downloads) {
+
+	if (!FAKE_DWLD && all_downloads.length > 0) {
 		var param = {
-			collection: Array.from(media_download_urls).map(url => [url, PaddedFilename(url)]),
-			folder: `${saveas}_media`
+			collection: all_downloads
 		};
 		chrome.runtime.sendMessage(param);
 	}
 
 	//help
-	if (ANKI_HELP_PROMPT && confirm('Would you like some help with Anki integration?')) {
+	if (ANKI_HELP_PROMPT && !BATCH && confirm('Would you like some help with Anki integration?')) {
 		window.open('https://github.com/Eltaurus-Lt/CourseDump2022#importing-into-anki', '_blank').focus();
 	};
+}
 
-})();
+
+
+//------MAIN DOWNLOAD
+let media_downloads_all = [];
+
+(async function(){
+	let currentUrl = window.location.toString();
+	if (currentUrl.split("/")[2] !== 'app.memrise.com') {
+		alert("The extension should be used on the memrise.com site"); 
+		return -1;
+	}
+	
+	if (BATCH) {
+		await fetch(chrome.runtime.getURL('queue.txt')).then(
+				(response) => {
+					return response.text().then(
+					async (text) => {
+						await Promise.all(text.split("\n").map(
+						async (queueline) => {
+							console.log("downloading " + queueline);
+							await CourseDownload(queueline);
+						}));
+						mediaDownload(media_downloads_all);
+					});				
+				}
+	);
+	} else {
+		if (await CourseDownload(currentUrl) != -1) {
+			mediaDownload(media_downloads_all);
+		}
+	}
+})()
