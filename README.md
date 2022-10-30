@@ -32,7 +32,7 @@ When the scanning of the course is finished (this might take up to several minut
 ### Batch download
 
 1. Make a list of urls of the Memrise courses to download in the `queue.txt` file found in the extension folder (the examples of urls are provided in the file)
-2. Set `BATCH = true` ([changing settings](https://github.com/Eltaurus-Lt/CourseDump2022#changing-settings))
+2. Set `BATCH = true` ([changing settings](https://github.com/Eltaurus-Lt/CourseDump2022#settings))
 3. During batch download the option of downloading media is defined by `ALWAYS_DWLD_MEDIA` constant. So set `ALWAYS_DWLD_MEDIA = true` to download all media files or `ALWAYS_DWLD_MEDIA = false` to download none
 4. Open any [Memrise](https://memrise.com/) page and make sure you are logged in
 5. Click the extension icon ![CourseDump2022 icon](https://user-images.githubusercontent.com/93875472/197039734-bd2efdf8-a6c6-4327-8617-f2d3a95fcb3a.png) 
