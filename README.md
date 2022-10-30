@@ -1,6 +1,12 @@
 # CourseDump2022
 This **Google Chrome** extension downloads word lists from [**Memrise**](https://memrise.com/) courses as `.csv` spreadsheets along with all the associated <ins>audio</ins> and <ins>video</ins> files. The format of downloaded data is suitable for further import into [**Anki**](https://apps.ankiweb.net/).
 
+The extension is supposed to serve as a substitution for the currently defunct Anki's [Memrise2Anki](https://github.com/wilddom/memrise2anki-extension) addon.
+Although it does not replicate all of the addon's functionality (e.g. in it's current state the extension does not download personal study data), the extension has several advantages over Memrise2Anki:
+1. It can download video files in additon to audio
+2. Allows [batch download](https://github.com/Eltaurus-Lt/CourseDump2022#batch-download) of Memrise courses
+3. Works past April 2022 Memrise changes =)
+
 ## Downloading from GitHub
 Click `Code` and then `Download ZIP` (Note, that the `Code` button might be hidden if your browser window is not wide enough)<p>
  ![image](https://user-images.githubusercontent.com/93875472/197013145-902c0361-6030-4fbf-9f97-9516eaa8137e.png) 
@@ -22,6 +28,14 @@ Click `Code` and then `Download ZIP` (Note, that the `Code` button might be hidd
     <br>(if you skipped the last installation step, click the `Extensions` button ![Chrome extension icon](https://user-images.githubusercontent.com/93875472/197036859-7c3ff1ab-a171-4408-8255-29ba6d8d8139.png) and then ![`CourseDump2022`](https://user-images.githubusercontent.com/93875472/197040206-6c5298bd-0f68-418d-9efb-a3ce1b8d275d.png))
  
 When the scanning of the course is finished (this might take up to several minutes for large courses!), a `.csv` file with all the table data should appear in your downloads folder. After that, if you chose to download media, the extension will proceed to downloading all the audio and video files from the course to a subfolder containing the course's name.
+
+### Batch download
+
+1. Make a list of urls of the Memrise courses to download in the `queue.txt` file found in the extension folder (the examples of urls are provided in the file)
+2. Set `BATCH = true` ([changing settings](https://github.com/Eltaurus-Lt/CourseDump2022#changing-settings))
+3. During batch download the option of downloading media is defined by `ALWAYS_DWLD_MEDIA` constant. So set `ALWAYS_DWLD_MEDIA = true` to download all media files or `ALWAYS_DWLD_MEDIA = false` to download none
+4. Open any [Memrise](https://memrise.com/) page and make sure you are logged in
+5. Click the extension icon ![CourseDump2022 icon](https://user-images.githubusercontent.com/93875472/197039734-bd2efdf8-a6c6-4327-8617-f2d3a95fcb3a.png) 
 
 ## Importing into Anki
 
@@ -69,6 +83,7 @@ The other available settings that can be changed in the same way:
 | `ANKI_HELP_PROMPT` | Setting to `false` disables the popup which links to this page after the download  |
 | `LEVEL_TAGS`       | Setting to `false` removes column with hierarchical course::level tags from `.csv` |
 | `COLLAPSE_COLUMNS` | Setting to `false` leaves empty columns in the `.csv` tables, so that the numbering of fields ([step 3.iii.](https://github.com/Eltaurus-Lt/CourseDump2022#simple-import-without-media)) is the same for any course: 1 - _Learned word_, 2 - _Definition_, 3 - _Audio_, 4 - _Video_, 5 - _Tags_. |
+| `BATCH`            | Setting to `true` enables [batch download](https://github.com/Eltaurus-Lt/CourseDump2022#batch-download) of Memrise courses |
 
 ## Known issues
 
