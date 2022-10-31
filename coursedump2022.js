@@ -1,8 +1,9 @@
 const ALWAYS_DWLD_MEDIA = false;
 const ANKI_HELP_PROMPT = true;
-const LEVEL_TAGS = true;
-const COLLAPSE_COLUMNS = true;
 const BATCH = false;
+const LEVEL_TAGS = true;
+const EXTRA_INFO = false;
+const COLLAPSE_COLUMNS = true;
 
 const MAX_ERR_ABORT = 5;
 const MIN_FILENAME_LENGTH = 8;
@@ -21,7 +22,7 @@ async function CourseDownload(URLString) {
 	if (course[3] === "course") { 
 		id = course[4]; 
 		name = course[5];
-		saveas = name + `-[` + id +`]`;
+		saveas = name + ` [` + id +`]`;
 	} else { 
 		if (!BATCH) {
 			alert("Please use the extention on an open Memrise course tab"); 
@@ -44,6 +45,7 @@ async function CourseDownload(URLString) {
 	let download_media = false;
 	let has_audio = false;
 	let has_video = false;
+	let has_extras = false;
 	let has_definitions = false;
 	let has_learnable = false;
 	let media_download_urls = new Set();
@@ -134,6 +136,13 @@ async function CourseDownload(URLString) {
 				
 				row.push(level_tag);
 
+				let temp_extra = "";
+				if (EXTRA_INFO && learnable.screens["1"].visible_info && learnable.screens["1"].visible_info.length > 0) {
+					has_extras = true;
+					temp_extra = `"` + learnable.screens["1"].visible_info[0].value + `"`;
+				}
+				row.push(temp_extra);
+
 				if (LEARNABLE_IDS) {
 					try {
 						row.push(learnable.id);
@@ -168,7 +177,8 @@ async function CourseDownload(URLString) {
 			if (has_audio) {line.push(row[2])};
 			if (has_video) {line.push(row[3])};
 			if (LEVEL_TAGS) {line.push(row[4])};
-			if (LEARNABLE_IDS) {line.push(row[5])}
+			if (has_extras) {line.push(row[5])};
+			if (LEARNABLE_IDS) {line.push(row[6])}
 			return line.join(`,`);
 		} else {return row.join(`,`);}
 	}).join("\n") + "\n";
@@ -183,7 +193,7 @@ async function CourseDownload(URLString) {
 
 	//appending media files to media download queue
 	console.log("[" + name + "] media files found: " + media_download_urls.size);	
-	let downloads_pack = Array.from(media_download_urls).map(url => [url, `${saveas}_media/` + PaddedFilename(url)]);
+	let downloads_pack = Array.from(media_download_urls).map(url => [url, `${saveas}_media(${media_download_urls.size})/` + PaddedFilename(url)]);
 	media_downloads_all.push(...downloads_pack);
 
 };
