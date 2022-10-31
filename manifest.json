@@ -1,26 +1,28 @@
 {
-"manifest_version": 2,
-"name": "CourseDump2022",
-"version": "4.1",
-"description": "export from memrise to CSV.",
-"icons": {
+  "manifest_version": 3,
+  "name": "CourseDump2022",
+  "version": "5.0",
+  "description": "export from memrise to CSV.",
+  "icons": {
     "16": "icon.png",
     "32": "icon.png",
     "48": "icon.png",
-    "128":"icon.png"
-   },
-"browser_action": {
-    "default_icon": "icon.png"
+    "128": "icon.png"
   },
-"permissions": [
-	"activeTab",
-	"tabs",
-	"downloads"
+  "permissions": [
+    "activeTab",
+    "storage",
+    "tabs",
+    "downloads",
+    "scripting"
   ],
-"background" : {
-    "scripts" : ["background.js"]
+  "background": {
+    "service_worker": "background.js"
   },
-"web_accessible_resources": [
-        "queue.txt"
-    ]
+  "action": {},
+  "content_security_policy": {},
+  "web_accessible_resources": [{
+    "resources": ["queue.txt"],
+    "matches": ["<all_urls>"]
+    }]
 }

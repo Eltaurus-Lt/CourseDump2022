@@ -1,5 +1,8 @@
-chrome.browserAction.onClicked.addListener(function (tab) {
-   chrome.tabs.executeScript(null, { file: "coursedump2022.js" });
+chrome.action.onClicked.addListener((tab) => {
+  chrome.scripting.executeScript({
+    target: {tabId: tab.id},
+    files: ['coursedump2022.js']
+  });
 });
 
 function sleep(ms) {
