@@ -78,12 +78,14 @@ If you want the extension to download media by default without asking every time
 
 The other available settings that can be changed in the same way:
 
-| option             | description                                                                        |
-| ------------------ | ---------------------------------------------------------------------------------- |
-| `ANKI_HELP_PROMPT` | Setting to `false` disables the popup which links to this page after the download  |
-| `LEVEL_TAGS`       | Setting to `false` removes column with hierarchical course::level tags from `.csv` |
-| `COLLAPSE_COLUMNS` | Setting to `false` leaves empty columns in the `.csv` tables, so that the numbering of fields ([step 3.iii.](https://github.com/Eltaurus-Lt/CourseDump2022#simple-import-without-media)) is the same for any course: 1 - _Learned word_, 2 - _Definition_, 3 - _Audio_, 4 - _Video_, 5 - _Tags_. |
-| `BATCH`            | Setting to `true` enables [batch download](https://github.com/Eltaurus-Lt/CourseDump2022#batch-download) of Memrise courses |
+| option           | description                                                                        |
+| ---------------- | ---------------------------------------------------------------------------------- |
+| ANKI_HELP_PROMPT | Setting to `false` disables the popup which links to this page after the download  |
+| BATCH            | Setting to `true` enables [batch download](https://github.com/Eltaurus-Lt/CourseDump2022#batch-download) of Memrise courses |
+| LEVEL_TAGS       | Setting to `false` removes column with hierarchical course::level tags from `.csv` |
+| EXTRA_INFO       | Setting to `true` makes the extension to download additional word data if present |
+| COLLAPSE_COLUMNS | Setting to `false` leaves empty columns in the `.csv` tables, so that the numbering of fields ([step 3.iii.](https://github.com/Eltaurus-Lt/CourseDump2022#simple-import-without-media)) is the same for any course: 1 - _Learned word_, 2 - _Definition_, 3 - _Audio_, 4 - _Video_, 5 - _Tags_, 6 - _Extra_. |
+
 
 ## Known issues
 
