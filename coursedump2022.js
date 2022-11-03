@@ -9,20 +9,26 @@ const MAX_ERR_ABORT = 5;
 const MIN_FILENAME_LENGTH = 8;
 const LEARNABLE_IDS = false;
 const FAKE_DWLD = false;
-
+const PLAIN_DWLD = false;
 
 function sleep(ms) {
 	return new Promise(resolve => setTimeout(resolve, ms));
 }
 
+
 async function CourseDownload(URLString) {
 	let course = URLString.split("/");
-	let id, name, saveas;
+	let id, name;
 
 	if (course[3] === "course") { 
 		id = course[4]; 
 		name = course[5];
-		saveas = name + ` [` + id +`]`;
+
+		let scanprogress = document.createElement("div");
+		scanprogress.className = "scanprogress cid" + id;
+			scanprogress.style.width = 0;
+		progressbar.append(scanprogress);
+		
 	} else { 
 		if (!BATCH) {
 			alert("Please use the extention on an open Memrise course tab"); 
@@ -40,6 +46,63 @@ async function CourseDownload(URLString) {
 		return temp_filename;
 	}
 
+
+//------------------------------------------Fetching course metadata
+	let description = '';
+	let author = '';
+	let ava = 'https://static.memrise.com/accounts/img/placeholders/empty-avatar-2.png'; // -> rnd 1..4
+	let propName = '';
+	let courseImg = '';
+	let levelsN = 0;
+	try {
+	let meta = fetch('https://app.memrise.com/course/' + id )
+	    .then(response => response.text())
+	    .then(html => {
+	        var parser = new DOMParser();
+	        var doc = parser.parseFromString(html, "text/html");
+		levelsN     = doc.querySelector('div.levels').childElementCount;
+		author      = doc.querySelector('.creator-name span').innerText;
+		ava         = doc.querySelector('.creator-image img').src;
+		propName    = doc.querySelector('.course-name').innerText;
+		courseImg   = doc.querySelector('.course-photo img').src;
+		description = doc.querySelector('.course-description.text').innerText;
+	    })
+	    .catch(function(err) {  
+	        console.log('Failed to fetch html: ', err);  
+	});
+	await meta;
+	
+	} catch (err) {}
+	console.log(description);
+	console.log(author);
+	console.log(ava);
+	console.log(propName);
+	console.log(courseImg);
+	console.log(levelsN);
+	
+	//choosing names and queueing meta
+	let saveas, subfolder;
+	if (PLAIN_DWLD) {
+		saveas = name + ` by ` + author + ` [` + id +`]`; //general name for csv and media folder 
+		subfolder = ``;
+	} else {
+		saveas = name + ` [` + id +`]`; //general name for csv and media folder
+		subfolder = name + ` by ` + author + ` [` + id +`]/`;
+		let info;
+		info = 'data:md/plain;charset=utf-8,' + encodeURIComponent( 
+			`# **` + propName + `**\n` + 
+			`### by _` + author + `_\n` +
+			`\n` + 
+			description
+		);
+
+		download_queue.push([info, subfolder + 'info.md']);
+		download_queue.push([ava, subfolder + author + '.' + ava.split(".").slice(-1)]);
+		download_queue.push([courseImg, subfolder + name + '.' + courseImg.split(".").slice(-1)]);
+	}
+
+
+//------------------------------------------Fetching level data	
 	let err_count = 0;
 	let media_asked = false;
 	let download_media = false;
@@ -56,9 +119,13 @@ async function CourseDownload(URLString) {
 		download_media = true;
 	}
 
+
 	let next = true;
-	for (let i = 1; next; i++) {
+	for (let i = 1; next || i <= levelsN; i++) {
+		//marking scanprogress
 		console.log("[" + name + "] scanning level " + i + "...");
+		document.querySelector('.scanprogress.cid' + id).style.width = Math.min(100, Math.round(10000. * i / (levelsN + MAX_ERR_ABORT/2))/100) + "%";
+		
 		let empty_set_err = false;
 		try {
 			await sleep(200);
@@ -83,7 +150,7 @@ async function CourseDownload(URLString) {
 			let level_tag = `"` + name + `"`;
 			if (LEVEL_TAGS) {
 				try {
-					level_tag = `"` + response.session_source_info.name + `::` + ((i < 10) ? (`0` + i) : i) + `_` + response.session_source_info.level_name + `"`;
+					level_tag = `"` + response.session_source_info.name.replaceAll('"', '""') + `::` + ((i < 10) ? (`0` + i) : i) + `_` + response.session_source_info.level_name.replaceAll('"', '""') + `"`;
 				} catch (error) {console.log(`${error.name}: ${error.message}`);}
 				level_tag = level_tag.replaceAll(' ','_');
 			}
@@ -183,30 +250,38 @@ async function CourseDownload(URLString) {
 		} else {return row.join(`,`);}
 	}).join("\n") + "\n";
 
-
 	//downloading the table
-	var hiddenElement = document.createElement('a');
-	hiddenElement.href = 'data:text/csv;charset=utf-8,%EF%BB%BF' + encodeURIComponent(result);
-	hiddenElement.target = '_blank';
-	hiddenElement.download = saveas + '.csv';
-	hiddenElement.click();
+	let csvdata = 'data:text/csv;charset=utf-8,%EF%BB%BF' + encodeURIComponent(result);
+	if (PLAIN_DWLD) {
+		var downloadElement = document.createElement('a');
+		downloadElement.target = '_blank';
+		downloadElement.href = csvdata;
+		downloadElement.download = saveas + '.csv';
+		downloadElement.click();
+	} else {
+		download_queue.push([csvdata, subfolder + saveas + '.csv']);
+	}
 
-	//appending media files to media download queue
-	console.log("[" + name + "] media files found: " + media_download_urls.size);	
-	let downloads_pack = Array.from(media_download_urls).map(url => [url, `${saveas}_media(${media_download_urls.size})/` + PaddedFilename(url)]);
-	media_downloads_all.push(...downloads_pack);
-
+	//appending files to media download queue
+	if (download_media) {console.log("[" + name + "] media files found: " + media_download_urls.size)};	
+	if (!FAKE_DWLD) {
+		let media_batch = Array.from(media_download_urls).map(url => [url, `${subfolder}${saveas}_media(${media_download_urls.size})/` + PaddedFilename(url)]);
+		download_queue.push(...media_batch);
+	} 
 };
 
 
 function mediaDownload(all_downloads) {
+	
+	let dwldprogress = document.createElement("div");
+	dwldprogress.id = "downprogress";
+		dwldprogress.style.width = 0;
+	document.querySelector('.scanprogress').append(dwldprogress);
 
-	if (!FAKE_DWLD && all_downloads.length > 0) {
-		var param = {
-			collection: all_downloads
-		};
-		chrome.runtime.sendMessage(param);
-	}
+	chrome.runtime.sendMessage({
+		type: "coursedump_download",
+		collection: all_downloads
+	});
 
 	//help
 	if (ANKI_HELP_PROMPT && !BATCH && confirm('Would you like some help with Anki integration?')) {
@@ -216,8 +291,38 @@ function mediaDownload(all_downloads) {
 
 
 
-//------MAIN DOWNLOAD
-let media_downloads_all = [];
+//------MAIN
+let progressbar;
+progressbar = document.getElementById('dumpprogress');
+if (!progressbar) {
+	progressbar = document.createElement("div");	
+	progressbar.id = "dumpprogress";
+	progresspadding = document.createElement("div");	
+	progresspadding.id = "progresspadding";
+	try {
+		document.querySelector(".rebrand-header-root").prepend(progressbar);
+		document.querySelector("#page-head").prepend(progresspadding);
+	} catch (err) {
+		document.body.prepend(progressbar);
+	}
+//	document.getElementById('header').prepend(progressbar);
+}
+let download_queue = [];
+
+chrome.runtime.onMessage.addListener(
+   function (arg, sender, sendResponse) {
+      var type = arg.type;
+      var prog = arg.progress;
+	if (type === "coursedump_progress_upd") {
+		if (prog === "done") {
+			progressbar.className = "done";
+		} else { 
+			console.log(prog + " media queued");
+			document.getElementById("downprogress").style.width = prog;
+		}
+	}
+});
+
 
 (async function(){
 	let currentUrl = window.location.toString();
@@ -236,13 +341,14 @@ let media_downloads_all = [];
 							console.log("downloading " + queueline);
 							await CourseDownload(queueline);
 						}));
-						mediaDownload(media_downloads_all);
+						progressbar.className = "halfdone";
+						mediaDownload(download_queue);
 					});				
 				}
 	);
 	} else {
 		if (await CourseDownload(currentUrl) != -1) {
-			mediaDownload(media_downloads_all);
+			mediaDownload(download_queue);
 		}
 	}
 })()
