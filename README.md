@@ -27,11 +27,11 @@ Click `Code` and then `Download ZIP` (Note, that the `Code` button might be hidd
 3. Simply **click the extension icon** ![CourseDump2022 icon](https://user-images.githubusercontent.com/93875472/197039734-bd2efdf8-a6c6-4327-8617-f2d3a95fcb3a.png) on the toolbar
     <br>(if you skipped the last installation step, click the `Extensions` button ![Chrome extension icon](https://user-images.githubusercontent.com/93875472/197036859-7c3ff1ab-a171-4408-8255-29ba6d8d8139.png) and then ![`CourseDump2022`](https://user-images.githubusercontent.com/93875472/197040206-6c5298bd-0f68-418d-9efb-a3ce1b8d275d.png))
  
-After that you should see a progress bar at the top of the page, indicating the progress of the extension scanning the course's page:
+After that you should see a progress bar at the top, indicating the progress of the extension scanning the course's page:
 
 ![image](https://user-images.githubusercontent.com/93875472/199846918-1ad6cfe1-0e8c-498b-8a14-e1c4ef6851ca.png)
 
-When the scanning is complete, the bar will start to fill with yellow, as the extension sends the `.csv` file, course metadata, and media files (if you chose to download them) to *Google Chrome* download queue. The downloaded files should appear in your downloads directory, in a subfolder containing course name and id, as well as the name of the author.
+When the scanning is complete, the bar will start to fill with yellow, as the extension sends the `.csv` file, course metadata, and media files (if you chose to download them) to *Google Chrome* download queue. The downloaded files should appear in your downloads directory, in a subfolder named with the course's name and id, as well as the name of the author.
 
 ### Batch download
 
