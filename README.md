@@ -27,7 +27,11 @@ Click `Code` and then `Download ZIP` (Note, that the `Code` button might be hidd
 3. Simply **click the extension icon** ![CourseDump2022 icon](https://user-images.githubusercontent.com/93875472/197039734-bd2efdf8-a6c6-4327-8617-f2d3a95fcb3a.png) on the toolbar
     <br>(if you skipped the last installation step, click the `Extensions` button ![Chrome extension icon](https://user-images.githubusercontent.com/93875472/197036859-7c3ff1ab-a171-4408-8255-29ba6d8d8139.png) and then ![`CourseDump2022`](https://user-images.githubusercontent.com/93875472/197040206-6c5298bd-0f68-418d-9efb-a3ce1b8d275d.png))
  
-When the scanning of the course is finished (this might take up to several minutes for large courses!), a `.csv` file with all the table data should appear in your downloads folder. After that, if you chose to download media, the extension will proceed to downloading all the audio and video files from the course to a subfolder containing the course's name.
+After that you should see a progress bar at the top of the page, indicating the progress of the extension scanning the course's page:
+
+![image](https://user-images.githubusercontent.com/93875472/199846918-1ad6cfe1-0e8c-498b-8a14-e1c4ef6851ca.png)
+
+When the scanning is complete, the bar will start to fill with yellow, as the extension sends the `.csv` file, course metadata, and media files (if you chose to download them) to *Google Chrome* download queue. The downloaded files should appear in your downloads directory, in a subfolder containing course name and id, as well as the name of the author.
 
 ### Batch download
 
@@ -55,7 +59,7 @@ You can compare this number against the total number of words in the Memrise cou
 
 ### Full import with media
 The overall process is the same as [importing without media](https://github.com/Eltaurus-Lt/CourseDump2022#simple-import-without-media) with two differences:
-1. You need to move all media files from the course subfolder they have been downloaded into to your Anki's `collection.media` folder. The default path on different systems is as follows:
+1. You need to move all media files from the course `..._media` subfolder they have been downloaded into to your Anki's `collection.media` folder. The default path on different systems is as follows:
     * Windows: `%APPDATA%\\Anki2\\[your Anki username]\\collection.media`
     * Mac: `~/Library/Application Support/Anki2/[your Anki username]/collection.media` (the Library folder is hidden by default, but can be revealed in Finder by holding down the option key while clicking on the Go menu)
     * Linux: `~/.local/share/Anki2/[your Anki username]/collection.media` for native installs or `~/.var/app/net.ankiweb.Anki/data/Anki2/[your Anki username]/collection.media` for flatpak installs
