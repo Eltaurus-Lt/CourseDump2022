@@ -60,7 +60,7 @@ async function CourseDownload(URLString) {
 	    .then(html => {
 	        var parser = new DOMParser();
 	        var doc = parser.parseFromString(html, "text/html");
-		levelsN     = doc.querySelector('div.levels').childElementCount;
+		levelsN     = (query => (query ? query.childElementCount : 1))(doc.querySelector('div.levels'));
 		author      = doc.querySelector('.creator-name span').innerText;
 		ava         = doc.querySelector('.creator-image img').src;
 		propName    = doc.querySelector('.course-name').innerText;
@@ -146,7 +146,8 @@ async function CourseDownload(URLString) {
 					(learnable.screens["1"].audio && learnable.screens["1"].audio.value.length > 0) || 
 					(learnable.screens["1"].video && learnable.screens["1"].video.value.length > 0) || 
 					(learnable.screens["1"].definition.kind === "audio" && learnable.screens["1"].definition.value.length > 0) ||
-					(learnable.screens["1"].definition.kind === "image" && learnable.screens["1"].definition.value.length > 0) 
+					(learnable.screens["1"].definition.kind === "image" && learnable.screens["1"].definition.value.length > 0) ||
+					(learnable.screens["1"].item.kind === "image" && learnable.screens["1"].item.value.length > 0) 
 				)}	)) {
 				media_asked = true;
 				download_media = confirm("Embedded media was detected. Would you like to download it?");
@@ -172,6 +173,12 @@ async function CourseDownload(URLString) {
 				if (learnable.learning_element) {
 					has_learnable = true;
 					learnable_el = `"${learnable.learning_element.replaceAll('"', '""')}"`;
+				} else if (download_media && learnable.screens["1"].item.kind === "image" && learnable.screens["1"].item.value.length > 0) { 
+					has_learnable = true;
+					let temp_image_learns = [];
+					learnable.screens["1"].item.value.map(image_learn => {temp_image_learns.push(image_learn)});
+					temp_image_learns.forEach(media_download_urls.add, media_download_urls);
+					learnable_el = `"` + temp_image_learns.map(url => `<img src='${PaddedFilename(url)}'>`).join(``) + `"`;
 				}
 				row.push(learnable_el);
 
@@ -214,8 +221,10 @@ async function CourseDownload(URLString) {
 				}
 				row.push(`"` + temp_video_urls.map(url => `[sound:${PaddedFilename(url)}]`).join("") + `"`);
 				
+				//tags
 				row.push(level_tag);
-
+				
+				//extra data
 				let temp_extra = "";
 				if (EXTRA_INFO && learnable.screens["1"].visible_info && learnable.screens["1"].visible_info.length > 0) {
 					has_extras = true;
