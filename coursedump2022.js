@@ -1,4 +1,4 @@
-const ALWAYS_DWLD_MEDIA = true;
+const ALWAYS_DWLD_MEDIA = false;
 const ANKI_HELP_PROMPT = true;
 const BATCH = false;
 const LEVEL_TAGS = true;
