@@ -187,7 +187,6 @@ async function CourseDownload(URLString) {
 					temp_audio_defs.forEach(media_download_urls.add, media_download_urls);
 					definition = `"` + temp_audio_defs.map(url => `[sound:${PaddedFilename(url)}]`).join("") + `"`;
 				} else if (download_media && learnable.screens["1"].definition.kind === "image" && learnable.screens["1"].definition.value.length > 0) {
-					console.log('in');
 					has_definitions = true;
 					let temp_image_defs = [];
 					learnable.screens["1"].definition.value.map(image_def => {temp_image_defs.push(image_def)});
@@ -247,7 +246,6 @@ async function CourseDownload(URLString) {
 			}
 		}
 	}
-console.log('here');
 
 	//table to text conversion (global flags has_audio/has_video are needed since different number of cells in csv rows causes problems for Anki import)
 	let result = table.map(row => {
