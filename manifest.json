@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "CourseDump2022",
-  "version": "6.2",
+  "version": "6.3",
   "description": "export from memrise to CSV.",
   "icons": {
     "16": "icon.png",

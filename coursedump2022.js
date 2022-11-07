@@ -41,7 +41,9 @@ async function CourseDownload(URLString) {
 	function PaddedFilename(url) {
 		let temp_filename = url.split("/").slice(-1);
 		if (temp_filename[0].length < MIN_FILENAME_LENGTH) {
-			temp_filename = name + "_" + url.split("/").slice(-2).join("_");
+			let pad = url.split("/").slice(-2)[0];
+			if (pad === 'medium') {pad = url.split("/").slice(-3)[0].replaceAll('%','_')};
+			temp_filename = name + "_" + pad + "_" + url.split("/").slice(-1).join("_");
 		};
 		return temp_filename;
 	}
