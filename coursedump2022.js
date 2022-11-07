@@ -1,14 +1,14 @@
 const ALWAYS_DWLD_MEDIA = false;
 const ANKI_HELP_PROMPT = true;
 const BATCH = false;
-const LEVEL_TAGS = false;
+const LEVEL_TAGS = true;
 const EXTRA_INFO = false;
 const COLLAPSE_COLUMNS = true;
 
 const MAX_ERR_ABORT = 5;
 const MIN_FILENAME_LENGTH = 8;
 const LEARNABLE_IDS = false;
-const FAKE_DWLD = true;
+const FAKE_DWLD = false;
 const PLAIN_DWLD = false;
 
 function sleep(ms) {
