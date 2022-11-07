@@ -1,14 +1,14 @@
 const ALWAYS_DWLD_MEDIA = false;
 const ANKI_HELP_PROMPT = true;
 const BATCH = false;
-const LEVEL_TAGS = true;
+const LEVEL_TAGS = false;
 const EXTRA_INFO = false;
 const COLLAPSE_COLUMNS = true;
 
 const MAX_ERR_ABORT = 5;
 const MIN_FILENAME_LENGTH = 8;
 const LEARNABLE_IDS = false;
-const FAKE_DWLD = false;
+const FAKE_DWLD = true;
 const PLAIN_DWLD = false;
 
 function sleep(ms) {
@@ -41,7 +41,9 @@ async function CourseDownload(URLString) {
 	function PaddedFilename(url) {
 		let temp_filename = url.split("/").slice(-1);
 		if (temp_filename[0].length < MIN_FILENAME_LENGTH) {
-			temp_filename = name + "_" + url.split("/").slice(-2).join("_");
+			let pad = url.split("/").slice(-2)[0];
+			if (pad === 'medium') {pad = url.split("/").slice(-3)[0].replaceAll('%','_')};
+			temp_filename = name + "_" + pad + "_" + url.split("/").slice(-1).join("_");
 		};
 		return temp_filename;
 	}
