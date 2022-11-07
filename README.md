@@ -73,6 +73,10 @@ The overall process is the same as [importing without media](https://github.com/
         3. Press `Fields` then `Add` buttons, and type a name (e.g. _Audio_. Repeat the adding if you need the _Video_ field as well). <br><sub>You might want to clone the existing Note Type before adding fields though, so as to preserve the original. For that, before step b.: click Add -> select the Note Type from the list to clone -> `OK` -> enter a new name -> `OK` -> go to step b. and select the new Note Type.</sub>
     
     For additional information regarding the Note Types editing please refer to [this section of Anki manual](https://docs.ankiweb.net/templates/fields.html#basic-replacements). 
+    
+A typical `Field mapping` for importing with media looks like this:
+![image](https://user-images.githubusercontent.com/93875472/200242551-5b2d4613-6cdd-4588-b472-ed24d3aac25e.png)
+    
 
 ## Settings
 
