@@ -117,7 +117,7 @@ The other available settings that can be changed in the same way:
 
 There is a problem with encoding of a small subset of Unicode characters, which results in media filenames being written with _ where their entries in `.csv` tables are written with %. If you encounter such a case, the workaround is to replace all % in `.csv` file with _ in any text editor before importing it into Anki:
 <p><picture>
- <source media="(prefers-color-scheme: dark)" srcset="https://user-images.githubusercontent.com/93875472/212491973-345e73b6-e032-41d7-bd1e-afd781e502de.png">
+ <source media="(prefers-color-scheme: dark)" srcset="https://user-images.githubusercontent.com/93875472/212492190-d5e4d68f-1cf4-4bcc-824e-f1e4d0fea734.png">
  <img src="https://user-images.githubusercontent.com/93875472/197361505-70f2d10f-728b-4412-adc0-a19cd30aef04.png">
 </picture></p>  
 
