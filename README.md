@@ -10,10 +10,11 @@ Although it does not replicate all of the addon's functionality (e.g. in it's cu
 ## Downloading from GitHub
 Click `Code` and then `Download ZIP` (Note, that the `Code` button might be hidden if your browser window is not wide enough)<p>
  <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="https://user-images.githubusercontent.com/93875472/212447951-0f0cb29f-e378-4a6e-99e1-37e0a0b522eb.png">
+  <source media="(prefers-color-scheme: dark)" srcset="https://user-images.githubusercontent.com/93875472/212448145-e33acf96-fbb7-4ee0-8f70-89d142582797.png">
   <img src="https://user-images.githubusercontent.com/93875472/212447995-ec0370a5-af67-4a7b-96ec-b7eb2dd4e803.png">
 </picture>
 </p>
+
 
 
 ## Installation
