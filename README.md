@@ -11,7 +11,7 @@ Although it does not replicate all of the addon's functionality (e.g. in it's cu
 Click `Code` and then `Download ZIP` (Note, that the `Code` button might be hidden if your browser window is not wide enough)<p>
  <picture>
   <source media="(prefers-color-scheme: dark)" srcset="[https://user-images.githubusercontent.com/93875472/212294662-a4b089f3-ffa3-4ca2-99fa-755aa1226f49.png](https://user-images.githubusercontent.com/93875472/212447951-0f0cb29f-e378-4a6e-99e1-37e0a0b522eb.png)">
-  <img src="https://user-images.githubusercontent.com/93875472/212447946-b4112858-7b3a-4cff-b0f9-b0a639eaa50b.png">
+  <img src="https://user-images.githubusercontent.com/93875472/212447995-ec0370a5-af67-4a7b-96ec-b7eb2dd4e803.png">
 </picture>
 </p>
 
