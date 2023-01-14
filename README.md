@@ -10,10 +10,11 @@ Although it does not replicate all of the addon's functionality (e.g. in it's cu
 ## Downloading from GitHub
 Click `Code` and then `Download ZIP` (Note, that the `Code` button might be hidden if your browser window is not wide enough)<p>
  <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="https://user-images.githubusercontent.com/93875472/212294662-a4b089f3-ffa3-4ca2-99fa-755aa1226f49.png">
-  <img src="https://user-images.githubusercontent.com/93875472/212294591-9d14f426-9c78-4403-ac20-c98e395024fc.png">
+  <source media="(prefers-color-scheme: dark)" srcset="[https://user-images.githubusercontent.com/93875472/212294662-a4b089f3-ffa3-4ca2-99fa-755aa1226f49.png](https://user-images.githubusercontent.com/93875472/212447951-0f0cb29f-e378-4a6e-99e1-37e0a0b522eb.png)">
+  <img src="https://user-images.githubusercontent.com/93875472/212447946-b4112858-7b3a-4cff-b0f9-b0a639eaa50b.png">
 </picture>
 </p>
+
 
 ## Installation
 1. [Download](https://github.com/Eltaurus-Lt/CourseDump2022/archive/refs/heads/main.zip) the ***CourseDump2022-main.zip*** archive and extract ***CourseDump2022-main*** folder from it
