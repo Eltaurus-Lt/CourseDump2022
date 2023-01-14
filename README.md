@@ -8,13 +8,11 @@ Although it does not replicate all of the addon's functionality (e.g. in it's cu
 3. Works past April 2022 Memrise changes =)
 
 ## Downloading from GitHub
-Click `Code` and then `Download ZIP` (Note, that the `Code` button might be hidden if your browser window is not wide enough)<p>
- <picture>
+Click `Code` and then `Download ZIP` (Note, that the `Code` button might be hidden if your browser window is not wide enough)
+<p><picture>
   <source media="(prefers-color-scheme: dark)" srcset="https://user-images.githubusercontent.com/93875472/212448145-e33acf96-fbb7-4ee0-8f70-89d142582797.png">
   <img src="https://user-images.githubusercontent.com/93875472/212447995-ec0370a5-af67-4a7b-96ec-b7eb2dd4e803.png">
-</picture>
-</p>
-
+</picture></p>
 
 ## Installation
 1. [Download](https://github.com/Eltaurus-Lt/CourseDump2022/archive/refs/heads/main.zip) the ***CourseDump2022-main.zip*** archive and extract ***CourseDump2022-main*** folder from it
