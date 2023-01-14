@@ -116,8 +116,11 @@ The other available settings that can be changed in the same way:
 ## Known issues
 
 There is a problem with encoding of a small subset of Unicode characters, which results in media filenames being written with _ where their entries in `.csv` tables are written with %. If you encounter such a case, the workaround is to replace all % in `.csv` file with _ in any text editor before importing it into Anki:
+<p><picture>
+ <source media="(prefers-color-scheme: dark)" srcset="https://user-images.githubusercontent.com/93875472/212491973-345e73b6-e032-41d7-bd1e-afd781e502de.png">
+ <img src="https://user-images.githubusercontent.com/93875472/197361505-70f2d10f-728b-4412-adc0-a19cd30aef04.png">
+</picture></p>  
 
-![image](https://user-images.githubusercontent.com/93875472/197361505-70f2d10f-728b-4412-adc0-a19cd30aef04.png)
 
 ## Discussion
 If you encounter errors, have further questions regarding the extension, or need any help with using the downloaded materials in Anki, please leave a comment in this thread: [Memrise2Anki Replacement](https://community.memrise.com/t/memrise2anki-replacement/77107)
