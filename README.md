@@ -18,7 +18,7 @@ Click `Code` and then `Download ZIP` (Note, that the `Code` button might be hidd
 
 ## Installation
 1. [Download](https://github.com/Eltaurus-Lt/CourseDump2022/archive/refs/heads/main.zip) the ***CourseDump2022-main.zip*** archive and extract ***CourseDump2022-main*** folder from it
-2. In *Google Chrome* click the `Extensions` button <picture><source media="(prefers-color-scheme: dark)" srcset="https://user-images.githubusercontent.com/93875472/212448200-3a586992-2920-4d91-ae1b-aa7526b72d2a.png"><img src="https://user-images.githubusercontent.com/93875472/197036859-7c3ff1ab-a171-4408-8255-29ba6d8d8139.png"></picture> and then <picture><source media="(prefers-color-scheme: dark)" srcset="https://user-images.githubusercontent.com/93875472/212448898-d8025f31-6981-482c-8c71-07d071ad97f7.png"><img src="https://user-images.githubusercontent.com/93875472/197037928-6c6c52f9-472f-44c0-9cbd-ef18d6a2cdda.png" alt="Manage extensions"></picture><br> 
+2. In *Google Chrome* click the `Extensions` button <picture><source media="(prefers-color-scheme: dark)" srcset="https://user-images.githubusercontent.com/93875472/212448200-3a586992-2920-4d91-ae1b-aa7526b72d2a.png"><img src="https://user-images.githubusercontent.com/93875472/197036859-7c3ff1ab-a171-4408-8255-29ba6d8d8139.png" alt="Chrome extension icon"></picture> and then <picture><source media="(prefers-color-scheme: dark)" srcset="https://user-images.githubusercontent.com/93875472/212448898-d8025f31-6981-482c-8c71-07d071ad97f7.png"><img src="https://user-images.githubusercontent.com/93875472/197037928-6c6c52f9-472f-44c0-9cbd-ef18d6a2cdda.png" alt="Manage extensions"></picture><br> 
   (alternatively go to the Main menu <picture><source media="(prefers-color-scheme: dark)" srcset="https://user-images.githubusercontent.com/93875472/212449149-6576e8ca-38a7-471d-8f26-53e9bfe996f3.png"><img src="https://user-images.githubusercontent.com/93875472/197037696-a6258293-5de9-42c7-b971-d430abc5c7c5.png" alt="`Menu`"></picture> in the top right corner and click `More tools` -> `Extensions`) 
 3. Enable `Developer mode` (top right corner of the page)<br> <picture><source media="(prefers-color-scheme: dark)" srcset="https://user-images.githubusercontent.com/93875472/212449257-162c735c-4d62-4ccf-957d-af045aaa1115.png"><img src="https://user-images.githubusercontent.com/93875472/197039106-acc2abba-2a2d-4b4f-acc6-e2708341fc74.png" alt="Developer mode off->on"></picture>
 4. Choose `Load unpacked` (top left corner of the page) and select the ***CourseDump2022-main*** folder extracted in step 1
@@ -28,12 +28,15 @@ Click `Code` and then `Download ZIP` (Note, that the `Code` button might be hidd
 ## Downloading a Memrise Course
 1. Make sure you are logged in on [Memrise](https://memrise.com/)
 2. Navigate to any page belonging to a course you want to download ([example-1](https://app.memrise.com/course/1105/speak-esperanto-like-a-nativetm-1/), [example-2](https://app.memrise.com/course/2021573/french-1/3/))
-3. Simply **click the extension icon** ![CourseDump2022 icon](https://user-images.githubusercontent.com/93875472/197039734-bd2efdf8-a6c6-4327-8617-f2d3a95fcb3a.png) on the toolbar
-    <br>(if you skipped the last installation step, click the `Extensions` button ![Chrome extension icon](https://user-images.githubusercontent.com/93875472/197036859-7c3ff1ab-a171-4408-8255-29ba6d8d8139.png) and then ![`CourseDump2022`](https://user-images.githubusercontent.com/93875472/197040206-6c5298bd-0f68-418d-9efb-a3ce1b8d275d.png))
+3. Simply **click the extension icon** <picture><source media="(prefers-color-scheme: dark)" srcset="https://user-images.githubusercontent.com/93875472/212484466-55d630f7-763b-44a9-a858-a7a8c5898948.png"><img src="https://user-images.githubusercontent.com/93875472/197039734-bd2efdf8-a6c6-4327-8617-f2d3a95fcb3a.png" alt="CourseDump2022 icon"></picture> on the toolbar
+    <br>(if you skipped the last installation step, click the `Extensions` button <picture><source media="(prefers-color-scheme: dark)" srcset="https://user-images.githubusercontent.com/93875472/212448200-3a586992-2920-4d91-ae1b-aa7526b72d2a.png"><img src="https://user-images.githubusercontent.com/93875472/197036859-7c3ff1ab-a171-4408-8255-29ba6d8d8139.png" alt="Chrome extension icon"></picture> and then <picture><source media="(prefers-color-scheme: dark)" srcset="https://user-images.githubusercontent.com/93875472/212484476-4de62d82-525e-40cc-80ba-6901aa3398ea.png"><img src="https://user-images.githubusercontent.com/93875472/197040206-6c5298bd-0f68-418d-9efb-a3ce1b8d275d.png" alt="`CourseDump2022`"></picture>)
  
 After that you should see a progress bar at the top, indicating the progress of the extension scanning the course's page:
 
-![image](https://user-images.githubusercontent.com/93875472/199846918-1ad6cfe1-0e8c-498b-8a14-e1c4ef6851ca.png)
+<picture>
+ <source media="(prefers-color-scheme: dark)" srcset="https://user-images.githubusercontent.com/93875472/212484712-9d9627cd-6766-4b45-af46-4809fc646dbf.png">
+ <img src="https://user-images.githubusercontent.com/93875472/212484716-a5f3cb78-c150-438b-85a8-f8a6ad30d7ad.png">
+</picture>
 
 When the scanning is complete, the bar will start to fill with yellow, as the extension sends the `.csv` file, course metadata, and media files (if you chose to download them) to *Google Chrome* download queue. The downloaded files should appear in your downloads directory, in a subfolder named with the course's name and id, as well as the name of the author.
 
@@ -43,7 +46,7 @@ When the scanning is complete, the bar will start to fill with yellow, as the ex
 2. Set `BATCH = true` ([changing settings](https://github.com/Eltaurus-Lt/CourseDump2022#settings))
 3. During batch download the option of downloading media is defined by `ALWAYS_DWLD_MEDIA` constant. So set `ALWAYS_DWLD_MEDIA = true` to download all media files or `ALWAYS_DWLD_MEDIA = false` to download none
 4. Open any [Memrise](https://memrise.com/) page and make sure you are logged in
-5. Click the extension icon ![CourseDump2022 icon](https://user-images.githubusercontent.com/93875472/197039734-bd2efdf8-a6c6-4327-8617-f2d3a95fcb3a.png) 
+5. Click the extension icon <picture><source media="(prefers-color-scheme: dark)" srcset="https://user-images.githubusercontent.com/93875472/212484466-55d630f7-763b-44a9-a858-a7a8c5898948.png"><img src="https://user-images.githubusercontent.com/93875472/197039734-bd2efdf8-a6c6-4327-8617-f2d3a95fcb3a.png" alt="CourseDump2022 icon"></picture> 
 
 ## Importing into Anki
 
