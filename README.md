@@ -33,10 +33,10 @@ Click `Code` and then `Download ZIP` (Note, that the `Code` button might be hidd
  
 After that you should see a progress bar at the top, indicating the progress of the extension scanning the course's page:
 
-<picture>
+<p><picture>
  <source media="(prefers-color-scheme: dark)" srcset="https://user-images.githubusercontent.com/93875472/212484712-9d9627cd-6766-4b45-af46-4809fc646dbf.png">
  <img src="https://user-images.githubusercontent.com/93875472/212484716-a5f3cb78-c150-438b-85a8-f8a6ad30d7ad.png">
-</picture>
+</picture></p>
 
 When the scanning is complete, the bar will start to fill with yellow, as the extension sends the `.csv` file, course metadata, and media files (if you chose to download them) to *Google Chrome* download queue. The downloaded files should appear in your downloads directory, in a subfolder named with the course's name and id, as well as the name of the author.
 
