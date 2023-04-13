@@ -1,5 +1,5 @@
 # CourseDump2022
-This **Google Chrome** extension downloads word lists from [**Memrise**](https://memrise.com/) courses as `.csv` spreadsheets along with all the associated <ins>audio</ins> and <ins>video</ins> files. The format of downloaded data is suitable for further import into [**Anki**](https://apps.ankiweb.net/).
+This **Google Chrome** extension downloads word lists from [**Memrise**](https://memrise.com/) courses as `.csv` spreadsheets along with all the associated <ins>audio</ins> and <ins>video</ins> files. The format of downloaded data is suitable for subsequent import into [**Anki**](https://apps.ankiweb.net/).
 
 The extension is supposed to serve as a substitution for the currently defunct Anki's [Memrise2Anki](https://github.com/wilddom/memrise2anki-extension) addon.
 Although it does not replicate all of the addon's functionality (e.g. in it's current state the extension does not download personal study data), the extension has several advantages over Memrise2Anki:
