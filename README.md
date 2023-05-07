@@ -121,4 +121,4 @@ There is a problem with encoding of a small subset of Unicode characters, which 
 
 
 ## Discussion
-If you encounter errors, have further questions regarding the extension, or need any help with using the downloaded materials in Anki, please leave a comment in this thread: [Memrise2Anki Replacement](https://forums.ankiweb.net/t/an-alternative-to-memrise2anki-support-thread/30084)
+If you encounter errors, have further questions regarding the extension, or need any help with using the downloaded materials in Anki, please leave a comment in this thread: [An alternative to Memrise2Anki](https://forums.ankiweb.net/t/an-alternative-to-memrise2anki-support-thread/30084)
