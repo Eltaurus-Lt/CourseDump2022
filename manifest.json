@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "CourseDump2022",
-  "version": "6.4",
+  "version": "6.5",
   "description": "export from memrise to CSV.",
   "icons": {
     "16": "icon.png",
@@ -22,7 +22,7 @@
   "action": {},
   "content_security_policy": {},
   "web_accessible_resources": [{
-    "resources": ["queue.txt"],
+    "resources": ["queue.txt", "settings.json"],
     "matches": ["<all_urls>"]
     }],
    "content_scripts": [
