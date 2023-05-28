@@ -1,15 +1,16 @@
-const ALWAYS_DWLD_MEDIA = false;
-const ANKI_HELP_PROMPT = true;
-const BATCH = false;
-const LEVEL_TAGS = true;
-const EXTRA_INFO = false;
-const COLLAPSE_COLUMNS = true;
+//fallback settings values
+let ALWAYS_DWLD_MEDIA = false,
+	ANKI_HELP_PROMPT = true,
+	BATCH = false,
+	LEVEL_TAGS = true,
+	EXTRA_INFO = false,
+	COLLAPSE_COLUMNS = true,
 
-const MAX_ERR_ABORT = 5;
-const MIN_FILENAME_LENGTH = 8;
-const LEARNABLE_IDS = false;
-const FAKE_DWLD = false;
-const PLAIN_DWLD = false;
+	MAX_ERR_ABORT = 5,
+	MIN_FILENAME_LENGTH = 8,
+	LEARNABLE_IDS = false,
+	FAKE_DWLD = false,
+	PLAIN_DWLD = false;
 
 function sleep(ms) {
 	return new Promise(resolve => setTimeout(resolve, ms));
@@ -255,8 +256,8 @@ async function CourseDownload(URLString) {
 
 			err_count = 0;
 		} catch (error) {
-			console.log(error);
-			console.log(err_count + 1);
+			//console.log(error);
+			console.log('Level does not exist or has no learnable words. Level skip count: ' + (err_count + 1));
 			if (empty_set_err) continue;
 			err_count++;
 			if (err_count >= MAX_ERR_ABORT) {
@@ -359,6 +360,33 @@ chrome.runtime.onMessage.addListener(
 	if (currentUrl.split("/")[2] !== 'app.memrise.com') {
 		alert("The extension should be used on the memrise.com site"); 
 		return -1;
+	}
+
+	//overwrite settings with settings from json file
+	if (true) {
+		await fetch(chrome.runtime.getURL('settings.json'))
+		.then(response => response.json()).then(settings => {
+			try {
+				ALWAYS_DWLD_MEDIA = settings.user_settings.always_download_media;
+				ANKI_HELP_PROMPT = settings.user_settings.display_anki_help_prompt;
+				BATCH = settings.user_settings.batch_download;
+				LEVEL_TAGS = settings.user_settings.level_tags;
+				EXTRA_INFO = settings.user_settings.extra_info;
+				COLLAPSE_COLUMNS = settings.user_settings.collapse_columns;
+
+				LEARNABLE_IDS = settings.extra_settings.learnable_ids;
+				PLAIN_DWLD = settings.extra_settings.exclude_course_metadata;
+				FAKE_DWLD = settings.extra_settings.imitate_media_download;
+
+				MAX_ERR_ABORT = settings.basic_settings.max_level_skip;
+				MIN_FILENAME_LENGTH = settings.basic_settings.max_filename_length;
+
+				console.log(MIN_FILENAME_LENGTH);
+			} catch (err) {console.log('overwriting settings error')};
+		}
+		).catch(error => {
+			console.error('Error reading settings.json:', error);
+		});
 	}
 	
 	if (BATCH) {
