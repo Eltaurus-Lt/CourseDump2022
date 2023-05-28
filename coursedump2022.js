@@ -227,11 +227,18 @@ async function CourseDownload(URLString) {
 				row.push(level_tag);
 				
 				//extra data
-				let temp_extra = "";
+				let temp_extra = ``;
 				if (EXTRA_INFO && learnable.screens["1"].visible_info && learnable.screens["1"].visible_info.length > 0) {
 					has_extras = true;
-					temp_extra = `"` + learnable.screens["1"].visible_info[0].value + `"`;
+					temp_extra = learnable.screens["1"].visible_info[0].value;
 				}
+					//attributes ?= example sentences
+				if (EXTRA_INFO && learnable.screens["1"].attributes && learnable.screens["1"].attributes.length > 0 && learnable.screens["1"].attributes[0] && learnable.screens["1"].attributes[0].value) {
+					has_extras = true;
+					if (temp_extra) {temp_extra = temp_extra + ` `};
+					temp_extra = temp_extra + learnable.screens["1"].attributes[0].value;
+				}
+				if (temp_extra) {temp_extra = `"` + temp_extra + `"`};
 				row.push(temp_extra);
 
 				if (LEARNABLE_IDS) {
