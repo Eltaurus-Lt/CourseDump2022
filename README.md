@@ -41,8 +41,8 @@ When the scanning is complete, the bar will start to fill with yellow, as the ex
 ### Batch download
 
 1. Make a list of urls of the Memrise courses to download in the `queue.txt` file found in the extension folder (the examples of urls are provided in the file)
-2. Set `BATCH = true` ([changing settings](https://github.com/Eltaurus-Lt/CourseDump2022#settings))
-3. During batch download the option of downloading media is defined by `ALWAYS_DWLD_MEDIA` constant. So set `ALWAYS_DWLD_MEDIA = true` to download all media files or `ALWAYS_DWLD_MEDIA = false` to download none
+2. Set `"batch_download": true` ([changing settings](https://github.com/Eltaurus-Lt/CourseDump2022#settings))
+3. During batch download the option of downloading media is defined by `always_download_media` parameter. So set `"always_download_media": true` to download all media files or `"always_download_media": false` to download none
 4. Open any [Memrise](https://memrise.com/) page and make sure you are logged in
 5. Click the extension icon <picture><source media="(prefers-color-scheme: dark)" srcset="https://user-images.githubusercontent.com/93875472/212484466-55d630f7-763b-44a9-a858-a7a8c5898948.png"><img src="https://user-images.githubusercontent.com/93875472/197039734-bd2efdf8-a6c6-4327-8617-f2d3a95fcb3a.png" alt="CourseDump2022 icon"></picture> 
 
@@ -53,7 +53,7 @@ When the scanning is complete, the bar will start to fill with yellow, as the ex
 2. Navigate to the `.csv` file created after [step 3 of downloading a course](https://github.com/Eltaurus-Lt/CourseDump2022#downloading-a-memrise-course)
 3. Adjust the import settings:
     1. Indicate the Note Type you want to use in the `Type` field (if you don't have any particular Note Type in mind, the `Basic` one will do)
-    2. In the `Deck` field select the Deck you want cards to go into (you can create a new one from this menu by clicking a deck name after the `Deck`field and then `Add`)
+    2. In the `Deck` field select the Deck you want cards to go into (you can create a new one from this menu by clicking a deck name after the `Deck` field and then `Add`)
     3. Check the `Field mapping`<p> 
   <picture><source media="(prefers-color-scheme: dark)" srcset="https://user-images.githubusercontent.com/93875472/212490785-8b6e6090-91e8-4a80-a8af-8d836deedde2.png">
  <img src="https://user-images.githubusercontent.com/93875472/198799349-feb5d729-c33a-41e7-aa24-3d1af37e2943.png"></picture></p>
@@ -84,7 +84,7 @@ The overall process is the same as [importing without media](https://github.com/
     * Modify an existing Note Type adding _Audio_ and/or _Video_ fields. To do so:
         1. In *Anki* go to `Tools` -> `Manage Note Types`
         2. Select a Note Type you would like to edit from the list (e.g. the `Basic` one)
-        3. Press `Fields` then `Add` buttons, and type a name (e.g. _Audio_. Repeat the adding if you need the _Video_ field as well). <br><sub>You might want to clone the existing Note Type before adding fields though, so as to preserve the original. For that, before step b.: click Add -> select the Note Type from the list to clone -> `OK` -> enter a new name -> `OK` -> go to step b. and select the new Note Type.</sub>
+        3. Press `Fields` then `Add` buttons, and type a name (e.g. _Audio_. Repeat the adding for _Video_ and other extra fields as needed). <br><sub>You might want to clone the existing Note Type before adding fields though, so as to preserve the original. For that, before step b.: click Add -> select the Note Type from the list to clone -> `OK` -> enter a new name -> `OK` -> go to step b. and select the new Note Type.</sub>
     
     For additional information regarding the Note Types editing please refer to [this section of Anki manual](https://docs.ankiweb.net/templates/fields.html#basic-replacements). 
     
@@ -96,19 +96,21 @@ A typical `Field mapping` for importing with media looks like this:
 
 ## Settings
 
-If you want the extension to download media by default without asking every time:
-1. Open `cousedump2022.js` in any text editor 
-2. Set `const ALWAYS_DWLD_MEDIA = true;` in the first line and save the file
+The settings for the extension are stored in `settings.json` file inside the extension root folder.
+For example, if you want the extension to download media by default without asking every time:
+1. Open `settings.json` in any text editor 
+2. Locate `"always_download_media": false` and change it to `"always_download_media": true`
+3. Save the file
 
 The other available settings that can be changed in the same way:
 
-| option           | description                                                                        |
-| ---------------- | ---------------------------------------------------------------------------------- |
-| ANKI_HELP_PROMPT | Setting to `false` disables the popup which links to this page after the download  |
-| BATCH            | Setting to `true` enables [batch download](https://github.com/Eltaurus-Lt/CourseDump2022#batch-download) of Memrise courses |
-| LEVEL_TAGS       | Setting to `false` removes column with hierarchical course::level tags from `.csv` |
-| EXTRA_INFO       | Setting to `true` makes the extension to download additional word data if present |
-| COLLAPSE_COLUMNS | Setting to `false` leaves empty columns in the `.csv` tables, so that the numbering of fields ([step 3.iii.](https://github.com/Eltaurus-Lt/CourseDump2022#simple-import-without-media)) is the same for any course: 1 - _Learned word_, 2 - _Definition_, 3 - _Audio_, 4 - _Video_, 5 - _Tags_, 6 - _Extra_. |
+| option                   | description                                                                        |
+| ------------------------ | ---------------------------------------------------------------------------------- |
+| display_anki_help_prompt | Setting to `false` disables the popup which links to this page after the download  |
+| batch_download           | Setting to `true` enables [batch download](https://github.com/Eltaurus-Lt/CourseDump2022#batch-download) of Memrise courses |
+| level_tags               | Setting to `false` removes column with hierarchical `course::level` tags from `.csv` |
+| extra_info               | Setting to `true` makes the extension to download additional word data and attributes if present |
+| collapse_columns         | Setting to `false` leaves empty columns in the `.csv` tables, so that the numbering of fields ([step 3.iii.](https://github.com/Eltaurus-Lt/CourseDump2022#simple-import-without-media)) would always be the same: 1 - _Learned word_, 2 - _Definition_, 3 - _Audio_, 4 - _Video_, 5 - _Tags_, 6 - _Extra_. |
 
 
 ## Known issues
