@@ -134,7 +134,7 @@ async function CourseDownload(URLString) {
 			await sleep(200);
 			// get CSRF header
 			token = document.cookie.split(" ").find(cookie => cookie.includes("csrftoken")).split(/[=;]/g)[1];
-			response = await (await fetch("https://app.memrise.com/v1.18/learning_sessions/preview/", {
+			response = await (await fetch("https://app.memrise.com/v1.19/learning_sessions/preview/", {
 				"headers": { "Accept": "*/*", "Content-Type": "Application/json", "X-CSRFToken": token },
 				"body": "{\"session_source_id\":" + id + ",\"session_source_type\":\"course_id_and_level_index\",\"session_source_sub_index\":" + i + "}",
 				"method": "POST"
