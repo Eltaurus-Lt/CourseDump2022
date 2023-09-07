@@ -111,7 +111,9 @@ async function CourseDownload(URLString) {
 	let download_media = false;
 	let has_audio = false;
 	let has_video = false;
-	let has_extras = false;
+	let has_extras1 = false;
+	let has_extras2 = false;
+	let has_extras3 = false;
 	let has_definitions = false;
 	let has_learnable = false;
 	let media_download_urls = new Set();
@@ -228,19 +230,30 @@ async function CourseDownload(URLString) {
 				row.push(level_tag);
 				
 				//extra data
-				let temp_extra = ``;
-				if (EXTRA_INFO && learnable.screens["1"].visible_info && learnable.screens["1"].visible_info.length > 0) {
-					has_extras = true;
-					temp_extra = learnable.screens["1"].visible_info[0].value;
-				}
-					//attributes ?= example sentences
+				//	attr: 686844 - SS; 1995282 - PoS;
+				let temp_extra1 = ``;
 				if (EXTRA_INFO && learnable.screens["1"].attributes && learnable.screens["1"].attributes.length > 0 && learnable.screens["1"].attributes[0] && learnable.screens["1"].attributes[0].value) {
-					has_extras = true;
-					if (temp_extra) {temp_extra = temp_extra + ` `};
-					temp_extra = temp_extra + learnable.screens["1"].attributes[0].value;
+					has_extras1 = true;
+					temp_extra1 = learnable.screens["1"].attributes[0].value;
 				}
-				if (temp_extra) {temp_extra = `"` + temp_extra + `"`};
-				row.push(temp_extra);
+				row.push(`"` + temp_extra1 + `"`);
+
+				//	visible_info: 548340 - kana; 6197256 - syn;
+				let temp_extra2 = ``;
+				if (EXTRA_INFO && learnable.screens["1"].visible_info && learnable.screens["1"].visible_info.length > 0 && learnable.screens["1"].visible_info[0] && learnable.screens["1"].visible_info[0].value) {
+					has_extras2 = true;
+					temp_extra2 = learnable.screens["1"].visible_info[0].value;
+				}
+				row.push(`"` + temp_extra2 + `"`);
+
+				//	hidden_info: 1995282 - inflections;
+				let temp_extra3 = ``;
+				if (EXTRA_INFO && learnable.screens["1"].hidden_info && learnable.screens["1"].hidden_info.length > 0 && learnable.screens["1"].hidden_info[0] && learnable.screens["1"].hidden_info[0].value) {
+					has_extras3 = true;
+					temp_extra3 = learnable.screens["1"].hidden_info[0].value;
+				}
+				row.push(`"` + temp_extra3 + `"`);
+
 
 				if (LEARNABLE_IDS) {
 					try {
@@ -275,8 +288,10 @@ async function CourseDownload(URLString) {
 			if (has_audio) {line.push(row[2])};
 			if (has_video) {line.push(row[3])};
 			if (LEVEL_TAGS) {line.push(row[4])};
-			if (has_extras) {line.push(row[5])};
-			if (LEARNABLE_IDS) {line.push(row[6])}
+			if (has_extras1) {line.push(row[5])};
+			if (has_extras2) {line.push(row[6])};
+			if (has_extras3) {line.push(row[7])};
+			if (LEARNABLE_IDS) {line.push(row[8])}
 			return line.join(`,`);
 		} else {return row.join(`,`);}
 	}).join("\n") + "\n";

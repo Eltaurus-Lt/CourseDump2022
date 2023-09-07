@@ -111,7 +111,7 @@ The other available settings that can be changed in the same way:
 | batch_download           | Setting to `true` enables [batch download](https://github.com/Eltaurus-Lt/CourseDump2022#batch-download) of Memrise courses |
 | level_tags               | Setting to `false` removes column with hierarchical `course::level` tags from `.csv` |
 | extra_info               | Setting to `true` makes the extension to download additional word data and attributes if present |
-| collapse_columns         | Setting to `false` leaves empty columns in the `.csv` tables, so that the numbering of fields ([step 3.iii.](https://github.com/Eltaurus-Lt/CourseDump2022#simple-import-without-media)) would always be the same: 1 - _Learned word_, 2 - _Definition_, 3 - _Audio_, 4 - _Video_, 5 - _Tags_, 6 - _Extra_. |
+| collapse_columns         | Setting to `false` leaves empty columns in the `.csv` tables, so that the numbering of fields ([step 3.iii.](https://github.com/Eltaurus-Lt/CourseDump2022#simple-import-without-media)) would always be the same: 1 - _Learned word_, 2 - _Definition_, 3 - _Audio_, 4 - _Video_, 5 - _Tags_, 6-8 - _Extra fields_. |
 
 
 ## Known issues
