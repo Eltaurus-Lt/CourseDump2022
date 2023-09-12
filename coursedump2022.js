@@ -76,12 +76,12 @@ async function CourseDownload(URLString) {
 	await meta;
 	
 	} catch (err) {}
-	console.log(description);
-	console.log(author);
-	console.log(ava);
-	console.log(propName);
-	console.log(courseImg);
-	console.log(levelsN);
+	console.log("course: ", propName);
+	console.log("about: ", description);
+	console.log("by: ", author);
+	console.log("ava ", ava);
+	console.log("icon ", courseImg);
+	console.log("number of levels: ", levelsN);
 	
 	//choosing names and queueing meta
 	let saveas, subfolder;
@@ -114,6 +114,7 @@ async function CourseDownload(URLString) {
 	let has_extras1 = false;
 	let has_extras2 = false;
 	let has_extras3 = false;
+	let has_extras4 = false;
 	let has_definitions = false;
 	let has_learnable = false;
 	let media_download_urls = new Set();
@@ -230,7 +231,7 @@ async function CourseDownload(URLString) {
 				row.push(level_tag);
 				
 				//extra data
-				//	attr: 686844 - SS; 1995282 - PoS;
+				//	attr[0]: 686844 - SS; 1995282 - PoS;
 				let temp_extra1 = ``;
 				if (EXTRA_INFO && learnable.screens["1"].attributes && learnable.screens["1"].attributes.length > 0 && learnable.screens["1"].attributes[0] && learnable.screens["1"].attributes[0].value) {
 					has_extras1 = true;
@@ -238,21 +239,31 @@ async function CourseDownload(URLString) {
 				}
 				row.push(`"` + temp_extra1 + `"`);
 
-				//	visible_info: 548340 - kana; 6197256 - syn;
+				//	visible_info[0]: 548340 - kana; 6197256 - syn; 2021373+2021381 - lit trans/pinyin;
 				let temp_extra2 = ``;
 				if (EXTRA_INFO && learnable.screens["1"].visible_info && learnable.screens["1"].visible_info.length > 0 && learnable.screens["1"].visible_info[0] && learnable.screens["1"].visible_info[0].value) {
 					has_extras2 = true;
 					temp_extra2 = learnable.screens["1"].visible_info[0].value;
 				}
-				row.push(`"` + temp_extra2 + `"`);
 
-				//	hidden_info: 1995282 - inflections;
+				//	visible_info[1]: 2021373+2021381 - pinyin;
 				let temp_extra3 = ``;
-				if (EXTRA_INFO && learnable.screens["1"].hidden_info && learnable.screens["1"].hidden_info.length > 0 && learnable.screens["1"].hidden_info[0] && learnable.screens["1"].hidden_info[0].value) {
+				if (EXTRA_INFO && learnable.screens["1"].visible_info && learnable.screens["1"].visible_info.length > 1 && learnable.screens["1"].visible_info[1] && learnable.screens["1"].visible_info[1].value) {
 					has_extras3 = true;
-					temp_extra3 = learnable.screens["1"].hidden_info[0].value;
+					temp_extra3 = learnable.screens["1"].visible_info[1].value;
+
+					row.push(`"` + temp_extra3 + `"`); row.push(`"` + temp_extra2 + `"`);
+				} else {
+					row.push(`"` + temp_extra2 + `"`); row.push(`"` + temp_extra3 + `"`);
 				}
-				row.push(`"` + temp_extra3 + `"`);
+
+				//	hidden_info[0]: 1995282 - inflections;
+				let temp_extra4 = ``;
+				if (EXTRA_INFO && learnable.screens["1"].hidden_info && learnable.screens["1"].hidden_info.length > 0 && learnable.screens["1"].hidden_info[0] && learnable.screens["1"].hidden_info[0].value) {
+					has_extras4 = true;
+					temp_extra4 = learnable.screens["1"].hidden_info[0].value;
+				}
+				row.push(`"` + temp_extra4 + `"`);
 
 
 				if (LEARNABLE_IDS) {
@@ -291,7 +302,8 @@ async function CourseDownload(URLString) {
 			if (has_extras1) {line.push(row[5])};
 			if (has_extras2) {line.push(row[6])};
 			if (has_extras3) {line.push(row[7])};
-			if (LEARNABLE_IDS) {line.push(row[8])}
+			if (has_extras4) {line.push(row[8])};
+			if (LEARNABLE_IDS) {line.push(row[9])}
 			return line.join(`,`);
 		} else {return row.join(`,`);}
 	}).join("\n") + "\n";
@@ -396,7 +408,7 @@ chrome.runtime.onMessage.addListener(
 				MAX_ERR_ABORT = settings.basic_settings.max_level_skip;
 				MIN_FILENAME_LENGTH = settings.basic_settings.max_filename_length;
 
-				console.log(MIN_FILENAME_LENGTH);
+				//console.log(MIN_FILENAME_LENGTH);
 			} catch (err) {console.log('overwriting settings error')};
 		}
 		).catch(error => {
