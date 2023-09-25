@@ -86,7 +86,9 @@ The overall process is the same as [importing without media](https://github.com/
         1. In *Anki* go to `Tools` -> `Manage Note Types`
         2. Select a Note Type you would like to edit from the list (e.g. the `Basic` one)
         3. Press `Fields` then `Add` buttons, and type a name (e.g. _Audio_. Repeat the adding for _Video_ and other extra fields as needed). <br><sub>You might want to clone the existing Note Type before adding fields though, so as to preserve the original. For that, before step b.: click Add -> select the Note Type from the list to clone -> `OK` -> enter a new name -> `OK` -> go to step b. and select the new Note Type.</sub>
-    
+
+    You might also want to look at [this template](https://github.com/Eltaurus-Lt/Anki-Card-Templates) to create Anki cards, which look and function similar to the original Memrise courses.
+
     For additional information regarding the Note Types editing please refer to [this section of Anki manual](https://docs.ankiweb.net/templates/fields.html#basic-replacements). 
     
 A typical `Field mapping` for importing with media looks like this:
