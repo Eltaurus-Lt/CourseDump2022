@@ -41,9 +41,9 @@ When the scanning is complete, the bar will start to fill with yellow, as the ex
 
 ### Batch download
 
-1. Make a list of urls of the Memrise courses to download in the `queue.txt` file found in the extension folder (make sure to include full urls, including the name of a course after its number – the examples of urls are provided in the file)
+1. Make a list of urls of the Memrise courses to download in the `queue.txt` file found in the extension folder (make sure to write full urls, including the name of a course after its number – the examples are provided in the file)
 2. Set `"batch_download": true` ([changing settings](https://github.com/Eltaurus-Lt/CourseDump2022#settings))
-3. During batch download the option of downloading media is defined by `always_download_media` parameter. So set `"always_download_media": true` to download all media files or `"always_download_media": false` to download none
+3. During the batch download the option of downloading media is defined by `always_download_media` parameter. So set `"always_download_media": true` to download all media files or `"always_download_media": false` to download none
 4. Open any [Memrise](https://memrise.com/) page and make sure you are logged in
 5. Click the extension icon <picture><source media="(prefers-color-scheme: dark)" srcset="https://user-images.githubusercontent.com/93875472/212484466-55d630f7-763b-44a9-a858-a7a8c5898948.png"><img src="https://user-images.githubusercontent.com/93875472/197039734-bd2efdf8-a6c6-4327-8617-f2d3a95fcb3a.png" alt="CourseDump2022 icon"></picture> 
 
@@ -87,7 +87,7 @@ The overall process is the same as [importing without media](https://github.com/
         2. Select a Note Type you would like to edit from the list (e.g. the `Basic` one)
         3. Press `Fields` then `Add` buttons, and type a name (e.g. _Audio_. Repeat the adding for _Video_ and other extra fields as needed). <br><sub>You might want to clone the existing Note Type before adding fields though, so as to preserve the original. For that, before step b.: click Add -> select the Note Type from the list to clone -> `OK` -> enter a new name -> `OK` -> go to step b. and select the new Note Type.</sub>
 
-    You might also want to look at [this template](https://github.com/Eltaurus-Lt/Anki-Card-Templates) to create Anki cards, which look and function similar to the original Memrise courses.
+    You might also want to look at [this template](https://github.com/Eltaurus-Lt/Anki-Card-Templates) to create Anki cards, which look and function similarly to the original Memrise courses.
 
     For additional information regarding the Note Types editing please refer to [this section of Anki manual](https://docs.ankiweb.net/templates/fields.html#basic-replacements). 
     
