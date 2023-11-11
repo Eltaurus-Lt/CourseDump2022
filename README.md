@@ -15,7 +15,7 @@ Click `Code` and then `Download ZIP` (Note, that the `Code` button might be hidd
 </picture></p>
 
 ## Installation
-1. [Download](https://github.com/Eltaurus-Lt/CourseDump2022/archive/refs/heads/main.zip) the ***CourseDump2022-main.zip*** archive and extract ***CourseDump2022-main*** folder from it
+1. [Download](https://github.com/Eltaurus-Lt/CourseDump2022/archive/refs/heads/main.zip) the ***CourseDump2022-main.zip*** archive and extract ***CourseDump2022-main*** folder from it. At this step, you can move the extension folder to any place in your filesystem.
 2. In *Google Chrome* click the `Extensions` button <picture><source media="(prefers-color-scheme: dark)" srcset="https://user-images.githubusercontent.com/93875472/212448200-3a586992-2920-4d91-ae1b-aa7526b72d2a.png"><img src="https://user-images.githubusercontent.com/93875472/197036859-7c3ff1ab-a171-4408-8255-29ba6d8d8139.png" alt="Chrome extension icon"></picture> and then <picture><source media="(prefers-color-scheme: dark)" srcset="https://user-images.githubusercontent.com/93875472/212448898-d8025f31-6981-482c-8c71-07d071ad97f7.png"><img src="https://user-images.githubusercontent.com/93875472/197037928-6c6c52f9-472f-44c0-9cbd-ef18d6a2cdda.png" alt="Manage extensions"></picture><br> 
   (alternatively go to the Main menu <picture><source media="(prefers-color-scheme: dark)" srcset="https://user-images.githubusercontent.com/93875472/212449149-6576e8ca-38a7-471d-8f26-53e9bfe996f3.png"><img src="https://user-images.githubusercontent.com/93875472/197037696-a6258293-5de9-42c7-b971-d430abc5c7c5.png" alt="`Menu`"></picture> in the top right corner and click `More tools` -> `Extensions`) 
 3. Enable `Developer mode` (top right corner of the page)<br> <picture><source media="(prefers-color-scheme: dark)" srcset="https://user-images.githubusercontent.com/93875472/212449257-162c735c-4d62-4ccf-957d-af045aaa1115.png"><img src="https://user-images.githubusercontent.com/93875472/197039106-acc2abba-2a2d-4b4f-acc6-e2708341fc74.png" alt="Developer mode off->on"></picture>
@@ -41,7 +41,7 @@ When the scanning is complete, the bar will start to fill with yellow, as the ex
 
 ### Batch download
 
-1. Make a list of urls of the Memrise courses to download in the `queue.txt` file found in the extension folder (the examples of urls are provided in the file)
+1. Make a list of urls of the Memrise courses to download in the `queue.txt` file found in the extension folder (the examples of urls are provided in the file, make sure to include full urls, including the name of a course after its number)
 2. Set `"batch_download": true` ([changing settings](https://github.com/Eltaurus-Lt/CourseDump2022#settings))
 3. During batch download the option of downloading media is defined by `always_download_media` parameter. So set `"always_download_media": true` to download all media files or `"always_download_media": false` to download none
 4. Open any [Memrise](https://memrise.com/) page and make sure you are logged in
