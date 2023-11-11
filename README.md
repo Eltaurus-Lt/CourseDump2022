@@ -37,11 +37,11 @@ After that you should see a progress bar at the top, indicating the progress of 
  <img src="https://user-images.githubusercontent.com/93875472/212484716-a5f3cb78-c150-438b-85a8-f8a6ad30d7ad.png">
 </picture></p>
 
-When the scanning is complete, the bar will start to fill with yellow, as the extension sends the `.csv` file, course metadata, and media files (if you chose to download them) to *Google Chrome* download queue. The downloaded files should appear in your downloads directory, in a subfolder named with the course's name and id, as well as the name of the author.
+When the scanning is complete, the bar will start to fill with yellow, as the extension sends the `.csv` file, course metadata, and media files (if you choose to download them) to *Google Chrome* download queue. The downloaded files should appear in your downloads directory, in a subfolder named with the course's name and id, as well as the name of the author.
 
 ### Batch download
 
-1. Make a list of urls of the Memrise courses to download in the `queue.txt` file found in the extension folder (the examples of urls are provided in the file; make sure to include full urls, including the name of a course after its number)
+1. Make a list of urls of the Memrise courses to download in the `queue.txt` file found in the extension folder (make sure to include full urls, including the name of a course after its number – the examples of urls are provided in the file)
 2. Set `"batch_download": true` ([changing settings](https://github.com/Eltaurus-Lt/CourseDump2022#settings))
 3. During batch download the option of downloading media is defined by `always_download_media` parameter. So set `"always_download_media": true` to download all media files or `"always_download_media": false` to download none
 4. Open any [Memrise](https://memrise.com/) page and make sure you are logged in
