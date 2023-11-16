@@ -1,4 +1,4 @@
-//fallback settings values
+//fallback settings
 let ALWAYS_DWLD_MEDIA = false,
 	ANKI_HELP_PROMPT = true,
 	BATCH = false,
@@ -21,9 +21,9 @@ async function CourseDownload(URLString) {
 	let course = URLString.split("/");
 	let id, name;
 
-	if (course[3] === "course") { 
-		id = course[4]; 
-		name = course[5];
+	if (course[4] === "course") { 
+		id = course[5]; 
+		name = course[6];
 
 		let scanprogress = document.createElement("div");
 		scanprogress.className = "scanprogress cid" + id;
@@ -58,7 +58,7 @@ async function CourseDownload(URLString) {
 	let courseImg = '';
 	let levelsN = 0;
 	try {
-	let meta = fetch('https://app.memrise.com/course/' + id )
+	let meta = fetch('https://app.memrise.com/community/course/' + id )
 	    .then(response => response.text())
 	    .then(html => {
 	        var parser = new DOMParser();
@@ -342,7 +342,7 @@ function mediaDownload(all_downloads) {
 	});
 
 	//help
-	if (ANKI_HELP_PROMPT && !BATCH && confirm('Would you like some help with Anki integration?')) {
+	if (ANKI_HELP_PROMPT && !BATCH && confirm('Would you like some help with importing the downloaded data into Anki?')) {
 		window.open('https://github.com/Eltaurus-Lt/CourseDump2022#importing-into-anki', '_blank').focus();
 	};
 }
@@ -403,10 +403,10 @@ chrome.runtime.onMessage.addListener(
 
 				LEARNABLE_IDS = settings.extra_settings.learnable_ids;
 				PLAIN_DWLD = settings.extra_settings.exclude_course_metadata;
-				FAKE_DWLD = settings.extra_settings.imitate_media_download;
+				FAKE_DWLD = settings.extra_settings.skip_media_download;
 
 				MAX_ERR_ABORT = settings.basic_settings.max_level_skip;
-				MIN_FILENAME_LENGTH = settings.basic_settings.max_filename_length;
+				MIN_FILENAME_LENGTH = settings.basic_settings.min_filename_length;
 
 				//console.log(MIN_FILENAME_LENGTH);
 			} catch (err) {console.log('overwriting settings error')};
