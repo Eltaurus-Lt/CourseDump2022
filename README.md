@@ -1,13 +1,9 @@
 # CourseDump2022
-This **Google Chrome** extension downloads word lists from [**Memrise**](https://memrise.com/) courses as `.csv` spreadsheets along with all the associated <ins>audio</ins> and <ins>video</ins> files. The format of downloaded data is suitable for subsequent import into [**Anki**](https://apps.ankiweb.net/).
+This **Google Chrome** extension downloads word lists from [**Memrise**](https://memrise.com/) courses as `.csv` spreadsheets along with all the associated <ins>audio</ins> and <ins>video</ins> files. It also supports [batch download](https://github.com/Eltaurus-Lt/CourseDump2022#batch-download) of Memrise courses. The format of the downloaded data is suitable for subsequent import into [**Anki**](https://apps.ankiweb.net/). 
 
-The extension is supposed to serve as a substitution for the currently defunct Anki's [Memrise2Anki](https://github.com/wilddom/memrise2anki-extension) addon.
-Although it does not replicate all of the addon's functionality (e.g. in it's current state the extension does not download personal study data), the extension has several advantages over Memrise2Anki:
-1. It can download video files in additon to audio
-2. Allows [batch download](https://github.com/Eltaurus-Lt/CourseDump2022#batch-download) of Memrise courses
-3. Works past April 2022 Memrise changes =)
+The extension *does not* download personal study data (although such functionality can be added if requested). It also does not download the words you have marked as "ignored" on Memrise. You might want to unignore them before downloading a course or make a separate clean Memrise account specifically for downloading data from it.
 
-## Downloading from GitHub
+## Downloading the Extension
 Click `Code` and then `Download ZIP` (Note, that the `Code` button might be hidden if your browser window is not wide enough)
 <p><picture>
   <source media="(prefers-color-scheme: dark)" srcset="https://user-images.githubusercontent.com/93875472/212448145-e33acf96-fbb7-4ee0-8f70-89d142582797.png">
