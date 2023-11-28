@@ -4,7 +4,7 @@ This **Google Chrome** extension downloads word lists from [**Memrise**](https:/
 The extension *does not* download personal study data (although such functionality can be added if requested). It also does not download the words you have marked as "ignored" on Memrise. You might want to unignore them before downloading a course or make a separate clean Memrise account specifically for downloading data from it.
 
 ## Downloading the Extension
-Click `Code` and then `Download ZIP` (Note, that the `Code` button might be hidden if your browser window is not wide enough)
+At the top of this page click `Code` and then `Download ZIP` (Note, that the `Code` button might be hidden if your browser window is not wide enough)
 <p><picture>
   <source media="(prefers-color-scheme: dark)" srcset="https://user-images.githubusercontent.com/93875472/212448145-e33acf96-fbb7-4ee0-8f70-89d142582797.png">
   <img src="https://user-images.githubusercontent.com/93875472/212447995-ec0370a5-af67-4a7b-96ec-b7eb2dd4e803.png">
