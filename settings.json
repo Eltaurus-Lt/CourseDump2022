@@ -2,10 +2,9 @@
   "user_settings": {
     "always_download_media": false,
     "display_anki_help_prompt": true,
-    "batch_download": false,
-    "level_tags": true,
     "extra_info": true,
-    "collapse_columns": true
+    "level_tags": true,
+    "batch_download": false
   },
   "extra_settings": {
     "learnable_ids": false,
@@ -14,6 +13,7 @@
   },
   "basic_settings": {
     "max_level_skip": 5,
-    "min_filename_length": 8
+    "min_filename_length": 8,
+    "max_extra_fields": 5
   }
 }
