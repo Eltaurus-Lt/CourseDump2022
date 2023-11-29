@@ -8,6 +8,7 @@ let ALWAYS_DWLD_MEDIA = false,
 
 	MAX_ERR_ABORT = 5,
 	MIN_FILENAME_LENGTH = 8,
+	MAX_EXTRA_FIELDS = 5,
 	LEARNABLE_IDS = false,
 	FAKE_DWLD = false,
 	PLAIN_DWLD = false;
@@ -91,15 +92,8 @@ async function CourseDownload(URLString) {
 	} else {
 		saveas = name + ` [` + id +`]`; //general name for csv and media folder
 		subfolder = name + ` by ` + author + ` [` + id +`]/`;
-		let info;
-		info = 'data:md/plain;charset=utf-8,' + encodeURIComponent( 
-			`# **` + propName + `**\n` + 
-			`### by _` + author + `_\n` +
-			`\n` + 
-			description
-		);
 
-		download_queue.push([info, subfolder + 'info.md']);
+		//(info moved below)
 		download_queue.push([ava, subfolder + author + '.' + ava.split(".").slice(-1)]);
 		download_queue.push([courseImg, subfolder + name + '.' + courseImg.split(".").slice(-1)]);
 	}
@@ -111,10 +105,9 @@ async function CourseDownload(URLString) {
 	let download_media = false;
 	let has_audio = false;
 	let has_video = false;
-	let has_extras1 = false;
-	let has_extras2 = false;
-	let has_extras3 = false;
-	let has_extras4 = false;
+	let attributes = [];
+	let visible_info = [];
+	let hidden_info = [];
 	let has_definitions = false;
 	let has_learnable = false;
 	let media_download_urls = new Set();
@@ -163,7 +156,7 @@ async function CourseDownload(URLString) {
 			let level_tag = `"` + name + `"`;
 			if (LEVEL_TAGS) {
 				try {
-					level_tag = `"` + response.session_source_info.name.replaceAll('"', '""') + `::` + ((i < 10) ? (`0` + i) : i) + `_` + response.session_source_info.level_name.replaceAll('"', '""') + `"`;
+					level_tag = `"` + response.session_source_info.name.replaceAll('"', '""') + `::` + ((levelsN && levelsN > 99 && i < 100) ? (`0`) : ``) + ((i < 10) ? (`0` + i) : i) + `_` + response.session_source_info.level_name.replaceAll('"', '""') + `"`;
 				} catch (error) {console.log(`${error.name}: ${error.message}`);}
 				level_tag = level_tag.replaceAll(' ','_');
 			}
@@ -179,6 +172,12 @@ async function CourseDownload(URLString) {
 				if (learnable.learning_element) {
 					has_learnable = true;
 					learnable_el = `"${learnable.learning_element.replaceAll('"', '""')}"`;
+				} else if (download_media && learnable.screens["1"].item.kind === "audio" && learnable.screens["1"].item.value.length > 0) {
+					has_learnable = true;
+					let temp_audio_learns = [];
+					learnable.screens["1"].item.value.map(audio_learn => {temp_audio_learns.push(audio_learn.normal)});
+					temp_audio_learns.forEach(media_download_urls.add, media_download_urls);
+					learnable_el = `"` + temp_audio_learns.map(url => `[sound:${PaddedFilename(url)}]`).join("") + `"`;
 				} else if (download_media && learnable.screens["1"].item.kind === "image" && learnable.screens["1"].item.value.length > 0) { 
 					has_learnable = true;
 					let temp_image_learns = [];
@@ -226,45 +225,89 @@ async function CourseDownload(URLString) {
 					temp_video_urls.forEach(media_download_urls.add, media_download_urls);
 				}
 				row.push(`"` + temp_video_urls.map(url => `[sound:${PaddedFilename(url)}]`).join("") + `"`);
-				
-				//tags
-				row.push(level_tag);
-				
+							
 				//extra data
 				//	attr[0]: 686844 - SS; 1995282 - PoS;
-				let temp_extra1 = ``;
-				if (EXTRA_INFO && learnable.screens["1"].attributes && learnable.screens["1"].attributes.length > 0 && learnable.screens["1"].attributes[0] && learnable.screens["1"].attributes[0].value) {
-					has_extras1 = true;
-					temp_extra1 = learnable.screens["1"].attributes[0].value;
+				let temp_extra1 = new Array(MAX_EXTRA_FIELDS).fill(``);
+				if (EXTRA_INFO && learnable.screens["1"].attributes && learnable.screens["1"].attributes.length > 0) {
+					learnable.screens["1"].attributes.forEach(attribute => {
+						if (attribute && attribute.value && attribute.label) {
+							let ind = attributes.indexOf(attribute.label);
+							if (ind == -1 && attributes.length < MAX_EXTRA_FIELDS) {
+								attributes.push(attribute.label);
+							}
+							ind = attributes.indexOf(attribute.label);
+							if (ind != -1) {
+								temp_extra1[ind] = attribute.value;
+							}
+						}
+					})
 				}
-				row.push(`"` + temp_extra1 + `"`);
+				temp_extra1.forEach(el => row.push(`"` + el + `"`));
 
 				//	visible_info[0]: 548340 - kana; 6197256 - syn; 2021373+2021381 - lit trans/pinyin;
-				let temp_extra2 = ``;
-				if (EXTRA_INFO && learnable.screens["1"].visible_info && learnable.screens["1"].visible_info.length > 0 && learnable.screens["1"].visible_info[0] && learnable.screens["1"].visible_info[0].value) {
-					has_extras2 = true;
-					temp_extra2 = learnable.screens["1"].visible_info[0].value;
-				}
-
 				//	visible_info[1]: 2021373+2021381 - pinyin;
-				let temp_extra3 = ``;
-				if (EXTRA_INFO && learnable.screens["1"].visible_info && learnable.screens["1"].visible_info.length > 1 && learnable.screens["1"].visible_info[1] && learnable.screens["1"].visible_info[1].value) {
-					has_extras3 = true;
-					temp_extra3 = learnable.screens["1"].visible_info[1].value;
-
-					row.push(`"` + temp_extra3 + `"`); row.push(`"` + temp_extra2 + `"`);
-				} else {
-					row.push(`"` + temp_extra2 + `"`); row.push(`"` + temp_extra3 + `"`);
+				let temp_extra2 = new Array(MAX_EXTRA_FIELDS).fill(``);
+				if (EXTRA_INFO && learnable.screens["1"].visible_info && learnable.screens["1"].visible_info.length > 0) {
+					learnable.screens["1"].visible_info.forEach(v_info => {
+						if (v_info && v_info.value && v_info.label) {
+							let ind = visible_info.indexOf(v_info.label);
+							if (ind == -1 && visible_info.length < MAX_EXTRA_FIELDS) {
+								visible_info.push(v_info.label);
+							}
+							ind = visible_info.indexOf(v_info.label);
+							if (ind != -1) {
+								if (download_media && v_info.kind === "audio" && v_info.value.length > 0) {
+									let temp_audio_list = [];
+									v_info.value.map(audio => {temp_audio_list.push(audio.normal)});
+									temp_audio_list.forEach(media_download_urls.add, media_download_urls);
+									temp_extra2[ind] = `` + temp_audio_list.map(url => `[sound:${PaddedFilename(url)}]`).join("") + ``;
+								} else if (download_media && v_info.kind === "image" && v_info.value.length > 0) {
+									let temp_image_list = [];
+									v_info.value.map(image => {temp_image_list.push(image)});
+									temp_image_list.forEach(media_download_urls.add, media_download_urls);
+									temp_extra2[ind] = `` + temp_image_list.map(url => `<img src='${PaddedFilename(url)}'>`).join(``) + ``;
+								} else if (v_info.kind !== "audio" && v_info.kind !== "image") {
+									temp_extra2[ind] = v_info.value;
+								}
+							}
+						}
+					})
 				}
+				temp_extra2.forEach(el => row.push(`"` + el + `"`));
 
 				//	hidden_info[0]: 1995282 - inflections;
-				let temp_extra4 = ``;
-				if (EXTRA_INFO && learnable.screens["1"].hidden_info && learnable.screens["1"].hidden_info.length > 0 && learnable.screens["1"].hidden_info[0] && learnable.screens["1"].hidden_info[0].value) {
-					has_extras4 = true;
-					temp_extra4 = learnable.screens["1"].hidden_info[0].value;
+				let temp_extra3 = new Array(MAX_EXTRA_FIELDS).fill(``);
+				if (EXTRA_INFO && learnable.screens["1"].hidden_info && learnable.screens["1"].hidden_info.length > 0) {
+					learnable.screens["1"].hidden_info.forEach(h_info => {
+						if (h_info && h_info.value && h_info.label) {
+							let ind = hidden_info.indexOf(h_info.label);
+							if (ind == -1 && hidden_info.length < MAX_EXTRA_FIELDS) {
+								hidden_info.push(h_info.label);
+							}
+							ind = hidden_info.indexOf(h_info.label);
+							if (ind != -1) {
+								if (download_media && h_info.kind === "audio" && h_info.value.length > 0) {
+									let temp_audio_list = [];
+									h_info.value.map(audio => {temp_audio_list.push(audio.normal)});
+									temp_audio_list.forEach(media_download_urls.add, media_download_urls);
+									temp_extra3[ind] = `` + temp_audio_list.map(url => `[sound:${PaddedFilename(url)}]`).join("") + ``;
+								} else if (download_media && h_info.kind === "image" && h_info.value.length > 0) {
+									let temp_image_list = [];
+									h_info.value.map(image => {temp_image_list.push(image)});
+									temp_image_list.forEach(media_download_urls.add, media_download_urls);
+									temp_extra3[ind] = `` + temp_image_list.map(url => `<img src='${PaddedFilename(url)}'>`).join(``) + ``;
+								} else if (h_info.kind !== "audio" && h_info.kind !== "image") {
+									temp_extra3[ind] = h_info.value;
+								}
+							}
+						}
+					})
 				}
-				row.push(`"` + temp_extra4 + `"`);
+				temp_extra3.forEach(el => row.push(`"` + el + `"`));
 
+				//tags
+				row.push(level_tag);
 
 				if (LEARNABLE_IDS) {
 					try {
@@ -274,13 +317,13 @@ async function CourseDownload(URLString) {
 						row.push(-1);
 					}
 				}
-
 				table.push(row);
+
 			});
 
 			err_count = 0;
 		} catch (error) {
-			//console.log(error);
+			console.log(error);
 			console.log('Level does not exist or has no learnable words. Level skip count: ' + (err_count + 1));
 			if (empty_set_err) continue;
 			err_count++;
@@ -290,7 +333,37 @@ async function CourseDownload(URLString) {
 		}
 	}
 
-	//table to text conversion (global flags has_audio/has_video are needed since different number of cells in csv rows causes problems for Anki import)
+
+	//global flags (e.g. has_audio, has_video..) are needed to keep consistency of column content between all table rows
+	let course_fields = [];
+	if (has_learnable) {course_fields.push("Learnable")};
+	if (has_definitions) {course_fields.push("Definition")};
+	if (has_audio) {course_fields.push("Audio")};
+	if (has_video) {course_fields.push("Video")};
+	course_fields.push(...attributes);
+	course_fields.push(...visible_info);
+	course_fields.push(...hidden_info);
+	if (LEVEL_TAGS) {course_fields.push("Level tags")};
+	if (LEARNABLE_IDS) {course_fields.push("Learnable ID")};
+
+	//downloading info
+	let info;
+	info = 'data:md/plain;charset=utf-8,' + encodeURIComponent( 
+		`# **` + propName + `**\n` + 
+		`### by _` + author + `_\n` +
+		`\n` + 
+		description + 
+		`\n\n` + 
+		`## Course Fields\n` +
+		`| ` + course_fields.join(` | `) + ` |`
+	);
+	if (!PLAIN_DWLD) {
+		download_queue.push([info, subfolder + 'info.md']);
+	}
+
+	//console.log(table[0]);
+
+	//table to text conversion
 	let result = table.map(row => {
 		if (COLLAPSE_COLUMNS) {
 			let line = [];
@@ -298,12 +371,13 @@ async function CourseDownload(URLString) {
 			if (has_definitions) {line.push(row[1])};
 			if (has_audio) {line.push(row[2])};
 			if (has_video) {line.push(row[3])};
-			if (LEVEL_TAGS) {line.push(row[4])};
-			if (has_extras1) {line.push(row[5])};
-			if (has_extras2) {line.push(row[6])};
-			if (has_extras3) {line.push(row[7])};
-			if (has_extras4) {line.push(row[8])};
-			if (LEARNABLE_IDS) {line.push(row[9])}
+
+			line.push(...row.slice(4						, 4 + attributes.length));
+			line.push(...row.slice(4 + MAX_EXTRA_FIELDS		, 4 + MAX_EXTRA_FIELDS + visible_info.length));
+			line.push(...row.slice(4 + 2* MAX_EXTRA_FIELDS	, 4 + 2* MAX_EXTRA_FIELDS + hidden_info.length));
+
+			if (LEVEL_TAGS) {line.push(row[4 + 3 * MAX_EXTRA_FIELDS])};
+			if (LEARNABLE_IDS) {line.push(row[4 + 3 * MAX_EXTRA_FIELDS + 1])};
 			return line.join(`,`);
 		} else {return row.join(`,`);}
 	}).join("\n") + "\n";
@@ -341,10 +415,6 @@ function mediaDownload(all_downloads) {
 		collection: all_downloads
 	});
 
-	//help
-	if (ANKI_HELP_PROMPT && !BATCH && confirm('Would you like some help with importing the downloaded data into Anki?')) {
-		window.open('https://github.com/Eltaurus-Lt/CourseDump2022#importing-into-anki', '_blank').focus();
-	};
 }
 
 
@@ -374,6 +444,13 @@ chrome.runtime.onMessage.addListener(
 	if (type === "coursedump_progress_upd") {
 		if (prog === "done") {
 			progressbar.className = "done";
+			
+			
+			//help
+			setTimeout(()=> {if (ANKI_HELP_PROMPT && !BATCH && confirm('Would you like some help with importing the downloaded data into Anki?')) {
+				window.open('https://github.com/Eltaurus-Lt/CourseDump2022#importing-into-anki', '_blank').focus();
+			}}, 200);
+			
 		} else { 
 			console.log(prog + " media queued");
 			document.getElementById("downprogress").style.width = prog;
@@ -399,7 +476,7 @@ chrome.runtime.onMessage.addListener(
 				BATCH = settings.user_settings.batch_download;
 				LEVEL_TAGS = settings.user_settings.level_tags;
 				EXTRA_INFO = settings.user_settings.extra_info;
-				COLLAPSE_COLUMNS = settings.user_settings.collapse_columns;
+				COLLAPSE_COLUMNS = true;//settings.user_settings.collapse_columns;
 
 				LEARNABLE_IDS = settings.extra_settings.learnable_ids;
 				PLAIN_DWLD = settings.extra_settings.exclude_course_metadata;
@@ -407,6 +484,7 @@ chrome.runtime.onMessage.addListener(
 
 				MAX_ERR_ABORT = settings.basic_settings.max_level_skip;
 				MIN_FILENAME_LENGTH = settings.basic_settings.min_filename_length;
+				MAX_EXTRA_FIELDS = settings.basic_settings.max_extra_fields;
 
 				//console.log(MIN_FILENAME_LENGTH);
 			} catch (err) {console.log('overwriting settings error')};
