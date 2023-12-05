@@ -1,44 +1,58 @@
 chrome.action.onClicked.addListener((tab) => {
-  chrome.scripting.executeScript({
-    target: {tabId: tab.id},
-    files: ['coursedump2022.js']
-  });
+	chrome.scripting.executeScript({
+		target: { tabId: tab.id },
+		files: ['coursedump2022.js']
+	});
 });
 
-function sleep(ms) {
-   return new Promise(resolve => setTimeout(resolve, ms));
+function download(url, filename) {
+	return new Promise(async (resolve, _) => {
+		const downloadId = await chrome.downloads.download({
+			url: url,
+			filename: filename
+		});
+		chrome.downloads.onChanged.addListener(function onDownloadComplete(delta) {
+			if (delta.id == downloadId && delta.state && delta.state.current === 'complete') {
+				chrome.downloads.onChanged.removeListener(onDownloadComplete);
+				resolve();
+			}
+		});
+	});
 }
 
-chrome.runtime.onMessage.addListener(
-   function (arg, sender, sendResponse) {
-      var type = arg.type;
-      var mediaurls = arg.collection;
-
-	if (type === "coursedump_download") {
-	      (async function () {
-	         for (i in mediaurls) {
-	            await sleep(200);
-	            var mediaUrl = mediaurls[i][0];
-	            var saveas = mediaurls[i][1];
-
-	            chrome.downloads.download({
-	               url: mediaUrl,
-	               filename: saveas
-	            });
-
-		    chrome.tabs.sendMessage(sender.tab.id, {
-		        type: "coursedump_progress_upd",
-		        progress: "" + Math.round((10000 + 10000. * i) / mediaurls.length)/100 + "%"
-		    });
-
-
-        	 }
-
-		chrome.tabs.sendMessage(sender.tab.id, {
-		    type: "coursedump_progress_upd",
-		    progress: "done"
-		});
-
-	      })()
+chrome.runtime.onMessage.addListener((arg, sender, sendResponse) => {
+	if (arg.type === "coursedump_download") {
+		const queue = arg.collection;
+		(async function () {
+			const total = queue.length;
+			const max = 5;
+			let done = 0;
+			await new Promise((resolve, _) => {
+				async function start() {
+					if (!queue.length) return;
+					const [url, filename] = queue.shift();
+					await download(url, filename);
+					done++;
+					chrome.tabs.sendMessage(sender.tab.id, {
+						type: "coursedump_progress_upd",
+						progress: "" + Math.floor(10000 * done / total) / 100 + "%",
+						done: done,
+						total: total
+					});
+					if (done == total) {
+						resolve();
+					} else if (queue.length) {
+						start();
+					}
+				}
+				for (let i = 0; i < max; i++) {
+					start();
+				}
+			});
+			chrome.tabs.sendMessage(sender.tab.id, {
+				type: "coursedump_progress_upd",
+				progress: "done"
+			});
+		})();
 	}
-   });
+});
