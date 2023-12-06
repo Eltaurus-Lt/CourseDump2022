@@ -14,13 +14,15 @@ function download(url, filename) {
 			});
 			chrome.downloads.onChanged.addListener(function onDownloadComplete(delta) {
 				if (delta.id == downloadId) {
-					chrome.downloads.onChanged.removeListener(onDownloadComplete);
 					if (delta.state && delta.state.current === 'complete') {
+						chrome.downloads.onChanged.removeListener(onDownloadComplete);
 						resolve();
 					} else if (delta.error) {
+						chrome.downloads.onChanged.removeListener(onDownloadComplete);
 						reject(new Error(delta.error.current));
-					} else {
-						reject(new Error(delta.state ? delta.state.current : "unknown"));
+					} else if (delta.state && delta.state.current === 'interrupted') {
+						chrome.downloads.onChanged.removeListener(onDownloadComplete);
+						reject(new Error(delta.state.current));
 					}
 				}
 			});
