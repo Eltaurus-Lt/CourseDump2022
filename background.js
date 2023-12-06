@@ -12,14 +12,14 @@ function sleep(ms) {
 function download(url, filename) {
 	return new Promise(async (resolve, reject) => {
 		try {
-			const downloadId = await chrome.downloads.download({
+			const id = await chrome.downloads.download({
 				url, filename
 			});
 			chrome.downloads.onChanged.addListener(function onDownloadComplete(delta) {
-				if (delta.id == downloadId) {
+				if (delta.id == id) {
 					if (delta.state && delta.state.current === 'complete') {
 						chrome.downloads.onChanged.removeListener(onDownloadComplete);
-						resolve();
+						resolve(id);
 					} else if (delta.error) {
 						chrome.downloads.onChanged.removeListener(onDownloadComplete);
 						reject(new Error(delta.error.current));
