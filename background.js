@@ -44,10 +44,11 @@ chrome.runtime.onMessage.addListener(async (arg, sender, sendResponse) => {
 		const total = queue.length;
 		if (arg.max) maxConnections = arg.max;
 		let done = 0;
-		await Promise.all(Array(maxConnections).fill(0).map(async () => {
+		const results = await Promise.allSettled(Array(maxConnections).fill(0).map(async () => {
 			while (queue.length) {
-				const [url, filename] = queue.shift();
+				let url, filename;
 				try {
+					[url, filename] = queue.shift();
 					await sleep(200);
 					await download(url, filename);
 				} catch (e) {
@@ -66,6 +67,11 @@ chrome.runtime.onMessage.addListener(async (arg, sender, sendResponse) => {
 				});
 			}
 		}));
+		for (const result of results) {
+			if (result.status === "rejected") {
+				console.error(result.reason);
+			}
+		}
 		chrome.tabs.sendMessage(sender.tab.id, {
 			type: "coursedump_progress_upd",
 			progress: "done"
