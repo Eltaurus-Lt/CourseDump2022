@@ -32,7 +32,7 @@ function download(url, filename) {
 	});
 }
 
-let maxConnextions = 5;
+let maxConnextions = 10;
 let queue;
 
 chrome.runtime.onMessage.addListener((arg, sender, sendResponse) => {
