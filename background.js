@@ -13,8 +13,7 @@ function download(url, filename) {
 	return new Promise(async (resolve, reject) => {
 		try {
 			const downloadId = await chrome.downloads.download({
-				url: url,
-				filename: filename
+				url, filename
 			});
 			chrome.downloads.onChanged.addListener(function onDownloadComplete(delta) {
 				if (delta.id == downloadId) {
@@ -56,16 +55,14 @@ chrome.runtime.onMessage.addListener(async (arg, sender, sendResponse) => {
 					chrome.tabs.sendMessage(sender.tab.id, {
 						type: "coursedump_error",
 						error: e.message,
-						url: url,
-						filename: filename
+						url, filename
 					});
 				}
 				done++;
 				chrome.tabs.sendMessage(sender.tab.id, {
 					type: "coursedump_progress_upd",
 					progress: "" + Math.floor(10000 * done / total) / 100 + "%",
-					done: done,
-					total: total
+					done, total
 				});
 			}
 		}));
