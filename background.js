@@ -30,14 +30,20 @@ function download(url, filename) {
 	});
 }
 
+let maxConnextions = 5;
+let queue;
+
 chrome.runtime.onMessage.addListener((arg, sender, sendResponse) => {
 	if (arg.type === "coursedump_download") {
-		const queue = arg.collection;
+		queue = arg.collection;
 		(async function () {
 			const total = queue.length;
-			const max = 5;
+			if (arg.max) maxConnextions = arg.max;
 			let done = 0;
 			await new Promise((resolve, _) => {
+				for (let i = 0; i < maxConnextions; i++) {
+					start();
+				}
 				async function start() {
 					if (!queue.length) return;
 					const [url, filename] = queue.shift();
@@ -62,9 +68,6 @@ chrome.runtime.onMessage.addListener((arg, sender, sendResponse) => {
 					} else if (queue.length) {
 						start();
 					}
-				}
-				for (let i = 0; i < max; i++) {
-					start();
 				}
 			});
 			chrome.tabs.sendMessage(sender.tab.id, {
