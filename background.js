@@ -50,10 +50,12 @@ chrome.runtime.onMessage.addListener((arg, sender, sendResponse) => {
 					try {
 						await download(url, filename);
 					} catch (e) {
-						console.error(e);
+						console.error(e, url, filename);
 						chrome.tabs.sendMessage(sender.tab.id, {
 							type: "coursedump_error",
-							error: e.message
+							error: e.message,
+							url: url,
+							filename: filename
 						});
 					}
 					done++;
