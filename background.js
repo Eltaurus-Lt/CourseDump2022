@@ -46,8 +46,7 @@ chrome.runtime.onMessage.addListener((arg, sender, sendResponse) => {
 			const total = queue.length;
 			if (arg.max) maxConnections = arg.max;
 			let done = 0;
-			await Promise.all(Array(maxConnections).fill(undefined).map(start));
-			async function start() {
+			await Promise.all(Array(maxConnections).fill(0).map(async () => {
 				while (queue.length) {
 					const [url, filename] = queue.shift();
 					try {
@@ -70,7 +69,7 @@ chrome.runtime.onMessage.addListener((arg, sender, sendResponse) => {
 						total: total
 					});
 				}
-			}
+			}));
 			chrome.tabs.sendMessage(sender.tab.id, {
 				type: "coursedump_progress_upd",
 				progress: "done"
