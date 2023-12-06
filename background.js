@@ -42,7 +42,7 @@ chrome.runtime.onMessage.addListener(async (arg, sender, sendResponse) => {
 		const total = queue.length;
 		if (arg.max) maxConnections = arg.max;
 		let done = 0;
-		const results = await Promise.allSettled(Array(maxConnections).fill(0).map(async () => {
+		const results = await Promise.allSettled(Array(maxConnections).fill().map(async () => {
 			while (queue.length) {
 				let url, filename;
 				try {
