@@ -42,35 +42,30 @@ chrome.runtime.onMessage.addListener((arg, sender, sendResponse) => {
 			const total = queue.length;
 			if (arg.max) maxConnections = arg.max;
 			let done = 0;
-			await new Promise((resolve, _) => {
-				for (let i = 0; i < maxConnections; i++) {
-					start();
-				}
+			await new Promise(async (resolve, _) => {
+				await Promise.all(Array(maxConnections).fill(undefined).map(start));
+				resolve();
 				async function start() {
-					if (!queue.length) return;
-					const [url, filename] = queue.shift();
-					try {
-						await download(url, filename);
-					} catch (e) {
-						console.error(e, url, filename);
+					while (queue.length) {
+						const [url, filename] = queue.shift();
+						try {
+							await download(url, filename);
+						} catch (e) {
+							console.error(e, url, filename);
+							chrome.tabs.sendMessage(sender.tab.id, {
+								type: "coursedump_error",
+								error: e.message,
+								url: url,
+								filename: filename
+							});
+						}
+						done++;
 						chrome.tabs.sendMessage(sender.tab.id, {
-							type: "coursedump_error",
-							error: e.message,
-							url: url,
-							filename: filename
+							type: "coursedump_progress_upd",
+							progress: "" + Math.floor(10000 * done / total) / 100 + "%",
+							done: done,
+							total: total
 						});
-					}
-					done++;
-					chrome.tabs.sendMessage(sender.tab.id, {
-						type: "coursedump_progress_upd",
-						progress: "" + Math.floor(10000 * done / total) / 100 + "%",
-						done: done,
-						total: total
-					});
-					if (done == total) {
-						resolve();
-					} else if (queue.length) {
-						start();
 					}
 				}
 			});
