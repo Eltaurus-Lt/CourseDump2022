@@ -9,12 +9,10 @@ function sleep(ms) {
 	return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-function download(url, filename) {
+function download(options) {
 	return new Promise(async (resolve, reject) => {
 		try {
-			const id = await chrome.downloads.download({
-				url, filename
-			});
+			const id = await chrome.downloads.download(options);
 			chrome.downloads.onChanged.addListener(function onDownloadComplete(delta) {
 				if (delta.id == id) {
 					if (delta.state && delta.state.current === 'complete') {
@@ -50,7 +48,7 @@ chrome.runtime.onMessage.addListener(async (arg, sender, sendResponse) => {
 				try {
 					[url, filename] = queue.shift();
 					await sleep(200);
-					await download(url, filename);
+					await download({ url, filename });
 				} catch (e) {
 					console.error(e, url, filename);
 					chrome.tabs.sendMessage(sender.tab.id, {
