@@ -39,41 +39,39 @@ function download(url, filename) {
 let maxConnections = 10;
 let queue;
 
-chrome.runtime.onMessage.addListener((arg, sender, sendResponse) => {
+chrome.runtime.onMessage.addListener(async (arg, sender, sendResponse) => {
 	if (arg.type === "coursedump_download") {
 		queue = arg.collection;
-		(async function () {
-			const total = queue.length;
-			if (arg.max) maxConnections = arg.max;
-			let done = 0;
-			await Promise.all(Array(maxConnections).fill(0).map(async () => {
-				while (queue.length) {
-					const [url, filename] = queue.shift();
-					try {
-						await sleep(200);
-						await download(url, filename);
-					} catch (e) {
-						console.error(e, url, filename);
-						chrome.tabs.sendMessage(sender.tab.id, {
-							type: "coursedump_error",
-							error: e.message,
-							url: url,
-							filename: filename
-						});
-					}
-					done++;
+		const total = queue.length;
+		if (arg.max) maxConnections = arg.max;
+		let done = 0;
+		await Promise.all(Array(maxConnections).fill(0).map(async () => {
+			while (queue.length) {
+				const [url, filename] = queue.shift();
+				try {
+					await sleep(200);
+					await download(url, filename);
+				} catch (e) {
+					console.error(e, url, filename);
 					chrome.tabs.sendMessage(sender.tab.id, {
-						type: "coursedump_progress_upd",
-						progress: "" + Math.floor(10000 * done / total) / 100 + "%",
-						done: done,
-						total: total
+						type: "coursedump_error",
+						error: e.message,
+						url: url,
+						filename: filename
 					});
 				}
-			}));
-			chrome.tabs.sendMessage(sender.tab.id, {
-				type: "coursedump_progress_upd",
-				progress: "done"
-			});
-		})();
+				done++;
+				chrome.tabs.sendMessage(sender.tab.id, {
+					type: "coursedump_progress_upd",
+					progress: "" + Math.floor(10000 * done / total) / 100 + "%",
+					done: done,
+					total: total
+				});
+			}
+		}));
+		chrome.tabs.sendMessage(sender.tab.id, {
+			type: "coursedump_progress_upd",
+			progress: "done"
+		});
 	}
 });
