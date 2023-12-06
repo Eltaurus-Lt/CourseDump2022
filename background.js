@@ -32,7 +32,7 @@ function download(url, filename) {
 	});
 }
 
-let maxConnextions = 10;
+let maxConnections = 10;
 let queue;
 
 chrome.runtime.onMessage.addListener((arg, sender, sendResponse) => {
@@ -40,10 +40,10 @@ chrome.runtime.onMessage.addListener((arg, sender, sendResponse) => {
 		queue = arg.collection;
 		(async function () {
 			const total = queue.length;
-			if (arg.max) maxConnextions = arg.max;
+			if (arg.max) maxConnections = arg.max;
 			let done = 0;
 			await new Promise((resolve, _) => {
-				for (let i = 0; i < maxConnextions; i++) {
+				for (let i = 0; i < maxConnections; i++) {
 					start();
 				}
 				async function start() {
