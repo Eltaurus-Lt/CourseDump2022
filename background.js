@@ -5,6 +5,10 @@ chrome.action.onClicked.addListener((tab) => {
 	});
 });
 
+function sleep(ms) {
+	return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 function download(url, filename) {
 	return new Promise(async (resolve, reject) => {
 		try {
@@ -47,6 +51,7 @@ chrome.runtime.onMessage.addListener((arg, sender, sendResponse) => {
 				while (queue.length) {
 					const [url, filename] = queue.shift();
 					try {
+						await sleep(200);
 						await download(url, filename);
 					} catch (e) {
 						console.error(e, url, filename);
