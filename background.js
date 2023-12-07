@@ -9,27 +9,42 @@ function sleep(ms) {
 	return new Promise(resolve => setTimeout(resolve, ms));
 }
 
+const apiTimeout = 5000;
+
 function download(options) {
 	return new Promise(async (resolve, reject) => {
-		try {
-			const id = await chrome.downloads.download(options);
-			chrome.downloads.onChanged.addListener(function onDownloadComplete(delta) {
-				if (delta.id == id) {
-					if (delta.state && delta.state.current === 'complete') {
-						chrome.downloads.onChanged.removeListener(onDownloadComplete);
-						resolve(id);
-					} else if (delta.error) {
-						chrome.downloads.onChanged.removeListener(onDownloadComplete);
-						reject(new Error(delta.error.current));
-					} else if (delta.state && delta.state.current === 'interrupted') {
-						chrome.downloads.onChanged.removeListener(onDownloadComplete);
-						reject(new Error(delta.state.current));
-					}
-				}
-			});
-		} catch (e) {
-			reject(e);
+		let id, deltas = {};
+		const onDownloadComplete = delta => {
+			if (id === undefined) {
+				deltas[delta.id] = delta;
+			} else if (delta.id == id) {
+				checkDelta(delta);
+			}
 		}
+		chrome.downloads.onChanged.addListener(onDownloadComplete);
+		function checkDelta(delta) {
+			if (delta.state && delta.state.current === "complete") {
+				chrome.downloads.onChanged.removeListener(onDownloadComplete);
+				resolve(delta.id);
+			} else if (delta.error) {
+				chrome.downloads.onChanged.removeListener(onDownloadComplete);
+				reject(new Error(delta.error.current));
+			} else if (delta.state && delta.state.current === "interrupted") {
+				chrome.downloads.onChanged.removeListener(onDownloadComplete);
+				reject(new Error(delta.state.current));
+			}
+		}
+		const timeId = setTimeout(() => {
+			if (id === undefined) reject(new Error("API timeout"));
+		}, apiTimeout);
+		try {
+			id = await chrome.downloads.download(options);
+		} catch (e) {
+			return reject(e);
+		} finally {
+			clearTimeout(timeId);
+		}
+		if (id in deltas) checkDelta(deltas[id]);
 	});
 }
 
