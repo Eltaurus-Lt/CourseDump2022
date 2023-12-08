@@ -34,8 +34,18 @@ function download(options) {
 				reject(new Error(delta.state.current));
 			}
 		}
-		const timeId = setTimeout(() => {
-			if (id === undefined) reject(new Error("API timeout"));
+		const timeId = setTimeout(async () => {
+			if (id !== undefined) return;
+			if (options.url) {
+				const query = { url: options.url };
+				const items = await chrome.downloads.search(query);
+				if (items.length) {
+					id = items[0].id;
+					if (id in deltas) checkDelta(deltas[id]);
+					return;
+				}
+			}
+			reject(new Error("API timeout"));
 		}, apiTimeout);
 		try {
 			id = await chrome.downloads.download(options);
