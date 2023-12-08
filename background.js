@@ -83,11 +83,11 @@ chrome.runtime.onMessage.addListener(async (arg, sender, sendResponse) => {
 		let pids = Array(maxConnections).fill().map((_, i) => i + 1);
 		const results = await Promise.allSettled(pids.map(async pid => {
 			while (!stopFlag && queue.length) {
-				let url, filename;
+				const [url, filename] = queue.shift();
+				await sleep(200);
+				let id;
 				try {
-					[url, filename] = queue.shift();
-					await sleep(200);
-					await download({ url, filename });
+					id = await download({ url, filename });
 				} catch (e) {
 					console.error(filename, e);
 					chrome.tabs.sendMessage(sender.tab.id, {
@@ -95,6 +95,9 @@ chrome.runtime.onMessage.addListener(async (arg, sender, sendResponse) => {
 						error: e.message,
 						url, filename
 					});
+				}
+				if (id !== undefined) {
+					await chrome.downloads.erase({ id });
 				}
 				done++;
 				chrome.tabs.sendMessage(sender.tab.id, {
