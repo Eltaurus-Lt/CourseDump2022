@@ -58,21 +58,30 @@ function download(options) {
 	});
 }
 
+let stopFlag = false;
+
+function stopAll() {
+	stopFlag = true;
+}
+
 let maxConnections = 10;
 let queue = [];
 
 chrome.runtime.onMessage.addListener(async (arg, sender, sendResponse) => {
-	if (arg.type == "coursedump_clear") {
+	if (arg.type == "coursedump_stop") {
+		stopAll();
+	} else if (arg.type == "coursedump_clear") {
 		queue = [];
 	} else if (arg.type === "coursedump_add") {
 		queue.push(...arg.collection);
 	} else if (arg.type === "coursedump_download") {
+		stopFlag = false;
 		if (arg.collection) queue = arg.collection;
 		const total = queue.length;
 		if (arg.max) maxConnections = arg.max;
 		let done = 0;
 		const results = await Promise.allSettled(Array(maxConnections).fill().map(async () => {
-			while (queue.length) {
+			while (!stopFlag && queue.length) {
 				let url, filename;
 				try {
 					[url, filename] = queue.shift();
@@ -101,7 +110,8 @@ chrome.runtime.onMessage.addListener(async (arg, sender, sendResponse) => {
 		}
 		chrome.tabs.sendMessage(sender.tab.id, {
 			type: "coursedump_progress_upd",
-			progress: "done"
+			progress: stopFlag ? "stopped" : "done",
+			done, total
 		});
 	}
 });
