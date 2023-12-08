@@ -80,7 +80,8 @@ chrome.runtime.onMessage.addListener(async (arg, sender, sendResponse) => {
 		const total = queue.length;
 		if (arg.max) maxConnections = arg.max;
 		let done = 0;
-		const results = await Promise.allSettled(Array(maxConnections).fill().map(async () => {
+		let pids = Array(maxConnections).fill().map((_, i) => i + 1);
+		const results = await Promise.allSettled(pids.map(async pid => {
 			while (!stopFlag && queue.length) {
 				let url, filename;
 				try {
@@ -103,9 +104,10 @@ chrome.runtime.onMessage.addListener(async (arg, sender, sendResponse) => {
 				});
 			}
 		}));
-		for (const result of results) {
-			if (result.status === "rejected") {
-				console.error(result.reason);
+		for (let i = 0; i < results.length; i++) {
+			const r = results[i];
+			if (r.status === "rejected") {
+				console.error(`pid ${i + 1}: ${r.reason}`);
 			}
 		}
 		chrome.tabs.sendMessage(sender.tab.id, {
