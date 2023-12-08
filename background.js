@@ -59,11 +59,15 @@ function download(options) {
 }
 
 let maxConnections = 10;
-let queue;
+let queue = [];
 
 chrome.runtime.onMessage.addListener(async (arg, sender, sendResponse) => {
-	if (arg.type === "coursedump_download") {
-		queue = arg.collection;
+	if (arg.type == "coursedump_clear") {
+		queue = [];
+	} else if (arg.type === "coursedump_add") {
+		queue.push(...arg.collection);
+	} else if (arg.type === "coursedump_download") {
+		if (arg.collection) queue = arg.collection;
 		const total = queue.length;
 		if (arg.max) maxConnections = arg.max;
 		let done = 0;
