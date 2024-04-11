@@ -34,7 +34,7 @@ async function CourseDownload(URLString) {
 		
 	} else { 
 		if (!BATCH) {
-			alert("Please use the extention on an open Memrise course tab"); 
+			alert("Please use the extension on an open Memrise course tab"); 
 		} else {
 			console.log('"' + URLString + '" in queue.txt is not a Memrise course url');
 		}
@@ -373,8 +373,8 @@ async function CourseDownload(URLString) {
 			if (has_audio) {line.push(row[2])};
 			if (has_video) {line.push(row[3])};
 
-			line.push(...row.slice(4						, 4 + attributes.length));
-			line.push(...row.slice(4 + MAX_EXTRA_FIELDS		, 4 + MAX_EXTRA_FIELDS + visible_info.length));
+			line.push(...row.slice(4			, 4 + attributes.length));
+			line.push(...row.slice(4 + MAX_EXTRA_FIELDS	, 4 + MAX_EXTRA_FIELDS + visible_info.length));
 			line.push(...row.slice(4 + 2* MAX_EXTRA_FIELDS	, 4 + 2* MAX_EXTRA_FIELDS + hidden_info.length));
 
 			if (LEVEL_TAGS) {line.push(row[4 + 3 * MAX_EXTRA_FIELDS])};
