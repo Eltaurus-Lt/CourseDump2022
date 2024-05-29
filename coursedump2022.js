@@ -20,6 +20,7 @@ function sleep(ms) {
 
 async function CourseDownload(URLString) {
 	let course = URLString.split("/");
+	let domain = course[2];
 	let id, name;
 
 	if (course[4] === "course") { 
@@ -59,7 +60,7 @@ async function CourseDownload(URLString) {
 	let courseImg = '';
 	let levelsN = 0;
 	try {
-	let meta = fetch('https://app.memrise.com/community/course/' + id )
+	let meta = fetch('https://' + domain + '/community/course/' + id )
 	    .then(response => response.text())
 	    .then(html => {
 	        var parser = new DOMParser();
@@ -130,7 +131,7 @@ async function CourseDownload(URLString) {
 			await sleep(200);
 			// get CSRF header
 			token = document.cookie.split(" ").find(cookie => cookie.includes("csrftoken")).split(/[=;]/g)[1];
-			response = await (await fetch("https://app.memrise.com/v1.19/learning_sessions/preview/", {
+			response = await (await fetch("https://" + domain + "/v1.19/learning_sessions/preview/", {
 				"headers": { "Accept": "*/*", "Content-Type": "Application/json", "X-CSRFToken": token },
 				"body": "{\"session_source_id\":" + id + ",\"session_source_type\":\"course_id_and_level_index\",\"session_source_sub_index\":" + i + "}",
 				"method": "POST"
@@ -461,7 +462,7 @@ chrome.runtime.onMessage.addListener(
 
 (async function(){
 	let currentUrl = window.location.toString();
-	if (currentUrl.split("/")[2] !== 'app.memrise.com') {
+	if (currentUrl.split("/")[2] !== 'app.memrise.com' && currentUrl.split("/")[2] !== 'community-courses.memrise.com') {
 		alert("The extension should be used on the memrise.com site"); 
 		return -1;
 	}
