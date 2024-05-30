@@ -12,6 +12,7 @@
 	position: relative;
 	background: var(--mem-darkblue);
 	transition: height 1s;
+	overflow-y: hidden;
 }
 #dumpprogress::after {
   content: '';
@@ -26,6 +27,15 @@
 }
 #dumpprogress.halfdone {
 	height: var(--dumpprogress-barwidth);
+}
+#dumpprogress.stopped {
+	filter: grayscale(100%);
+}
+#dumpprogress.error {
+	background: var(--mem-red) !important;
+}
+#dumpprogress.error * {
+	opacity: 0.1;
 }
 
 @keyframes bar-expand {

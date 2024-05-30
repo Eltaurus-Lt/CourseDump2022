@@ -9,9 +9,12 @@ let ALWAYS_DWLD_MEDIA = false,
 	MAX_ERR_ABORT = 5,
 	MIN_FILENAME_LENGTH = 8,
 	MAX_EXTRA_FIELDS = 5,
+	PARALLEL_DOWNLOAD_LIMIT = 7,
+
 	LEARNABLE_IDS = false,
 	FAKE_DWLD = false,
 	PLAIN_DWLD = false;
+
 
 function sleep(ms) {
 	return new Promise(resolve => setTimeout(resolve, ms));
@@ -34,7 +37,7 @@ async function CourseDownload(URLString) {
 		
 	} else { 
 		if (!BATCH) {
-			alert("Please use the extention on an open Memrise course tab"); 
+			alert("Please use the extension on an open Memrise course tab"); 
 		} else {
 			console.log('"' + URLString + '" in queue.txt is not a Memrise course url');
 		}
@@ -413,7 +416,8 @@ function mediaDownload(all_downloads) {
 
 	chrome.runtime.sendMessage({
 		type: "coursedump_download",
-		collection: all_downloads
+		collection: all_downloads,
+		maxThreads: PARALLEL_DOWNLOAD_LIMIT
 	});
 
 }
@@ -445,17 +449,20 @@ chrome.runtime.onMessage.addListener(
 	if (type === "coursedump_progress_upd") {
 		if (prog === "done") {
 			progressbar.className = "done";
-			
-			
-			//help
+						
+			//help prompt
 			setTimeout(()=> {if (ANKI_HELP_PROMPT && !BATCH && confirm('Would you like some help with importing the downloaded data into Anki?')) {
 				window.open('https://github.com/Eltaurus-Lt/CourseDump2022#importing-into-anki', '_blank').focus();
 			}}, 200);
 			
+		} else if (prog === "stopped") {
+			progressbar.classList.add("stopped");
 		} else { 
-			console.log(prog + " media queued");
+			console.log(prog + " media downloaded");
 			document.getElementById("downprogress").style.width = prog;
 		}
+	} else if (type === "coursedump_error") {
+		progressbar.classList.add("error");
 	}
 });
 
@@ -486,6 +493,7 @@ chrome.runtime.onMessage.addListener(
 				MAX_ERR_ABORT = settings.basic_settings.max_level_skip;
 				MIN_FILENAME_LENGTH = settings.basic_settings.min_filename_length;
 				MAX_EXTRA_FIELDS = settings.basic_settings.max_extra_fields;
+				PARALLEL_DOWNLOAD_LIMIT = settings.basic_settings.parallel_download_limit;
 
 				//console.log(MIN_FILENAME_LENGTH);
 			} catch (err) {console.log('overwriting settings error')};
