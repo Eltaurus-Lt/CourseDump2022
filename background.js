@@ -1,4 +1,13 @@
+const apiTimeout = 5000;
+let stopFlag = false;
+let maxConnections = 15;
+let urls = [];
+
 chrome.action.onClicked.addListener((tab) => {
+	chrome.action.setIcon({
+		path: '../icons/pause.png',
+		tabId: tab.id
+	});
 	chrome.scripting.executeScript({
 		target: { tabId: tab.id },
 		files: ['coursedump2022.js']
@@ -8,11 +17,6 @@ chrome.action.onClicked.addListener((tab) => {
 function sleep(ms) {
 	return new Promise(resolve => setTimeout(resolve, ms));
 }
-
-const apiTimeout = 5000;
-let stopFlag = false;
-let maxConnections = 15;
-let urls = [];
 
 function download(options) {
 	return new Promise(async (resolve, reject) => {
