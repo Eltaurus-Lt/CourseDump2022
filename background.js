@@ -1,11 +1,11 @@
 const apiTimeout = 5000;
-let stopFlag = false;
-let initFlag = false;
-let maxConnections = 15;
+let stopFlag = true;
+let maxConnections = 5;
 let urls = [];
 
 chrome.action.onClicked.addListener((tab) => {
-	if (!initFlag) {
+	if (stopFlag) {
+		stopFlag = false;
 		chrome.action.setIcon({
 			path: '../icons/stop.png',
 			tabId: tab.id
@@ -14,15 +14,11 @@ chrome.action.onClicked.addListener((tab) => {
 			target: { tabId: tab.id },
 			files: ['coursedump2022.js']
 		});
-	} else if (!stopFlag) {
+	} else {
 		stopFlag = true;
 		chrome.action.setIcon({
 			path: '../icons/stop2.png',
 			tabId: tab.id
-		});		
-	} else {
-		chrome.tabs.sendMessage(tab.id, {
-			type: "coursedump_reloadAlert"
 		});		
 	}
 });
@@ -60,20 +56,28 @@ function download(options) {
 				const query = { url: options.url };
 				const items = await chrome.downloads.search(query);
 				if (items.length) {
-					id = items[0].id;
+					let item = items[0];
+					let id = item.id;
 					if (id in deltas) {
+						console.log(`saved with timeout ${options.filename} | id = ${id}`);
 						checkDelta(deltas[id]);
+					} else if ((item.state && item.state === "complete") || (item.bytesReceived && item.totalBytes && item.bytesReceived === item.totalBytes)) {
+						console.log(`saved from log with timeout ${options.filename} | id = ${id}`);
+						chrome.downloads.onChanged.removeListener(onDownloadComplete);
+						resolve(id);						
 					} else {
-						console.error(`download timed out on: ${options.url}`);
+						console.log(`download timed out on ${options.filename} | id = ${id}`);
 					}
 					return;
 				}
 			}
+			chrome.downloads.onChanged.removeListener(onDownloadComplete);
 			reject(new Error("API timeout"));
 		}, apiTimeout);
 		try {
 			id = await chrome.downloads.download(options);
 		} catch (e) {
+			chrome.downloads.onChanged.removeListener(onDownloadComplete);
 			return reject(e);
 		} finally {
 			clearTimeout(timeId);
@@ -93,10 +97,10 @@ chrome.runtime.onMessage.addListener(async (arg, sender, sendResponse) => {
 		urls.push(...arg.collection);
 		total += arg.collection.length;
 	} else if (arg.type === "coursedump_download") {
-		stopFlag = false;
 		if (arg.collection) urls = arg.collection;
 		const total = urls.length;
-		if (arg.max) maxConnections = arg.max;
+		if (arg.maxThreads) maxConnections = arg.maxThreads;
+		console.log(`max threads set to : ${maxConnections}`);
 		let done = 0;
 		let pids = Array(maxConnections).fill().map((_, i) => i + 1);
 		const results = await Promise.allSettled(pids.map(async pid => {
@@ -136,5 +140,12 @@ chrome.runtime.onMessage.addListener(async (arg, sender, sendResponse) => {
 			progress: stopFlag ? "stopped" : "done",
 			done, total
 		});
+		if (!stopFlag) {
+			chrome.action.setIcon({
+				path: '../icons/done.png',
+				tabId: sender.tab.id
+			});
+		}
+		stopFlag = true;
 	}
 });
