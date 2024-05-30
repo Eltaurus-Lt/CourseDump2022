@@ -10,6 +10,9 @@ function sleep(ms) {
 }
 
 const apiTimeout = 5000;
+let stopFlag = false;
+let maxConnections = 15;
+let urls = [];
 
 function download(options) {
 	return new Promise(async (resolve, reject) => {
@@ -41,7 +44,11 @@ function download(options) {
 				const items = await chrome.downloads.search(query);
 				if (items.length) {
 					id = items[0].id;
-					if (id in deltas) checkDelta(deltas[id]);
+					if (id in deltas) {
+						checkDelta(deltas[id]);
+					} else {
+						console.error(`download timed out on: ${options.url}`);
+					}
 					return;
 				}
 			}
@@ -58,36 +65,30 @@ function download(options) {
 	});
 }
 
-let stopFlag = false;
-
-function stopAll() {
-	stopFlag = true;
-}
-
-let maxConnections = 15;
-let queue = [];
 
 chrome.runtime.onMessage.addListener(async (arg, sender, sendResponse) => {
-	if (arg.type == "coursedump_stop") {
-		stopAll();
-	} else if (arg.type == "coursedump_clear") {
-		queue = [];
+	if (arg.type === "coursedump_stop") {
+		stopFlag = true;
+	} else if (arg.type === "coursedump_clear") {
+		urls = [];
+		total = done;
 	} else if (arg.type === "coursedump_add") {
-		queue.push(...arg.collection);
+		urls.push(...arg.collection);
+		total += arg.collection.length;
 	} else if (arg.type === "coursedump_download") {
 		stopFlag = false;
-		if (arg.collection) queue = arg.collection;
-		const total = queue.length;
+		if (arg.collection) urls = arg.collection;
+		const total = urls.length;
 		if (arg.max) maxConnections = arg.max;
 		let done = 0;
 		let pids = Array(maxConnections).fill().map((_, i) => i + 1);
 		const results = await Promise.allSettled(pids.map(async pid => {
-			while (!stopFlag && queue.length) {
-				const [url, filename] = queue.shift();
+			while (!stopFlag && urls.length) {
+				const [url, filename] = urls.shift();
 				await sleep(200);
 				let id;
 				try {
-					id = await download({ url, filename });
+					id = await download({url, filename, conflictAction: "overwrite" });
 				} catch (e) {
 					console.error(filename, e);
 					chrome.tabs.sendMessage(sender.tab.id, {
