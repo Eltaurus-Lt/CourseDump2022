@@ -1,17 +1,30 @@
 const apiTimeout = 5000;
 let stopFlag = false;
+let initFlag = false;
 let maxConnections = 15;
 let urls = [];
 
 chrome.action.onClicked.addListener((tab) => {
-	chrome.action.setIcon({
-		path: '../icons/pause.png',
-		tabId: tab.id
-	});
-	chrome.scripting.executeScript({
-		target: { tabId: tab.id },
-		files: ['coursedump2022.js']
-	});
+	if (!initFlag) {
+		chrome.action.setIcon({
+			path: '../icons/stop.png',
+			tabId: tab.id
+		});
+		chrome.scripting.executeScript({
+			target: { tabId: tab.id },
+			files: ['coursedump2022.js']
+		});
+	} else if (!stopFlag) {
+		stopFlag = true;
+		chrome.action.setIcon({
+			path: '../icons/stop2.png',
+			tabId: tab.id
+		});		
+	} else {
+		chrome.tabs.sendMessage(tab.id, {
+			type: "coursedump_reloadAlert"
+		});		
+	}
 });
 
 function sleep(ms) {
