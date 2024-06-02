@@ -112,14 +112,5 @@ The other available settings that can be changed in the same way:
 | collapse_columns         | Setting to `false` leaves empty columns in the `.csv` tables, so that the numbering of fields ([step 3.iii.](https://github.com/Eltaurus-Lt/CourseDump2022#simple-import-without-media)) would always be the same: 1 - _Learned word_, 2 - _Definition_, 3 - _Audio_, 4 - _Video_, 5 - _Tags_, 6-9 - _Extra fields_. |
 
 
-## Known issues
-
-There is a problem with encoding of a small subset of Unicode characters, which results in media filenames being written with _ where their entries in `.csv` tables are written with %. If you encounter such a case, the workaround is to replace all % in `.csv` file with _ in any text editor before importing it into Anki:
-<p><picture>
- <source media="(prefers-color-scheme: dark)" srcset="https://user-images.githubusercontent.com/93875472/212492190-d5e4d68f-1cf4-4bcc-824e-f1e4d0fea734.png">
- <img src="https://user-images.githubusercontent.com/93875472/197361505-70f2d10f-728b-4412-adc0-a19cd30aef04.png">
-</picture></p>  
-
-
 ## Discussion
 If you encounter errors, have further questions regarding the extension, or need any help with using the downloaded materials in Anki, please leave a comment in this thread: [An alternative to Memrise2Anki](https://forums.ankiweb.net/t/an-alternative-to-memrise2anki-support-thread/30084)
