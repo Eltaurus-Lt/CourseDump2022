@@ -43,12 +43,29 @@ async function CourseDownload(URLString) {
 		return -1; 
 	};
 
-	function PaddedFilename(url) {
-		let temp_filename = decodeURIComponent(url.split("/").slice(-1));
-		let pad = decodeURIComponent(url.split("/").slice(-2)[0]);
-		if (pad === 'medium') {pad = decodeURIComponent(url.split("/").slice(-3)[0])};
-		temp_filename = name + "_" + pad + "_" + temp_filename;
-		temp_filename = temp_filename.replace('[','(').replace(']',')'); //square brackets are not allowed inside Anki [sound: ...]
+	let reserved_filenames = new Set();
+	let url2filenames = {};
+	function UniqueDecodedFilename(url) {
+		let temp_filename;
+		if (url in url2filenames) {
+			temp_filename = url2filenames[url];
+		} else {
+			temp_filename = decodeURIComponent(url.split("/").slice(-1)[0]);
+			let pad = decodeURIComponent(url.split("/").slice(-2)[0]);
+			if (pad === 'medium') {pad = decodeURIComponent(url.split("/").slice(-3)[0])};
+			temp_filename = name + "_" + pad + "_" + temp_filename;
+			temp_filename = temp_filename.replace('[','(').replace(']',')'); //square brackets are not allowed inside Anki [sound: ...]
+			if (reserved_filenames.has(temp_filename)) { //add ordinal number to make the filename unique
+				let subnames = temp_filename.split('.');
+				let ext = subnames.pop();
+				let proper = substrings.join(".");
+				for (let i = 1; reserved_filenames.has(temp_filename); i++) {
+					temp_filename = proper + " (" + i + ")." + ext;
+				}
+			}
+			url2filenames[url] = temp_filename;
+			reserved_filenames.add(temp_filename);
+		}
 		return temp_filename;
 	}
 
@@ -179,13 +196,13 @@ async function CourseDownload(URLString) {
 					let temp_audio_learns = [];
 					learnable.screens["1"].item.value.map(audio_learn => {temp_audio_learns.push(audio_learn.normal)});
 					temp_audio_learns.forEach(media_download_urls.add, media_download_urls);
-					learnable_el = `"` + temp_audio_learns.map(url => `[sound:${PaddedFilename(url)}]`).join("") + `"`;
+					learnable_el = `"` + temp_audio_learns.map(url => `[sound:${UniqueDecodedFilename(url)}]`).join("") + `"`;
 				} else if (download_media && learnable.screens["1"].item.kind === "image" && learnable.screens["1"].item.value.length > 0) { 
 					has_learnable = true;
 					let temp_image_learns = [];
 					learnable.screens["1"].item.value.map(image_learn => {temp_image_learns.push(image_learn)});
 					temp_image_learns.forEach(media_download_urls.add, media_download_urls);
-					learnable_el = `"` + temp_image_learns.map(url => `<img src='${PaddedFilename(url)}'>`).join(``) + `"`;
+					learnable_el = `"` + temp_image_learns.map(url => `<img src='${UniqueDecodedFilename(url)}'>`).join(``) + `"`;
 				}
 				row.push(learnable_el);
 
@@ -199,13 +216,13 @@ async function CourseDownload(URLString) {
 					let temp_audio_defs = [];
 					learnable.screens["1"].definition.value.map(audio_def => {temp_audio_defs.push(audio_def.normal)});
 					temp_audio_defs.forEach(media_download_urls.add, media_download_urls);
-					definition = `"` + temp_audio_defs.map(url => `[sound:${PaddedFilename(url)}]`).join("") + `"`;
+					definition = `"` + temp_audio_defs.map(url => `[sound:${UniqueDecodedFilename(url)}]`).join("") + `"`;
 				} else if (download_media && learnable.screens["1"].definition.kind === "image" && learnable.screens["1"].definition.value.length > 0) {
 					has_definitions = true;
 					let temp_image_defs = [];
 					learnable.screens["1"].definition.value.map(image_def => {temp_image_defs.push(image_def)});
 					temp_image_defs.forEach(media_download_urls.add, media_download_urls);
-					definition = `"` + temp_image_defs.map(url => `<img src='${PaddedFilename(url)}'>`).join(``) + `"`;
+					definition = `"` + temp_image_defs.map(url => `<img src='${UniqueDecodedFilename(url)}'>`).join(``) + `"`;
 				}
 				row.push(definition);
 
@@ -217,7 +234,7 @@ async function CourseDownload(URLString) {
 					learnable.screens["1"].audio.value.map(audio_item => {temp_audio_urls.push(audio_item.normal)});
 					temp_audio_urls.forEach(media_download_urls.add, media_download_urls);
 				}
-				row.push(`"` + temp_audio_urls.map(url => `[sound:${PaddedFilename(url)}]`).join("") + `"`);
+				row.push(`"` + temp_audio_urls.map(url => `[sound:${UniqueDecodedFilename(url)}]`).join("") + `"`);
 
 				//video
 				let temp_video_urls = [];
@@ -226,7 +243,7 @@ async function CourseDownload(URLString) {
 					learnable.screens["1"].video.value.map(video_item => {temp_video_urls.push(video_item)});
 					temp_video_urls.forEach(media_download_urls.add, media_download_urls);
 				}
-				row.push(`"` + temp_video_urls.map(url => `[sound:${PaddedFilename(url)}]`).join("") + `"`);
+				row.push(`"` + temp_video_urls.map(url => `[sound:${UniqueDecodedFilename(url)}]`).join("") + `"`);
 							
 				//extra data
 				//	attr[0]: 686844 - SS; 1995282 - PoS;
@@ -263,12 +280,12 @@ async function CourseDownload(URLString) {
 									let temp_audio_list = [];
 									v_info.value.map(audio => {temp_audio_list.push(audio.normal)});
 									temp_audio_list.forEach(media_download_urls.add, media_download_urls);
-									temp_extra2[ind] = `` + temp_audio_list.map(url => `[sound:${PaddedFilename(url)}]`).join("") + ``;
+									temp_extra2[ind] = `` + temp_audio_list.map(url => `[sound:${UniqueDecodedFilename(url)}]`).join("") + ``;
 								} else if (download_media && v_info.kind === "image" && v_info.value.length > 0) {
 									let temp_image_list = [];
 									v_info.value.map(image => {temp_image_list.push(image)});
 									temp_image_list.forEach(media_download_urls.add, media_download_urls);
-									temp_extra2[ind] = `` + temp_image_list.map(url => `<img src='${PaddedFilename(url)}'>`).join(``) + ``;
+									temp_extra2[ind] = `` + temp_image_list.map(url => `<img src='${UniqueDecodedFilename(url)}'>`).join(``) + ``;
 								} else if (v_info.kind !== "audio" && v_info.kind !== "image") {
 									temp_extra2[ind] = v_info.value;
 								}
@@ -293,12 +310,12 @@ async function CourseDownload(URLString) {
 									let temp_audio_list = [];
 									h_info.value.map(audio => {temp_audio_list.push(audio.normal)});
 									temp_audio_list.forEach(media_download_urls.add, media_download_urls);
-									temp_extra3[ind] = `` + temp_audio_list.map(url => `[sound:${PaddedFilename(url)}]`).join("") + ``;
+									temp_extra3[ind] = `` + temp_audio_list.map(url => `[sound:${UniqueDecodedFilename(url)}]`).join("") + ``;
 								} else if (download_media && h_info.kind === "image" && h_info.value.length > 0) {
 									let temp_image_list = [];
 									h_info.value.map(image => {temp_image_list.push(image)});
 									temp_image_list.forEach(media_download_urls.add, media_download_urls);
-									temp_extra3[ind] = `` + temp_image_list.map(url => `<img src='${PaddedFilename(url)}'>`).join(``) + ``;
+									temp_extra3[ind] = `` + temp_image_list.map(url => `<img src='${UniqueDecodedFilename(url)}'>`).join(``) + ``;
 								} else if (h_info.kind !== "audio" && h_info.kind !== "image") {
 									temp_extra3[ind] = h_info.value;
 								}
@@ -399,7 +416,7 @@ async function CourseDownload(URLString) {
 	//appending files to media download queue
 	if (download_media) {console.log("[" + name + "] media files found: " + media_download_urls.size)};	
 	if (!FAKE_DWLD) {
-		let media_batch = Array.from(media_download_urls).map(url => [url, `${subfolder}${saveas}_media(${media_download_urls.size})/` + PaddedFilename(url)]);
+		let media_batch = Array.from(media_download_urls).map(url => [url, `${subfolder}${saveas}_media(${media_download_urls.size})/` + UniqueDecodedFilename(url)]);
 		download_queue.push(...media_batch);
 	} 
 };
