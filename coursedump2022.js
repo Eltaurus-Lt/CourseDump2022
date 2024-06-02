@@ -4,7 +4,6 @@ let ALWAYS_DWLD_MEDIA = false,
 	BATCH = false,
 	LEVEL_TAGS = true,
 	EXTRA_INFO = false,
-	COLLAPSE_COLUMNS = true,
 
 	MAX_ERR_ABORT = 5,
 	MAX_EXTRA_FIELDS = 5,
@@ -54,7 +53,7 @@ async function CourseDownload(URLString) {
 			// let pad = decodeURIComponent(url.split("/").slice(-2)[0]);
 			// if (pad === 'medium') {pad = decodeURIComponent(url.split("/").slice(-3)[0])};
 			// temp_filename = name + "_" + pad + "_" + temp_filename;
-			temp_filename = name + "_" + temp_filename;
+			temp_filename = name + "_" + id + domain[0] + "_" + temp_filename;
 			temp_filename = temp_filename.replace('[','(').replace(']',')'); //square brackets are not allowed inside Anki [sound: ...]
 			if (reserved_filenames.has(temp_filename)) { //add ordinal number to make the filename unique
 				let subnames = temp_filename.split('.');
@@ -385,21 +384,19 @@ async function CourseDownload(URLString) {
 
 	//table to text conversion
 	let result = table.map(row => {
-		if (COLLAPSE_COLUMNS) {
-			let line = [];
-			if (has_learnable) {line.push(row[0])};
-			if (has_definitions) {line.push(row[1])};
-			if (has_audio) {line.push(row[2])};
-			if (has_video) {line.push(row[3])};
+		let line = [];
+		if (has_learnable) {line.push(row[0])};
+		if (has_definitions) {line.push(row[1])};
+		if (has_audio) {line.push(row[2])};
+		if (has_video) {line.push(row[3])};
 
-			line.push(...row.slice(4						, 4 + attributes.length));
-			line.push(...row.slice(4 + MAX_EXTRA_FIELDS		, 4 + MAX_EXTRA_FIELDS + visible_info.length));
-			line.push(...row.slice(4 + 2* MAX_EXTRA_FIELDS	, 4 + 2* MAX_EXTRA_FIELDS + hidden_info.length));
+		line.push(...row.slice(4						, 4 + attributes.length));
+		line.push(...row.slice(4 + MAX_EXTRA_FIELDS		, 4 + MAX_EXTRA_FIELDS + visible_info.length));
+		line.push(...row.slice(4 + 2* MAX_EXTRA_FIELDS	, 4 + 2* MAX_EXTRA_FIELDS + hidden_info.length));
 
-			if (LEVEL_TAGS) {line.push(row[4 + 3 * MAX_EXTRA_FIELDS])};
-			if (LEARNABLE_IDS) {line.push(row[4 + 3 * MAX_EXTRA_FIELDS + 1])};
-			return line.join(`,`);
-		} else {return row.join(`,`);}
+		if (LEVEL_TAGS) {line.push(row[4 + 3 * MAX_EXTRA_FIELDS])};
+		if (LEARNABLE_IDS) {line.push(row[4 + 3 * MAX_EXTRA_FIELDS + 1])};
+		return line.join(`,`);
 	}).join("\n") + "\n";
 
 	//downloading the table
@@ -491,8 +488,7 @@ chrome.runtime.onMessage.addListener(
 	}
 
 	//overwrite settings with settings from json file
-	if (true) {
-		await fetch(chrome.runtime.getURL('settings.json'))
+	await fetch(chrome.runtime.getURL('settings.json'))
 		.then(response => response.json()).then(settings => {
 			try {
 				ALWAYS_DWLD_MEDIA = settings.user_settings.always_download_media;
@@ -500,7 +496,6 @@ chrome.runtime.onMessage.addListener(
 				BATCH = settings.user_settings.batch_download;
 				LEVEL_TAGS = settings.user_settings.level_tags;
 				EXTRA_INFO = settings.user_settings.extra_info;
-				COLLAPSE_COLUMNS = true;//settings.user_settings.collapse_columns;
 
 				LEARNABLE_IDS = settings.extra_settings.learnable_ids;
 				PLAIN_DWLD = settings.extra_settings.exclude_course_metadata;
@@ -515,7 +510,6 @@ chrome.runtime.onMessage.addListener(
 		).catch(error => {
 			console.error('Error reading settings.json:', error);
 		});
-	}
 	
 	if (BATCH) {
 		await fetch(chrome.runtime.getURL('queue.txt')).then(
