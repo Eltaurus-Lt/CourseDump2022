@@ -51,15 +51,16 @@ async function CourseDownload(URLString) {
 			temp_filename = url2filenames[url];
 		} else {
 			temp_filename = decodeURIComponent(url.split("/").slice(-1)[0]);
-			let pad = decodeURIComponent(url.split("/").slice(-2)[0]);
-			if (pad === 'medium') {pad = decodeURIComponent(url.split("/").slice(-3)[0])};
-			temp_filename = name + "_" + pad + "_" + temp_filename;
+			// let pad = decodeURIComponent(url.split("/").slice(-2)[0]);
+			// if (pad === 'medium') {pad = decodeURIComponent(url.split("/").slice(-3)[0])};
+			// temp_filename = name + "_" + pad + "_" + temp_filename;
+			temp_filename = name + "_" + temp_filename;
 			temp_filename = temp_filename.replace('[','(').replace(']',')'); //square brackets are not allowed inside Anki [sound: ...]
 			if (reserved_filenames.has(temp_filename)) { //add ordinal number to make the filename unique
 				let subnames = temp_filename.split('.');
 				let ext = subnames.pop();
-				let proper = substrings.join(".");
-				for (let i = 1; reserved_filenames.has(temp_filename); i++) {
+				let proper = subnames.join(".");
+				for (let i = 2; reserved_filenames.has(temp_filename); i++) {
 					temp_filename = proper + " (" + i + ")." + ext;
 				}
 			}
