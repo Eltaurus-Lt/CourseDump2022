@@ -1,7 +1,5 @@
-const apiTimeout = 5000;
+const apiTimeout = 15000;
 let stopFlag = true;
-let maxConnections = 5;
-let urls = [];
 
 chrome.action.onClicked.addListener((tab) => {
 	if (stopFlag) {
@@ -88,6 +86,8 @@ function download(options) {
 
 
 chrome.runtime.onMessage.addListener(async (arg, sender, sendResponse) => {
+	let urls = [];
+	let maxConnections = 5;
 	if (arg.type === "coursedump_stop") {
 		stopFlag = true;
 	} else if (arg.type === "coursedump_clear") {

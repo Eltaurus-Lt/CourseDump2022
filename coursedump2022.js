@@ -45,12 +45,13 @@ async function CourseDownload(URLString) {
 	};
 
 	function PaddedFilename(url) {
-		let temp_filename = url.split("/").slice(-1);
+		let temp_filename = decodeURIComponent(url.split("/").slice(-1));
 		if (temp_filename[0].length < MIN_FILENAME_LENGTH) {
-			let pad = url.split("/").slice(-2)[0];
-			if (pad === 'medium') {pad = url.split("/").slice(-3)[0].replaceAll('%','_')};
-			temp_filename = name + "_" + pad + "_" + url.split("/").slice(-1).join("_");
+			let pad = decodeURIComponent(url.split("/").slice(-2)[0]);
+			if (pad === 'medium') {pad = decodeURIComponent(url.split("/").slice(-3)[0])};
+			temp_filename = name + "_" + pad + "_" + temp_filename;
 		};
+		temp_filename = temp_filename.replace('(','[').replace(')',']'); //square brackets not allowed inside Anki [sound: ...]
 		return temp_filename;
 	}
 
