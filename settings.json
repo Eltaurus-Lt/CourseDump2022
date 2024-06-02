@@ -13,7 +13,6 @@
   },
   "basic_settings": {
     "max_level_skip": 5,
-    "min_filename_length": 8,
     "max_extra_fields": 5,
     "parallel_download_limit": 15
   }

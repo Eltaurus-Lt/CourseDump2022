@@ -7,7 +7,6 @@ let ALWAYS_DWLD_MEDIA = false,
 	COLLAPSE_COLUMNS = true,
 
 	MAX_ERR_ABORT = 5,
-	MIN_FILENAME_LENGTH = 8,
 	MAX_EXTRA_FIELDS = 5,
 	PARALLEL_DOWNLOAD_LIMIT = 7,
 
@@ -46,12 +45,10 @@ async function CourseDownload(URLString) {
 
 	function PaddedFilename(url) {
 		let temp_filename = decodeURIComponent(url.split("/").slice(-1));
-		if (temp_filename[0].length < MIN_FILENAME_LENGTH) {
-			let pad = decodeURIComponent(url.split("/").slice(-2)[0]);
-			if (pad === 'medium') {pad = decodeURIComponent(url.split("/").slice(-3)[0])};
-			temp_filename = name + "_" + pad + "_" + temp_filename;
-		};
-		temp_filename = temp_filename.replace('(','[').replace(')',']'); //square brackets not allowed inside Anki [sound: ...]
+		let pad = decodeURIComponent(url.split("/").slice(-2)[0]);
+		if (pad === 'medium') {pad = decodeURIComponent(url.split("/").slice(-3)[0])};
+		temp_filename = name + "_" + pad + "_" + temp_filename;
+		temp_filename = temp_filename.replace('[','(').replace(']',')'); //square brackets are not allowed inside Anki [sound: ...]
 		return temp_filename;
 	}
 
@@ -492,11 +489,9 @@ chrome.runtime.onMessage.addListener(
 				FAKE_DWLD = settings.extra_settings.skip_media_download;
 
 				MAX_ERR_ABORT = settings.basic_settings.max_level_skip;
-				MIN_FILENAME_LENGTH = settings.basic_settings.min_filename_length;
 				MAX_EXTRA_FIELDS = settings.basic_settings.max_extra_fields;
 				PARALLEL_DOWNLOAD_LIMIT = settings.basic_settings.parallel_download_limit;
 
-				//console.log(MIN_FILENAME_LENGTH);
 			} catch (err) {console.log('overwriting settings error')};
 		}
 		).catch(error => {
