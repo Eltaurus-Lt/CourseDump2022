@@ -59,7 +59,7 @@ async function CourseDownload(URLString) {
 				let subnames = temp_filename.split('.');
 				let ext = subnames.pop();
 				let proper = subnames.join(".");
-				for (let i = 2; reserved_filenames.has(temp_filename); i++) {
+				for (let i = 1; reserved_filenames.has(temp_filename); i++) {
 					temp_filename = proper + " (" + i + ")." + ext;
 				}
 			}
