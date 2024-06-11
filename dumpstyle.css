@@ -43,7 +43,7 @@
 	100% {height: var(--dumpprogress-barwidth);}
 }
 
-#progresspadding,
+.progresspadding,
 .scanprogress {
 	height: var(--dumpprogress-barwidth);	
 	animation: bar-expand .25s ease-out forwards;

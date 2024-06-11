@@ -146,6 +146,6 @@ chrome.runtime.onMessage.addListener(async (arg, sender, sendResponse) => {
 				tabId: sender.tab.id
 			});
 		}
-		stopFlag = true;
+		// stopFlag = true;
 	}
 });
