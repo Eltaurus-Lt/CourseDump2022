@@ -39,20 +39,10 @@ function getDomainAndId(url) {
 	return {domain, id}
 }
 
-function ensureHTTPS(URLString) {
-    if (URLString.startsWith("https://")) {
-        return URLString;
-    }
-	if (URLString.startsWith("http://")) {
-        return "https://" + URLString.slice(7);
-    }
-    return "https://" + URLString;
-}
-
 async function CourseDownload(URLString) {
 	const {domain, id} = getDomainAndId(URLString);
 
-	let name;
+	let name, standardized_url;
 
 	if (domain && id) {
 
@@ -67,7 +57,8 @@ async function CourseDownload(URLString) {
 			document.querySelector("#page-head").prepend(progresspadding);
 		} catch (err) {}
 
-		const full_course_url = await fetch(ensureHTTPS(URLString)).then(response => response.url); // follow redirections to find the full course name
+		standardized_url = 'https://' + domain + '/community/course/' + id;
+		const full_course_url = await fetch(standardized_url).then(response => response.url); // follow redirections to find the full course name
 		name = full_course_url.split("/")[6];
 	} else { 
 		if (!BATCH) {
@@ -115,7 +106,7 @@ async function CourseDownload(URLString) {
 	let courseImg = '';
 	let levelsN = 0;
 	try {
-	let meta = fetch('https://' + domain + '/community/course/' + id )
+	let meta = fetch(standardized_url)
 	    .then(response => response.text())
 	    .then(html => {
 	        var parser = new DOMParser();
