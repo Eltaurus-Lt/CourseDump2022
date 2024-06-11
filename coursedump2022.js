@@ -39,6 +39,16 @@ function getDomainAndId(url) {
 	return {domain, id}
 }
 
+function ensureHTTPS(URLString) {
+    if (URLString.startsWith("https://")) {
+        return URLString;
+    }
+	if (URLString.startsWith("http://")) {
+        return "https://" + URLString.slice(7);
+    }
+    return "https://" + URLString;
+}
+
 async function CourseDownload(URLString) {
 	const {domain, id} = getDomainAndId(URLString);
 
@@ -57,7 +67,7 @@ async function CourseDownload(URLString) {
 			document.querySelector("#page-head").prepend(progresspadding);
 		} catch (err) {}
 
-		const full_course_url = await fetch(URLString).then(response => response.url); // follow redirections to find the full course name
+		const full_course_url = await fetch(ensureHTTPS(URLString)).then(response => response.url); // follow redirections to find the full course name
 		name = full_course_url.split("/")[6];
 	} else { 
 		if (!BATCH) {
@@ -123,6 +133,7 @@ async function CourseDownload(URLString) {
 	await meta;
 	
 	} catch (err) {}
+	console.log("id: ", id);
 	console.log("course: ", propName);
 	console.log("about: ", description);
 	console.log("by: ", author);
