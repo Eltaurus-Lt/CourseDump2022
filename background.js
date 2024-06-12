@@ -1,4 +1,4 @@
-const apiTimeout = 15000;
+const apiTimeout = 25000;
 let stopFlag = true;
 
 chrome.action.onClicked.addListener((tab) => {

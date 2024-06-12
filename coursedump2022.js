@@ -18,21 +18,48 @@ function sleep(ms) {
 	return new Promise(resolve => setTimeout(resolve, ms));
 }
 
+function extractNumberValue(string, key) {
+	const regex = new RegExp(`${key}(\\d+)`);
+	const match = string.match(regex);
+  
+	return match ? match[1] : "";
+}
+  
+function getDomainAndId(url) {
+	const id = extractNumberValue(url, "course_id=") ||
+			 extractNumberValue(url, "category_id=") ||
+			 extractNumberValue(url, "course/");
+	let domain = "";
+	if (url.includes("app.memrise.com")) {
+	  domain = "app.memrise.com";
+	} else if (url.includes("community-courses.memrise.com")) {
+	  domain = "community-courses.memrise.com";
+	}
+	
+	return {domain, id}
+}
 
 async function CourseDownload(URLString) {
-	let course = URLString.split("/");
-	let domain = course[2];
-	let id, name;
+	const {domain, id} = getDomainAndId(URLString);
 
-	if (course[4] === "course") { 
-		id = course[5]; 
-		name = course[6];
+	let name, standardized_url;
+
+	if (domain && id) {
 
 		let scanprogress = document.createElement("div");
 		scanprogress.className = "scanprogress cid" + id;
 			scanprogress.style.width = 0;
 		progressbar.append(scanprogress);
-		
+
+		let progresspadding = document.createElement("div");	
+		progresspadding.className = "progresspadding";
+		try {
+			document.querySelector("#page-head").prepend(progresspadding);
+		} catch (err) {}
+
+		standardized_url = 'https://' + domain + '/community/course/' + id;
+		const full_course_url = await fetch(standardized_url).then(response => response.url); // follow redirections to find the full course name
+		name = full_course_url.split("/")[6];
 	} else { 
 		if (!BATCH) {
 			alert("Please use the extension on an open Memrise course tab"); 
@@ -55,11 +82,12 @@ async function CourseDownload(URLString) {
 			// temp_filename = name + "_" + pad + "_" + temp_filename;
 			temp_filename = name + "_" + id + domain[0] + "_" + temp_filename;
 			temp_filename = temp_filename.replace('[','(').replace(']',')'); //square brackets are not allowed inside Anki [sound: ...]
+			let subnames = temp_filename.split('.');
+			const ext = subnames.pop().toLowerCase(); //Anki's "Check Media" is case-sensitive, and Chrome converts all extensions to lower case
+			const proper = subnames.join(".");
+			temp_filename = proper + "." + ext;
 			if (reserved_filenames.has(temp_filename)) { //add ordinal number to make the filename unique
-				let subnames = temp_filename.split('.');
-				let ext = subnames.pop();
-				let proper = subnames.join(".");
-				for (let i = 2; reserved_filenames.has(temp_filename); i++) {
+				for (let i = 1; reserved_filenames.has(temp_filename); i++) {
 					temp_filename = proper + " (" + i + ")." + ext;
 				}
 			}
@@ -78,7 +106,7 @@ async function CourseDownload(URLString) {
 	let courseImg = '';
 	let levelsN = 0;
 	try {
-	let meta = fetch('https://' + domain + '/community/course/' + id )
+	let meta = fetch(standardized_url)
 	    .then(response => response.text())
 	    .then(html => {
 	        var parser = new DOMParser();
@@ -96,6 +124,7 @@ async function CourseDownload(URLString) {
 	await meta;
 	
 	} catch (err) {}
+	console.log("id: ", id);
 	console.log("course: ", propName);
 	console.log("about: ", description);
 	console.log("by: ", author);
@@ -443,11 +472,8 @@ progressbar = document.getElementById('dumpprogress');
 if (!progressbar) {
 	progressbar = document.createElement("div");	
 	progressbar.id = "dumpprogress";
-	progresspadding = document.createElement("div");	
-	progresspadding.id = "progresspadding";
 	try {
 		document.querySelector(".rebrand-header-root").prepend(progressbar);
-		document.querySelector("#page-head").prepend(progresspadding);
 	} catch (err) {
 		document.body.prepend(progressbar);
 	}
@@ -506,26 +532,26 @@ chrome.runtime.onMessage.addListener(
 				PARALLEL_DOWNLOAD_LIMIT = settings.basic_settings.parallel_download_limit;
 
 			} catch (err) {console.log('overwriting settings error')};
-		}
-		).catch(error => {
+		}).catch(error => {
 			console.error('Error reading settings.json:', error);
 		});
 	
 	if (BATCH) {
 		await fetch(chrome.runtime.getURL('queue.txt')).then(
-				(response) => {
-					return response.text().then(
-					async (text) => {
-						await Promise.all(text.split("\n").map(
-						async (queueline) => {
+			response => {
+				return response.text().then(
+				async text => {
+					await Promise.all(text.split("\n").map(
+						async queueline => {
 							console.log("downloading " + queueline);
 							await CourseDownload(queueline);
-						}));
-						progressbar.className = "halfdone";
-						mediaDownload(download_queue);
-					});				
-				}
-	);
+						}
+					));
+					progressbar.className = "halfdone";
+					mediaDownload(download_queue);
+				});				
+			}
+		);
 	} else {
 		if (await CourseDownload(currentUrl) != -1) {
 			mediaDownload(download_queue);
