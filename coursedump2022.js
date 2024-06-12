@@ -13,6 +13,7 @@ let ALWAYS_DWLD_MEDIA = false,
 	FAKE_DWLD = false,
 	PLAIN_DWLD = false;
 
+let global_stop = false;
 
 function sleep(ms) {
 	return new Promise(resolve => setTimeout(resolve, ms));
@@ -58,9 +59,7 @@ async function CourseDownload(URLString) {
 	let name, standardized_url;
 
 	if (domain && id) {
-
 		addScanProgressBar(id);
-
 		standardized_url = 'https://' + domain + '/community/course/' + id;
 		const full_course_url = await fetch(standardized_url).then(response => response.url); // follow redirections to find the full course name
 		name = full_course_url.split("/")[6];
@@ -172,10 +171,10 @@ async function CourseDownload(URLString) {
 
 
 	let next = true;
-	for (let i = 1; next || i <= levelsN; i++) {
+	for (let i = 1; (next || i <= levelsN) && !global_stop; i++) {
 		//marking scanprogress
 		console.log("[" + name + "] scanning level " + i + "...");
-		//onsole.log("%: ", Math.min(100, Math.round(10000. * i / (levelsN + MAX_ERR_ABORT/2))/100), "i: ", i, "err_count: ", err_count, "levelsN: ", levelsN, "MAX_ERR_ABORT: ", MAX_ERR_ABORT);
+		//console.log("%: ", Math.min(100, Math.round(10000. * i / (levelsN + MAX_ERR_ABORT/2))/100), "i: ", i, "err_count: ", err_count, "levelsN: ", levelsN, "MAX_ERR_ABORT: ", MAX_ERR_ABORT);
 		document.querySelector('.scanprogress.cid' + id).style.width = Math.min(100, Math.round(10000. * i / (levelsN + MAX_ERR_ABORT/2))/100) + "%";
 		
 		let empty_set_err = false;
@@ -385,7 +384,9 @@ async function CourseDownload(URLString) {
 			}
 		}
 	}
-	document.querySelector('.scanprogress.cid' + id).style.width = "100%";
+	if (!global_stop) {
+		document.querySelector('.scanprogress.cid' + id).style.width = "100%";
+	}
 
 	//global flags (e.g. has_audio, has_video..) are needed to keep consistency of column content between all table rows
 	let course_fields = [];
@@ -505,6 +506,9 @@ chrome.runtime.onMessage.addListener(
 			console.log(prog + " media downloaded");
 			document.getElementById("downprogress").style.width = prog;
 		}
+	} else if (type === "coursedump_stop") {
+		global_stop = true;
+		progressbar.classList.add("stopped");
 	} else if (type === "coursedump_error") {
 		progressbar.classList.add("error");
 	}

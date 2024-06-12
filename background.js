@@ -1,9 +1,12 @@
 const apiTimeout = 25000;
 let stopFlag = true;
+let started = new Set();
+let stopped = new Set();
 
 chrome.action.onClicked.addListener((tab) => {
 	if (stopFlag) {
 		stopFlag = false;
+		//console.log("pressed on ", tab.id);
 		chrome.action.setIcon({
 			path: '../icons/stop.png',
 			tabId: tab.id
@@ -14,6 +17,9 @@ chrome.action.onClicked.addListener((tab) => {
 		});
 	} else {
 		stopFlag = true;
+		chrome.tabs.sendMessage(tab.id, {
+			type: "coursedump_stop"
+		});
 		chrome.action.setIcon({
 			path: '../icons/stop2.png',
 			tabId: tab.id
