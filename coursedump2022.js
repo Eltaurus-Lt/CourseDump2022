@@ -39,6 +39,19 @@ function getDomainAndId(url) {
 	return {domain, id}
 }
 
+function addScanProgressBar(cid) {
+	let scanprogress = document.createElement("div");
+	scanprogress.className = "scanprogress cid" + cid;
+		scanprogress.style.width = 0;
+	progressbar.append(scanprogress);
+
+	let progresspadding = document.createElement("div");	
+	progresspadding.className = "progresspadding";
+	try {
+		document.querySelector("#page-head").prepend(progresspadding);
+	} catch (err) {}
+}
+
 async function CourseDownload(URLString) {
 	const {domain, id} = getDomainAndId(URLString);
 
@@ -46,16 +59,7 @@ async function CourseDownload(URLString) {
 
 	if (domain && id) {
 
-		let scanprogress = document.createElement("div");
-		scanprogress.className = "scanprogress cid" + id;
-			scanprogress.style.width = 0;
-		progressbar.append(scanprogress);
-
-		let progresspadding = document.createElement("div");	
-		progresspadding.className = "progresspadding";
-		try {
-			document.querySelector("#page-head").prepend(progresspadding);
-		} catch (err) {}
+		addScanProgressBar(id);
 
 		standardized_url = 'https://' + domain + '/community/course/' + id;
 		const full_course_url = await fetch(standardized_url).then(response => response.url); // follow redirections to find the full course name
@@ -171,6 +175,7 @@ async function CourseDownload(URLString) {
 	for (let i = 1; next || i <= levelsN; i++) {
 		//marking scanprogress
 		console.log("[" + name + "] scanning level " + i + "...");
+		//onsole.log("%: ", Math.min(100, Math.round(10000. * i / (levelsN + MAX_ERR_ABORT/2))/100), "i: ", i, "err_count: ", err_count, "levelsN: ", levelsN, "MAX_ERR_ABORT: ", MAX_ERR_ABORT);
 		document.querySelector('.scanprogress.cid' + id).style.width = Math.min(100, Math.round(10000. * i / (levelsN + MAX_ERR_ABORT/2))/100) + "%";
 		
 		let empty_set_err = false;
@@ -380,7 +385,7 @@ async function CourseDownload(URLString) {
 			}
 		}
 	}
-
+	document.querySelector('.scanprogress.cid' + id).style.width = "100%";
 
 	//global flags (e.g. has_audio, has_video..) are needed to keep consistency of column content between all table rows
 	let course_fields = [];
