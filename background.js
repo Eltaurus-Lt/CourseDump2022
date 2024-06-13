@@ -1,11 +1,13 @@
 const apiTimeout = 25000;
 let stopFlag = true;
-let started = new Set();
-let stopped = new Set();
+
+const started = new Set();
+const stopped = new Set();
 
 chrome.action.onClicked.addListener((tab) => {
-	if (stopFlag) {
-		stopFlag = false;
+	const tabpageId = JSON.stringify([tab.id, tab.url]);
+	if (!started.has(tabpageId)) {
+		started.add(tabpageId);
 		//console.log("pressed on ", tab.id);
 		chrome.action.setIcon({
 			path: '../icons/stop.png',
@@ -15,8 +17,8 @@ chrome.action.onClicked.addListener((tab) => {
 			target: { tabId: tab.id },
 			files: ['coursedump2022.js']
 		});
-	} else {
-		stopFlag = true;
+	} else if (!stopped.has(tabpageId)) {
+		stopped.add(tabpageId);
 		chrome.tabs.sendMessage(tab.id, {
 			type: "coursedump_stop"
 		});
@@ -24,6 +26,10 @@ chrome.action.onClicked.addListener((tab) => {
 			path: '../icons/stop2.png',
 			tabId: tab.id
 		});		
+	} else {
+		chrome.tabs.reload(tab.id);
+		started.delete(tabpageId);
+		stopped.delete(tabpageId);
 	}
 });
 
@@ -92,10 +98,11 @@ function download(options) {
 
 
 chrome.runtime.onMessage.addListener(async (arg, sender, sendResponse) => {
+	const tabpageId = JSON.stringify([sender.tab.id, sender.tab.id]);
 	let urls = [];
 	let maxConnections = 5;
-	if (arg.type === "coursedump_stop") {
-		stopFlag = true;
+	if (arg.type === "coursedump_stopedByContentScript") {
+		stopped.add(tabpageId);
 	} else if (arg.type === "coursedump_clear") {
 		urls = [];
 		total = done;
@@ -110,7 +117,7 @@ chrome.runtime.onMessage.addListener(async (arg, sender, sendResponse) => {
 		let done = 0;
 		let pids = Array(maxConnections).fill().map((_, i) => i + 1);
 		const results = await Promise.allSettled(pids.map(async pid => {
-			while (!stopFlag && urls.length) {
+			while (!stopped.has(tabpageId) && urls.length) {
 				const [url, filename] = urls.shift();
 				await sleep(200);
 				let id;
@@ -143,15 +150,15 @@ chrome.runtime.onMessage.addListener(async (arg, sender, sendResponse) => {
 		}
 		chrome.tabs.sendMessage(sender.tab.id, {
 			type: "coursedump_progress_upd",
-			progress: stopFlag ? "stopped" : "done",
+			progress: stopped.has(tabpageId) ? "stopped" : "done",
 			done, total
 		});
-		if (!stopFlag) {
+		if (!stopped.has(tabpageId)) {
 			chrome.action.setIcon({
 				path: '../icons/done.png',
 				tabId: sender.tab.id
 			});
 		}
-		stopFlag = true;
+		stopped.add(tabpageId);
 	}
 });
