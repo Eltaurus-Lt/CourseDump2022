@@ -291,12 +291,12 @@ async function CourseDownload(URLString) {
 							}
 							ind = attributes.indexOf(attribute.label);
 							if (ind != -1) {
-								temp_extra1[ind] = attribute.value;
+								temp_extra1[ind] = `"${attribute.value.replaceAll('"', '""')}"`;
 							}
 						}
 					})
 				}
-				temp_extra1.forEach(el => row.push(`"` + el + `"`));
+				temp_extra1.forEach(el => row.push(el));
 
 				//	visible_info[0]: 548340 - kana; 6197256 - syn; 2021373+2021381 - lit trans/pinyin;
 				//	visible_info[1]: 2021373+2021381 - pinyin;
@@ -321,13 +321,13 @@ async function CourseDownload(URLString) {
 									temp_image_list.forEach(media_download_urls.add, media_download_urls);
 									temp_extra2[ind] = `` + temp_image_list.map(url => `<img src='${UniqueDecodedFilename(url)}'>`).join(``) + ``;
 								} else if (v_info.kind !== "audio" && v_info.kind !== "image") {
-									temp_extra2[ind] = v_info.value;
+									temp_extra2[ind] = `"${v_info.value.replaceAll('"', '""')}"`;
 								}
 							}
 						}
 					})
 				}
-				temp_extra2.forEach(el => row.push(`"` + el + `"`));
+				temp_extra2.forEach(el => row.push(el));
 
 				//	hidden_info[0]: 1995282 - inflections;
 				let temp_extra3 = new Array(MAX_EXTRA_FIELDS).fill(``);
@@ -351,13 +351,13 @@ async function CourseDownload(URLString) {
 									temp_image_list.forEach(media_download_urls.add, media_download_urls);
 									temp_extra3[ind] = `` + temp_image_list.map(url => `<img src='${UniqueDecodedFilename(url)}'>`).join(``) + ``;
 								} else if (h_info.kind !== "audio" && h_info.kind !== "image") {
-									temp_extra3[ind] = h_info.value;
+									temp_extra3[ind] = `"${h_info.value.replaceAll('"', '""')}"`;
 								}
 							}
 						}
 					})
 				}
-				temp_extra3.forEach(el => row.push(`"` + el + `"`));
+				temp_extra3.forEach(el => row.push(el));
 
 				//tags
 				row.push(level_tag);
@@ -570,6 +570,8 @@ chrome.runtime.onMessage.addListener(
 						}
 					));
 					progressbar.className = "halfdone";
+					let pi = 0;
+					[...document.getElementsByClassName('progresspadding')].forEach(e => {pi++; pi > 1 ? e.remove() : null});
 					mediaDownload(download_queue);
 				});				
 			}
