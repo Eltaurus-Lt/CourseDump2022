@@ -11,7 +11,8 @@ let ALWAYS_DWLD_MEDIA = false,
 
 	LEARNABLE_IDS = false,
 	FAKE_DWLD = false,
-	PLAIN_DWLD = false;
+	PLAIN_DWLD = false,
+	ANKI_HEADERS = true;
 
 let global_stop = false;
 
@@ -404,13 +405,17 @@ async function CourseDownload(URLString) {
 	let info;
 	info = 'data:md/plain;charset=utf-8,' + encodeURIComponent( 
 		`# **` + propName + `**\n` + 
-		`### by _` + author + `_\n` +
+		`### by _` + author + `_\n` + 
 		`\n` + 
-		description + 
+		description
+		);
+	if (!ANKI_HEADERS) {
+		info = info + encodeURIComponent( 
 		`\n\n` + 
 		`## Course Fields\n` +
 		`| ` + course_fields.join(` | `) + ` |`
-	);
+		);
+	}
 	if (!PLAIN_DWLD) {
 		download_queue.push([info, subfolder + 'info.md']);
 	}
@@ -433,6 +438,14 @@ async function CourseDownload(URLString) {
 		if (LEARNABLE_IDS) {line.push(row[4 + 3 * MAX_EXTRA_FIELDS + 1])};
 		return line.join(`,`);
 	}).join("\n") + "\n";
+	//add Anki headers
+	if (ANKI_HEADERS) {
+		result = "#separator:comma\n" +
+				 "#html:true\n" +
+				 (LEVEL_TAGS ? (`#tags column:${LEARNABLE_IDS ? course_fields.length-1 : course_fields.length}\n`) : ``) +
+				 "#columns:" + course_fields.join(",") + "\n" +
+				 result;
+	}
 
 	//downloading the table
 	let csvdata = 'data:text/csv;charset=utf-8,%EF%BB%BF' + encodeURIComponent(result);
