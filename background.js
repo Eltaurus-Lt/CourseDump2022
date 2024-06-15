@@ -23,7 +23,7 @@ chrome.action.onClicked.addListener((tab) => {
 			type: "coursedump_stop"
 		});
 		chrome.action.setIcon({
-			path: '../icons/stop2.png',
+			path: '../icons/reload.png',
 			tabId: tab.id
 		});		
 	} else {
@@ -115,7 +115,7 @@ chrome.runtime.onMessage.addListener(async (arg, sender, sendResponse) => {
 		if (arg.maxThreads) maxConnections = arg.maxThreads;
 		console.log(`max threads set to : ${maxConnections}`);
 		let done = 0;
-		let pids = Array(maxConnections).fill().map((_, i) => i + 1);		
+		let pids = Array(maxConnections).fill().map((_, i) => i + 1);
 		const results = await Promise.allSettled(pids.map(async pid => {
 			while (!stopped.has(tabpageId) && urls.length) {
 				const [url, filename] = urls.shift();
