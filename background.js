@@ -98,7 +98,7 @@ function download(options) {
 
 
 chrome.runtime.onMessage.addListener(async (arg, sender, sendResponse) => {
-	const tabpageId = JSON.stringify([sender.tab.id, sender.tab.id]);
+	const tabpageId = JSON.stringify([sender.tab.id, sender.tab.url]);
 	let urls = [];
 	let maxConnections = 5;
 	if (arg.type === "coursedump_stopedByContentScript") {
@@ -115,7 +115,7 @@ chrome.runtime.onMessage.addListener(async (arg, sender, sendResponse) => {
 		if (arg.maxThreads) maxConnections = arg.maxThreads;
 		console.log(`max threads set to : ${maxConnections}`);
 		let done = 0;
-		let pids = Array(maxConnections).fill().map((_, i) => i + 1);
+		let pids = Array(maxConnections).fill().map((_, i) => i + 1);		
 		const results = await Promise.allSettled(pids.map(async pid => {
 			while (!stopped.has(tabpageId) && urls.length) {
 				const [url, filename] = urls.shift();
