@@ -11,8 +11,10 @@ let ALWAYS_DWLD_MEDIA = false,
 
 	LEARNABLE_IDS = false,
 	FAKE_DWLD = false,
-	PLAIN_DWLD = false;
+	PLAIN_DWLD = false,
+	ANKI_HEADERS = true;
 
+let global_stop = false;
 
 function sleep(ms) {
 	return new Promise(resolve => setTimeout(resolve, ms));
@@ -58,9 +60,7 @@ async function CourseDownload(URLString) {
 	let name, standardized_url;
 
 	if (domain && id) {
-
 		addScanProgressBar(id);
-
 		standardized_url = 'https://' + domain + '/community/course/' + id;
 		const full_course_url = await fetch(standardized_url).then(response => response.url); // follow redirections to find the full course name
 		name = full_course_url.split("/")[6];
@@ -172,10 +172,10 @@ async function CourseDownload(URLString) {
 
 
 	let next = true;
-	for (let i = 1; next || i <= levelsN; i++) {
+	for (let i = 1; (next || i <= levelsN) && !global_stop; i++) {
 		//marking scanprogress
 		console.log("[" + name + "] scanning level " + i + "...");
-		//onsole.log("%: ", Math.min(100, Math.round(10000. * i / (levelsN + MAX_ERR_ABORT/2))/100), "i: ", i, "err_count: ", err_count, "levelsN: ", levelsN, "MAX_ERR_ABORT: ", MAX_ERR_ABORT);
+		//console.log("%: ", Math.min(100, Math.round(10000. * i / (levelsN + MAX_ERR_ABORT/2))/100), "i: ", i, "err_count: ", err_count, "levelsN: ", levelsN, "MAX_ERR_ABORT: ", MAX_ERR_ABORT);
 		document.querySelector('.scanprogress.cid' + id).style.width = Math.min(100, Math.round(10000. * i / (levelsN + MAX_ERR_ABORT/2))/100) + "%";
 		
 		let empty_set_err = false;
@@ -385,7 +385,9 @@ async function CourseDownload(URLString) {
 			}
 		}
 	}
-	document.querySelector('.scanprogress.cid' + id).style.width = "100%";
+	if (!global_stop) {
+		document.querySelector('.scanprogress.cid' + id).style.width = "100%";
+	}
 
 	//global flags (e.g. has_audio, has_video..) are needed to keep consistency of column content between all table rows
 	let course_fields = [];
@@ -403,13 +405,17 @@ async function CourseDownload(URLString) {
 	let info;
 	info = 'data:md/plain;charset=utf-8,' + encodeURIComponent( 
 		`# **` + propName + `**\n` + 
-		`### by _` + author + `_\n` +
+		`### by _` + author + `_\n` + 
 		`\n` + 
-		description + 
+		description
+		);
+	if (!ANKI_HEADERS) {
+		info = info + encodeURIComponent( 
 		`\n\n` + 
 		`## Course Fields\n` +
 		`| ` + course_fields.join(` | `) + ` |`
-	);
+		);
+	}
 	if (!PLAIN_DWLD) {
 		download_queue.push([info, subfolder + 'info.md']);
 	}
@@ -432,6 +438,14 @@ async function CourseDownload(URLString) {
 		if (LEARNABLE_IDS) {line.push(row[4 + 3 * MAX_EXTRA_FIELDS + 1])};
 		return line.join(`,`);
 	}).join("\n") + "\n";
+	//add Anki headers
+	if (ANKI_HEADERS) {
+		result = "#separator:comma\n" +
+				 "#html:true\n" +
+				 (LEVEL_TAGS ? (`#tags column:${LEARNABLE_IDS ? course_fields.length-1 : course_fields.length}\n`) : ``) +
+				 "#columns:" + course_fields.join(",") + "\n" +
+				 result;
+	}
 
 	//downloading the table
 	let csvdata = 'data:text/csv;charset=utf-8,%EF%BB%BF' + encodeURIComponent(result);
@@ -505,6 +519,9 @@ chrome.runtime.onMessage.addListener(
 			console.log(prog + " media downloaded");
 			document.getElementById("downprogress").style.width = prog;
 		}
+	} else if (type === "coursedump_stop") {
+		global_stop = true;
+		progressbar.classList.add("stopped");
 	} else if (type === "coursedump_error") {
 		progressbar.classList.add("error");
 	}
