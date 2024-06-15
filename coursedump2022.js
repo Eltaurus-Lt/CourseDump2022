@@ -570,6 +570,8 @@ chrome.runtime.onMessage.addListener(
 						}
 					));
 					progressbar.className = "halfdone";
+					let pi = 0;
+					[...document.getElementsByClassName('progresspadding')].forEach(e => {pi++; pi > 1 ? e.remove() : null});
 					mediaDownload(download_queue);
 				});				
 			}
