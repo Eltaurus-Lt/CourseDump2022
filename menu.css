@@ -1,0 +1,66 @@
+/*
+@import url(https://db.onlinewebfonts.com/c/df5e41ae1af690fdb8b46ed56048dfbd?family=Boing+WEB+Bold);
+@import url(https://fonts.googleapis.com/css?family=Noto+Sans+JP:400,900&display=swap);
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:400,600,700&display=swap);
+*/
+
+:root {
+	--dumpprogress-barwidth: 1.2em;	
+	--mem-orange: #ffbb00;
+	--mem-green: #83c53d;
+	--mem-red: #ff756b;
+	--mem-yellow: #ffc001;
+	--mem-darkblue: #2b3648;
+	--mem-lightblue: #b9d7e3;
+	--mem-lightgreen: #91be51;
+	--mem-lightred: #f17e75;
+}
+
+body {
+    background: var(--mem-darkblue);
+    color: white;
+    font-family: "Boing WEB Bold", Noto, "Noto Sans JP", "Open Sans", sans-serif;
+}
+
+h2 {
+    color: var(--mem-orange);
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
+    margin-top: 0px;
+}
+
+h3 {
+  font-size: 1.25rem;
+  padding: .75rem 0;
+  margin: 1rem 0 0;
+}
+
+/* toggle styles: */
+
+input {
+  appearance: none;
+  width: 50px;
+  height: 30px;
+  background-color: var(--mem-lightred);
+  border-radius: 100px;
+  transition: background .2s;
+  background-repeat: no-repeat;
+  background-position: 12%;
+  background-size: 52%;
+  background-image: url( "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle r='50' cx='50' cy='50' fill='white'/></svg>" );
+  /*   background-image: radial-gradient(circle at 50%, white 50%, transparent 55%); */
+  
+  box-shadow: inset .5px .5px 2px #10102050;
+}
+
+input:checked {
+  background-position: 88%;
+  background-color: var(--mem-lightgreen);
+}
+
+ input {
+  display: block;
+  margin-top: .5em;
+/*   transform-origin: 0 0;
+  scale: 50%; */
+}
