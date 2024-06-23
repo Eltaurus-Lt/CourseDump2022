@@ -19,13 +19,25 @@ function getDomainAndId(url) {
 	return {domain, id}
 }  
 
-async function getCurrentTabUrl() {
+async function getCurrentTab() {
   try {
       const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-      return tab.url;
+      return tab;
   } catch (error) {
       console.error(error);
   }
+}
+
+function saveToStorage(data) {
+  chrome.storage.local.set(data);
+}
+
+async function loadFromStorage(obj) {
+  return new Promise((resolve) => {
+      chrome.storage.local.get([obj], (result) => {
+          resolve(result[obj]);
+      });
+  });
 }
 
 document.addEventListener('DOMContentLoaded', async function () {
@@ -44,12 +56,26 @@ document.addEventListener('DOMContentLoaded', async function () {
     window.open('https://buymeacoffee.com/eltaurus', '_blank').focus();
   });
 
-  const tab_url = await getCurrentTabUrl();
-  const {domain, id} = getDomainAndId(tab_url);
+  const current_tab = await getCurrentTab();
+  const {domain, id} = getDomainAndId(current_tab.url);
+
 
   const downloadButton = document.getElementById("download-course");
   const BatchAddButton = document.getElementById("batch-add");
   const BatchDownloadButton = document.getElementById("batch-download");
+  const BatchViewButton = document.getElementById("batch-view");
+  const BatchClearButton = document.getElementById("batch-clear");
+
+  async function updateCounters() {
+    const queue = await loadFromStorage('queue');
+    const count = `${queue.length}`;
+    BatchDownloadButton.setAttribute("counter", count);
+    BatchViewButton.setAttribute("counter", count);
+  }
+  
+  updateCounters();
+
+  //download buttons
   if (!domain) {
     downloadButton.title = "Has to be used from memrise.com";
     downloadButton.setAttribute("disabled", true);
@@ -63,10 +89,36 @@ document.addEventListener('DOMContentLoaded', async function () {
     BatchAddButton.title = "Needs a course page from memrise.com";
     BatchAddButton.setAttribute("disabled", true);
   } else {
-    downloadButton.addEventListener('click', function () {
-      alert(tab_url);
+    downloadButton.addEventListener('click', () => {
+      chrome.scripting.executeScript({
+        target: {tabId: current_tab.id},
+        args: [{cUrl: current_tab.url}],
+        func: vars => Object.assign(self, vars),
+      }, () => {
+        chrome.scripting.executeScript({
+          target: {tabId: current_tab.id}, 
+          files: ['alert.js']});
+      });
     });
+    BatchAddButton.addEventListener('click', async () => {
+      const queue = await loadFromStorage('queue');
+      saveToStorage({'queue': [...queue, current_tab.url]});
+      updateCounters();
+    })
   }
+
+  BatchViewButton.addEventListener('click', async () => {
+    const queue = await loadFromStorage('queue');
+    alert(queue);
+  })
+
+  BatchClearButton.addEventListener('click', async () => {
+    saveToStorage({'queue': []});
+    updateCounters();
+  })
+
+
+  //batch buttons
 
   // document.getElementById('export').addEventListener('click', async () => {
 //     try {
