@@ -38,6 +38,7 @@ body * {
 
 body > :first-child {
   margin-top: .75em;
+  font-weight: bold;
 }
 
 h2, h3 {

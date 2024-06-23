@@ -4,17 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="menu.css">
+    <script src="menu.js"></script>
     <title>Course Dump Menu</title>
 </head>
 <body>
-    <h4 style="font-weight: bold"><img src="icons/icon.png"/> Download current course</h4>
+    <h4><img src="icons/icon.png"/> Download current course</h4>
 
     <hr>
 
-    <h4 onclick="window.open('https://github.com/Eltaurus-Lt/CourseDump2022#importing-into-anki', '_blank').focus();">Help</h4>
-    <h4>Feedback</h4>
-    <h4>Anki Templates</h4>
-    <h4 style="display:none;"><img src="icons/coffee.png"/>Support</h4>
+    <h4 id="link-help"onclick="">Help</h4>
+    <h4 id="link-forum">Feedback</h4>
+    <h4 id="link-ankiweb">Anki Templates</h4>
+    <h4 id="link-coffee"><img src="icons/coffee.png"/>Support</h4>
 
     <hr>
 
@@ -62,7 +63,6 @@
         </h4></label>
         </div>
     </div>
-    <h4 class="danger"><img src="icons/reload.png"/> Restore default</h4>
+    <h4 class="danger">Restore default</h4>
 </body>
 </html>
-<script src="menu.js"></script>
