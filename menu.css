@@ -85,7 +85,7 @@ h4:has(img) {
 }
 
 h4.danger {
-  color: #fff6;
+  color: #f977;
 }
 
 /* interactive styles */
@@ -161,12 +161,19 @@ input.toggle:checked {
   background-color: var(--mem-lightgreen);
 }
 
+h4#batch-download[counter="0"],
+h4[disabled],
 h4:has(input.toggle:disabled) {
   color: gray;
 }
 input.toggle:disabled {
   background-color: lightgray;
   filter: brightness(50%);
+}
+h4#batch-download[counter="0"] img,
+h4[disabled] img {
+  filter: grayscale(100)
+	  brightness(80%);
 }
 
 input.toggle {
