@@ -7,8 +7,62 @@
     <title>Course Dump Menu</title>
 </head>
 <body>
-    <h2>the menu</h1>
-    <h3> pt1 <h3>
-    <input type="checkbox" checked/>
+    <h4 style="font-weight: bold"><img src="icons/icon.png"/> Download current course</h4>
+
+    <hr>
+
+    <h4 onclick="window.open('https://github.com/Eltaurus-Lt/CourseDump2022#importing-into-anki', '_blank').focus();">Help</h4>
+    <h4>Feedback</h4>
+    <h4>Anki Templates</h4>
+    <h4 style="display:none;"><img src="icons/coffee.png"/>Support</h4>
+
+    <hr>
+
+    <h3>Batch download</h3>
+    <h4>Add to queue</h4>
+    <h4 counter="0"><img src="icons/icon.png"/> Download all</h4>
+    <h4 counter="0">View queued courses</h4>
+    <h4>Import course list</h4>
+    <h4 class="danger">Clear queue</h4>
+
+    <hr>
+
+    <h3>Settings</h3>
+    <label for="setting-downloadMedia">
+        <h4>Download media<input id="setting-downloadMedia" type="checkbox" class="toggle" checked/>
+    </h4></label>
+    <label for="setting-extraFields">
+    <h4>Extra fields<input id="setting-extraFields" type="checkbox" class="toggle" checked/>
+    </h4></label>
+    <label for="setting-levelTags">
+        <h4>Level tags<input id="setting-levelTags"  type="checkbox" class="toggle" checked/>
+    </h4></label>
+    <label for="setting-ankiPrompt">
+        <h4>Anki import prompt<input id="setting-ankiPrompt" type="checkbox" class="toggle" checked/>
+    </h4></label>
+    <label for="toggleAdvanced">
+        <h4><input id="toggleAdvanced" type="checkbox" class="expander"/> Advanced
+    </h4></label>
+    <div id="advancedGrid">
+        <div>
+        <label for="setting-learningProgress">
+            <h4>Learning Progress<input id="setting-learningProgress" type="checkbox" class="toggle" disabled/>
+        </h4></label>
+        <label for="setting-alternativeAnswers">
+            <h4>Alternative Answers<input id="setting-alternativeAnswers" type="checkbox" class="toggle" disabled/>
+        </h4></label>
+        <label for="setting-learnableIds">
+            <h4>Learnable IDs<input id="setting-learnableIds" type="checkbox" class="toggle"/>
+        </h4></label>
+        <label for="setting-skipMedia">
+            <h4>Skip media download<input id="setting-skipMedia" type="checkbox" class="toggle"/>
+        </h4></label>
+        <label for="setting-courseMeta">
+            <h4>Course metadata<input id="setting-courseMeta" type="checkbox" class="toggle" checked/>
+        </h4></label>
+        </div>
+    </div>
+    <h4 class="danger"><img src="icons/reload.png"/> Restore default</h4>
 </body>
 </html>
+<script src="menu.js"></script>
