@@ -1,3 +1,18 @@
+const default_settings = {
+  "download_media": true,
+  "extra_fields": true,
+  "level_tags": true,
+  "anki_import_prompt": true,
+
+  "learnable_ids": false,
+  "skip_media_download": false,
+  "course_metadata": true,
+
+  "max_level_skip": 5,
+  "max_extra_fields": 5,
+  "parallel_download_limit": 15
+};
+
 function extractNumberValue(string, key) {
 	const regex = new RegExp(`${key}(\\d+)`);
 	const match = string.match(regex);
@@ -40,6 +55,8 @@ async function loadFromStorage(obj) {
   });
 }
 
+
+
 document.addEventListener('DOMContentLoaded', async function () {
  
   // links
@@ -77,7 +94,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
   //download buttons
   if (!domain) {
-    downloadButton.title = "Has to be used from memrise.com";
+    downloadButton.title = "Has to be used on memrise.com";
     downloadButton.setAttribute("disabled", true);
     BatchAddButton.title = "Needs a course page from memrise.com";
     BatchAddButton.setAttribute("disabled", true);
@@ -107,18 +124,89 @@ document.addEventListener('DOMContentLoaded', async function () {
     })
   }
 
+  //batch buttons
   BatchViewButton.addEventListener('click', async () => {
     const queue = await loadFromStorage('queue');
     alert(queue);
   })
 
   BatchClearButton.addEventListener('click', async () => {
-    saveToStorage({'queue': []});
-    updateCounters();
+    if (confirm("Clear queued courses list?")) {
+      saveToStorage({'queue': []});
+      updateCounters();
+    }
   })
 
 
-  //batch buttons
+  //settings
+  const toggleDownloadMedia = document.getElementById("setting-downloadMedia");
+  const toggleExtraFields = document.getElementById("setting-extraFields");
+  const toggleLevelTags = document.getElementById("setting-levelTags");
+  const toggleAnkiPrompt = document.getElementById("setting-ankiPrompt");
+  const toggleLearnableIds = document.getElementById("setting-learnableIds");
+  const toggleSkipMedia = document.getElementById("setting-skipMedia");
+  const toggleCourseMeta = document.getElementById("setting-courseMeta");
+
+  async function settingsFromToggles() {
+    let current_settings = {
+      "download_media": toggleDownloadMedia.checked,
+      "extra_fields": toggleExtraFields.checked,
+      "level_tags": toggleLevelTags.checked,
+      "anki_import_prompt": toggleAnkiPrompt.checked,
+    
+      "learnable_ids": toggleLearnableIds.checked,
+      "skip_media_download": toggleSkipMedia.checked,
+      "course_metadata": toggleCourseMeta.checked
+    };
+
+    for (const [setting, default_value] of Object.entries(default_settings)) {
+      if (!(setting in current_settings && current_settings[setting] !== 'undefined')) {
+        current_settings[setting] = default_value;
+      }
+    }
+
+    saveToStorage({ 'settings': current_settings});
+  }
+  
+  async function togglesFromSettings() {
+    let settings = await loadFromStorage('settings') || default_settings;
+
+    for (const [setting, default_value] of Object.entries(default_settings)) {
+      if (!(setting in settings && settings[setting] !== 'undefined')) {
+        settings[setting] = default_value;
+      }
+    }
+
+    toggleDownloadMedia.checked = settings["download_media"];
+    toggleExtraFields.checked = settings["extra_fields"];
+    toggleLevelTags.checked = settings["level_tags"];
+    toggleAnkiPrompt.checked = settings["anki_import_prompt"];
+  
+    toggleLearnableIds.checked = settings["learnable_ids"];
+    toggleSkipMedia.checked = settings["skip_media_download"];
+    toggleCourseMeta.checked = settings["course_metadata"];
+  }
+
+
+  togglesFromSettings();
+
+
+  document.querySelectorAll('input[type="checkbox"].toggle').forEach((checkbox) => {
+    checkbox.addEventListener('change', (event) => {
+      settingsFromToggles();
+    });
+  });
+
+  document.getElementById("settings-restore").addEventListener('click', async () => {
+    if (confirm("Restore default settings?")) {
+      saveToStorage({ 'settings': default_settings});
+      togglesFromSettings();
+    }
+  })
+
+
+
+  
 
   // document.getElementById('export').addEventListener('click', async () => {
 //     try {
