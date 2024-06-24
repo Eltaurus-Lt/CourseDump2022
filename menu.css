@@ -164,6 +164,7 @@ input.toggle:checked {
 }
 
 h4#batch-download[counter="0"],
+h4#batch-clear[counter="0"],
 h4[disabled],
 h4:has(input.toggle:disabled) {
   color: gray;
