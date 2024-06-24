@@ -85,7 +85,7 @@ h4:has(img) {
 }
 
 h4.danger {
-  color: #fff8;
+  color: #fffa;
   font-size: .8em;
   padding-left: calc(1.5em / 0.8);
 }

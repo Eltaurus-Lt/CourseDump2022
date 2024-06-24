@@ -81,6 +81,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const BatchAddButton = document.getElementById("batch-add");
   const BatchDownloadButton = document.getElementById("batch-download");
   const BatchViewButton = document.getElementById("batch-view");
+  const BatchImportButton = document.getElementById("batch-import");
   const BatchClearButton = document.getElementById("batch-clear");
 
   async function updateCounters() {
@@ -127,7 +128,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   //batch buttons
   BatchViewButton.addEventListener('click', async () => {
     const queue = await loadFromStorage('queue');
-    let queueTab = window.open("data:text/html, <html contenteditable>","queueTab");
+    // let queueTab = window.open("data:text/html, <html contenteditable>","queueTab");
+    let queueTab = window.open("data:text/html","queueTab");
     queueTab.document.write(`<html>
       <head><title>Download queue</title></head>
       <body>
@@ -135,6 +137,35 @@ document.addEventListener('DOMContentLoaded', async () => {
       </body>
      </html>`);
     queueTab.document.close();
+  })
+
+  BatchImportButton.addEventListener('click', async () => {
+    const queue = await loadFromStorage('queue');
+    if ((queue.length == 0) || confirm("Importing course list will overwrite all currently queued courses.\n Proceed?")) {
+      try {
+        const pickerOpts = {
+          types: [
+              {
+                  description: "Text files",
+                  accept: { "text/plain": [".txt"] },
+              },
+          ],
+          multiple: false
+        };      
+        const [fileHandle] = await window.showOpenFilePicker(pickerOpts);
+        const file = await fileHandle.getFile();
+        const content = await file.text();
+        lines = content.split('\n');
+        courseList = lines.filter(line => {
+          const {domain, id} = getDomainAndId(line);
+          return (domain && id)
+        });
+        saveToStorage({'queue': courseList});
+        updateCounters();
+      } catch (error) {
+        console.log('Error reading file:', error);
+      }
+    }
   })
 
   BatchClearButton.addEventListener('click', async () => {
@@ -210,21 +241,4 @@ document.addEventListener('DOMContentLoaded', async () => {
       togglesFromSettings();
     }
   })
-
-
-
-  
-
-  // document.getElementById('export').addEventListener('click', async () => {
-//     try {
-//       const textToWrite = '42!';
-//       const fileHandle = await window.showSaveFilePicker();
-//       const writable = await fileHandle.createWritable();
-//       await writable.write(textToWrite);
-//       await writable.close();
-//       console.log('Text written successfully!');
-//     } catch (error) {
-//       alert('Error writing text:', error);
-//     }
-//   });
 });
