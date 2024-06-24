@@ -57,19 +57,19 @@ async function loadFromStorage(obj) {
 
 
 
-document.addEventListener('DOMContentLoaded', async function () {
+document.addEventListener('DOMContentLoaded', async () => {
  
   // links
-  document.getElementById("link-help").addEventListener('click', function () {
+  document.getElementById("link-help").addEventListener('click', () => {
     window.open('https://github.com/Eltaurus-Lt/CourseDump2022?tab=readme-ov-file#memrise-course-dump', '_blank').focus();
   });
-  document.getElementById("link-forum").addEventListener('click', function () {
+  document.getElementById("link-forum").addEventListener('click', () => {
     window.open('https://forums.ankiweb.net/t/an-alternative-to-memrise2anki-support-thread/30084', '_blank').focus();
   });
-  document.getElementById("link-ankiweb").addEventListener('click', function () {
+  document.getElementById("link-ankiweb").addEventListener('click', () => {
     window.open('https://ankiweb.net/shared/info/510199145', '_blank').focus();
   });
-  document.getElementById("link-coffee").addEventListener('click', function () {
+  document.getElementById("link-coffee").addEventListener('click', () => {
     window.open('https://buymeacoffee.com/eltaurus', '_blank').focus();
   });
 
@@ -127,7 +127,14 @@ document.addEventListener('DOMContentLoaded', async function () {
   //batch buttons
   BatchViewButton.addEventListener('click', async () => {
     const queue = await loadFromStorage('queue');
-    alert(queue);
+    let queueTab = window.open("data:text/html, <html contenteditable>","queueTab");
+    queueTab.document.write(`<html>
+      <head><title>Download queue</title></head>
+      <body>
+      ${queue.join('<br>')}
+      </body>
+     </html>`);
+    queueTab.document.close();
   })
 
   BatchClearButton.addEventListener('click', async () => {
