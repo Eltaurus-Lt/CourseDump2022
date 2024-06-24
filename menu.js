@@ -89,6 +89,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const count = `${queue.length}`;
     BatchDownloadButton.setAttribute("counter", count);
     BatchViewButton.setAttribute("counter", count);
+    BatchClearButton.setAttribute("counter", count);
   }
   
   updateCounters();
@@ -169,7 +170,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   })
 
   BatchClearButton.addEventListener('click', async () => {
-    if (confirm("Clear queued courses list?")) {
+    if (BatchClearButton.getAttribute("counter") !== '0' && confirm("Clear the list of queued courses?")) {
       saveToStorage({'queue': []});
       updateCounters();
     }
