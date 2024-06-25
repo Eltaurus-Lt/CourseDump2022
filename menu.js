@@ -21,7 +21,7 @@ function extractNumberValue(string, key) {
 }
   
 function getDomainAndId(url) {
-	const id = extractNumberValue(url, "course_id=") ||
+	const cid = extractNumberValue(url, "course_id=") ||
 			 extractNumberValue(url, "category_id=") ||
 			 extractNumberValue(url, "course/");
 	let domain = "";
@@ -31,7 +31,7 @@ function getDomainAndId(url) {
 	  domain = "community-courses.memrise.com";
 	}
 	
-	return {domain, id}
+	return {domain, cid}
 }  
 
 async function getCurrentTab() {
@@ -74,7 +74,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   });
 
   const current_tab = await getCurrentTab();
-  const {domain, id} = getDomainAndId(current_tab.url);
+  const {domain, cid} = getDomainAndId(current_tab.url);
+  const cidd = JSON.stringify({domain, cid});
 
 
   const downloadButton = document.getElementById("download-course");
@@ -102,7 +103,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     BatchAddButton.setAttribute("disabled", true);
     BatchDownloadButton.title = "Has to be used from memrise.com";
     BatchDownloadButton.setAttribute("disabled", true);
-  } else if (!id) {
+  } else if (!cid) {
     downloadButton.title = "Needs a specific course to be opened";
     downloadButton.setAttribute("disabled", true);
     BatchAddButton.title = "Needs a course page from memrise.com";
@@ -121,14 +122,30 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
     BatchAddButton.addEventListener('click', async () => {
       const queue = await loadFromStorage('queue');
-      saveToStorage({'queue': [...queue, current_tab.url]});
+      const queuetxt = await loadFromStorage('queue-text');
+      if (queue.includes(cidd)) {return} //list is supposedly faster than a set, because the number of itmes is small
+      if (queue) {
+        saveToStorage({'queue': [...queue, cidd]});
+      } else {
+        saveToStorage({'queue': [cidd]});
+      }
+      if (queuetxt) {
+        saveToStorage({'queue-text': [...queuetxt, current_tab.url]});
+      } else {
+        saveToStorage({'queue-text': [current_tab.url]});
+      }
       updateCounters();
     })
   }
 
   //batch buttons
-  BatchViewButton.addEventListener('click', async () => {
-    const queue = await loadFromStorage('queue');
+  BatchViewButton.addEventListener('click', async (event) => {
+    let queue;
+    if (event.ctrlKey) {
+      queue = await loadFromStorage('queue');
+    } else {
+      queue = await loadFromStorage('queue-text');
+    }
     // let queueTab = window.open("data:text/html, <html contenteditable>","queueTab");
     let queueTab = window.open("data:text/html","queueTab");
     queueTab.document.write(`<html>
@@ -157,11 +174,18 @@ document.addEventListener('DOMContentLoaded', async () => {
         const file = await fileHandle.getFile();
         const content = await file.text();
         lines = content.split('\n');
-        courseList = lines.filter(line => {
-          const {domain, id} = getDomainAndId(line);
-          return (domain && id)
+        const cidds = [];
+        const courseList = lines.filter(line => {
+          const {domain, cid} = getDomainAndId(line);
+          const cidd = JSON.stringify({domain, cid});
+          const check = (domain && cid && !cidds.includes(cidd));
+          if (check) {
+            cidds.push(cidd);
+          }
+          return check
         });
-        saveToStorage({'queue': courseList});
+        saveToStorage({'queue-text': courseList});
+        saveToStorage({'queue': cidds});
         updateCounters();
       } catch (error) {
         console.log('Error reading file:', error);
@@ -172,6 +196,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   BatchClearButton.addEventListener('click', async () => {
     if (BatchClearButton.getAttribute("counter") !== '0' && confirm("Clear the list of queued courses?")) {
       saveToStorage({'queue': []});
+      saveToStorage({'queue-text': []});
       updateCounters();
     }
   })
