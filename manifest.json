@@ -24,7 +24,6 @@
   },
   "content_security_policy": {},
   "web_accessible_resources": [{
-    "resources": ["queue.txt", "settings.json"],
     "matches": ["<all_urls>"]
     }],
    "content_scripts": [

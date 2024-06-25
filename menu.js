@@ -112,12 +112,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     downloadButton.addEventListener('click', () => {
       chrome.scripting.executeScript({
         target: {tabId: current_tab.id},
-        args: [{cUrl: current_tab.url}],
+        args: [{cidds: [cidd]}],
         func: vars => Object.assign(self, vars),
       }, () => {
         chrome.scripting.executeScript({
           target: {tabId: current_tab.id}, 
-          files: ['alert.js']});
+          files: ['dumpcourse.js']});
       });
     });
     BatchAddButton.addEventListener('click', async () => {
