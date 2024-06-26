@@ -253,7 +253,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 
   togglesFromSettings();
-
+  //turn toggle animations on
+  setTimeout(()=>document.querySelector('body').classList.add('animated'), 100);// awaiting above doesn't help (due to additional delay in css processing?)
 
   document.querySelectorAll('input[type="checkbox"].toggle').forEach((checkbox) => {
     checkbox.addEventListener('change', (event) => {
@@ -267,4 +268,6 @@ document.addEventListener('DOMContentLoaded', async () => {
       togglesFromSettings();
     }
   })
+
+
 });
