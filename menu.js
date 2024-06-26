@@ -55,7 +55,17 @@ async function loadFromStorage(obj) {
   });
 }
 
+async function loadSettings() {
+  let settings = await loadFromStorage('settings') || default_settings;
 
+  for (const [setting, default_value] of Object.entries(default_settings)) {
+    if (!(setting in settings && settings[setting] !== 'undefined')) {
+      settings[setting] = default_value;
+    }
+  }
+  
+  return settings;
+}
 
 document.addEventListener('DOMContentLoaded', async () => {
  
@@ -77,6 +87,19 @@ document.addEventListener('DOMContentLoaded', async () => {
   const {domain, cid} = getDomainAndId(current_tab.url);
   const cidd = JSON.stringify({domain, cid});
 
+  //content script wrapper for calling with arguments
+  async function downloadCourses(cidds) {
+    const settings = await loadSettings();
+    chrome.scripting.executeScript({
+      target: {tabId: current_tab.id},
+      args: [{cidds, settings}],
+      func: vars => Object.assign(self, vars),
+    }, () => {
+      chrome.scripting.executeScript({
+        target: {tabId: current_tab.id}, 
+        files: ['dumpcourse.js']});
+    });
+  }
 
   const downloadButton = document.getElementById("download-course");
   const BatchAddButton = document.getElementById("batch-add");
@@ -95,50 +118,51 @@ document.addEventListener('DOMContentLoaded', async () => {
   
   updateCounters();
 
-  //download buttons
+  //download and add buttons
   if (!domain) {
-    downloadButton.title = "Has to be used on memrise.com";
+    downloadButton.title = "Has to be used on a memrise.com course page";
     downloadButton.setAttribute("disabled", true);
-    BatchAddButton.title = "Needs a course page from memrise.com";
+    BatchAddButton.title = "Has to be used on a memrise.com course page";
     BatchAddButton.setAttribute("disabled", true);
     BatchDownloadButton.title = "Has to be used from memrise.com";
     BatchDownloadButton.setAttribute("disabled", true);
-  } else if (!cid) {
-    downloadButton.title = "Needs a specific course to be opened";
-    downloadButton.setAttribute("disabled", true);
-    BatchAddButton.title = "Needs a course page from memrise.com";
-    BatchAddButton.setAttribute("disabled", true);
   } else {
-    downloadButton.addEventListener('click', () => {
-      chrome.scripting.executeScript({
-        target: {tabId: current_tab.id},
-        args: [{cidds: [cidd]}],
-        func: vars => Object.assign(self, vars),
-      }, () => {
-        chrome.scripting.executeScript({
-          target: {tabId: current_tab.id}, 
-          files: ['dumpcourse.js']});
+    if (!cid) {
+      downloadButton.title = "Has to be used from a specific course page";
+      downloadButton.setAttribute("disabled", true);
+      BatchAddButton.title = "Has to be used from a specific course page";
+      BatchAddButton.setAttribute("disabled", true);
+    } else {
+      downloadButton.addEventListener('click', () => {
+        downloadCourses([cidd]);
       });
+      BatchAddButton.addEventListener('click', async () => {
+        const queue = await loadFromStorage('queue');
+        const queuetxt = await loadFromStorage('queue-text');
+        if (queue.includes(cidd)) {return} //list is supposedly faster than a set, because the number of itmes is small
+        if (queue) {
+          saveToStorage({'queue': [...queue, cidd]});
+        } else {
+          saveToStorage({'queue': [cidd]});
+        }
+        if (queuetxt) {
+          saveToStorage({'queue-text': [...queuetxt, current_tab.url]});
+        } else {
+          saveToStorage({'queue-text': [current_tab.url]});
+        }
+        updateCounters();
+      })
+    }
+    
+    BatchDownloadButton.addEventListener('click', async () => {
+      const cidds = await loadFromStorage('queue');
+      if (cidds && cidds.length > 0) {
+        downloadCourses(cidds);
+      }
     });
-    BatchAddButton.addEventListener('click', async () => {
-      const queue = await loadFromStorage('queue');
-      const queuetxt = await loadFromStorage('queue-text');
-      if (queue.includes(cidd)) {return} //list is supposedly faster than a set, because the number of itmes is small
-      if (queue) {
-        saveToStorage({'queue': [...queue, cidd]});
-      } else {
-        saveToStorage({'queue': [cidd]});
-      }
-      if (queuetxt) {
-        saveToStorage({'queue-text': [...queuetxt, current_tab.url]});
-      } else {
-        saveToStorage({'queue-text': [current_tab.url]});
-      }
-      updateCounters();
-    })
   }
 
-  //batch buttons
+  //other batch buttons
   BatchViewButton.addEventListener('click', async (event) => {
     let queue;
     if (event.ctrlKey) {
@@ -233,13 +257,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
   
   async function togglesFromSettings() {
-    let settings = await loadFromStorage('settings') || default_settings;
-
-    for (const [setting, default_value] of Object.entries(default_settings)) {
-      if (!(setting in settings && settings[setting] !== 'undefined')) {
-        settings[setting] = default_value;
-      }
-    }
+    const settings = await loadSettings();
 
     toggleDownloadMedia.checked = settings["download_media"];
     toggleExtraFields.checked = settings["extra_fields"];
@@ -268,6 +286,5 @@ document.addEventListener('DOMContentLoaded', async () => {
       togglesFromSettings();
     }
   })
-
 
 });
