@@ -1,3 +1,4 @@
+//global variables
 if (typeof threads !== 'undefined' && threads != []) {alert('Script is already executing');}
 if (typeof cidds === 'undefined') {var cidds = []}
 if (typeof media_queue === 'undefined') {var media_queue = []}
@@ -12,7 +13,7 @@ function sleep(ms) {
 
 //progress bars
 function progressBarContainer() {
-  const containerId = 'MemDump-progressContainer';
+  const containerId = 'MemDump_progressContainer';
 
   const existingContainer = document.getElementById(containerId);
   if (existingContainer) return existingContainer;
@@ -46,17 +47,23 @@ function progressBar(barId) {
 
 function batchProgressBar() {
   if (batch_size < 2) return;
-  return progressBar('MemDump-progress.batch');
+  return progressBar('MemDump_progress-batch');
 }
 
 function scanProgressBar(threadN) {
-  return progressBar('MemDump-progress.thread' + threadN);
+  return progressBar('MemDump_progress-thread' + threadN);
 }
 
 function removeScanBar(threadN) {
-  const progressBar = document.getElementById('MemDump-progress.thread' + threadN);
+  const progressBar = document.getElementById('MemDump_progress-thread' + threadN);
+
   if (progressBar) {
-    progressBar.classList.add('off');
+    progressBar.style.animationPlayState = "paused";
+    setTimeout(()=>{
+      void progressBar.offsetHeight;
+      progressBar.classList.add('off');
+      progressBar.style.animationPlayState = "running";
+    }, 500);
   }
 }
 
@@ -72,18 +79,34 @@ function removeScanBar(threadN) {
 async function scanCourse(cidd, threadN) {
   const progress_bar = scanProgressBar(threadN);
   function updScanProgress(progress) {
-    console.log(`thread: ${threadN} | cid: ${cidd['cid']} | ${progress}%`);
-    if (progress_bar) {
-      progress_bar.style.width = Math.min(100, Math.round(100. * progress)/100) + "%";
+    if (progress > 0) {
+      console.log(`thread: ${threadN} | cid: ${cidd['cid']} | ${progress}%`);
+      if (progress_bar) {
+        progress_bar.style.width = Math.min(100, Math.round(100. * progress)/100) + "%";
+      }
+    } else {
+      console.log(`thread: ${threadN} | Begin scanning ${cidd['cid']}`);
+      if (progress_bar) {
+        progress_bar.classList.add('abrupt');
+        progress_bar.style.width = "0%";
+        setTimeout(()=>{
+          progress_bar.classList.remove('abrupt');
+        }, 50);
+      }
     }
   }
 
+  //init
+  let progress = 0;
+  progress_bar.setAttribute("course-name", "");
+  updScanProgress(progress);
+
   //scan emulation
   const name = Math.random().toString().slice(2, 7);
+  await sleep(1000);
   if (progress_bar) {
     progress_bar.setAttribute("course-name", name);
   }
-  let progress = 0;
   while (progress < 100) {
     await sleep(Math.floor(Math.random() * 1000 + 500));
     progress += Math.floor(Math.random() * 20 + 10);

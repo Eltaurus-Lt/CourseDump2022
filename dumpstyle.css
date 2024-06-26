@@ -8,14 +8,14 @@
 	--mem-darkerblue: #555e7d;
 }
 
-#MemDump-progressContainer {
+#MemDump_progressContainer {
 	width: 100%;
 	position: relative;
 	background: var(--mem-darkblue);
 	transition: height 1s;
 	overflow-y: hidden;
 }
-#MemDump-progressContainer::after {
+#MemDump_progressContainer::after {
   content: '';
   position: absolute;
   inset: 0;
@@ -28,28 +28,39 @@
 	100% {height: var(--dumpprogress-barwidth);}
 }
 
-div[id^="MemDump-progress."] {
+div[id^="MemDump_progress-"] {
 	height: var(--dumpprogress-barwidth);	
 	animation: bar-expand .25s ease-out forwards;
 	left: 0;
 	top: 0;
 }
-div[id^="MemDump-progress."] {
-//	position: absolute;
+div[id^="MemDump_progress-media"] {
+	background: var(--mem-yellow);
+}
+div[id^="MemDump_progress-thread"] {
 	background: var(--mem-lightblue);
+}
+div[id^="MemDump_progress-"] {
 	transition: width .5s;
 }
-div[id^="MemDump-progress."]::after {
+div[id^="MemDump_progress-"].abrupt {
+	transition: width .1s;
+}
+div[id^="MemDump_progress-"]:not(:only-child):not(:has(+ #MemDump_progress-media))::after {
 	position: relative;
 	bottom: 5px;
 	content: attr(course-name);
 	font-family: "Arial", sans-serif;
 	font-size: 10px;
 	left: 1em;
-	text-shadow: 1px 1px 2px #000000, 0px 0px 1px #000000;
+	text-shadow: 1px 1px 2px #000000, 1px 1px 2px #00000055, 0px 0px 1px #000000;
+}
+div[id^="MemDump_progress-"].off:not(:only-child):not(:has(+ #MemDump_progress-media)) {
+	animation: bar-expand 0.30s ease-out reverse forwards;
+	overflow-y: hidden;
 }
 
-div[id="MemDump-progress.batch"] {
+div#MemDump_progress-batch {
 	background: var(--mem-darkerblue);
 }
 
@@ -72,17 +83,6 @@ div[id="MemDump-progress.batch"] {
 }
 #dumpprogress.error * {
 	opacity: 0.1;
-}
-
-
-
-
-#downprogress {
-	left: 0;
-	top: 0;
-	height: var(--dumpprogress-barwidth);	
-	background: var(--mem-yellow);
-	transition: width .5s;
 }
 
 .done .scanprogress,
