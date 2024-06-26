@@ -24,6 +24,7 @@
   },
   "content_security_policy": {},
   "web_accessible_resources": [{
+    "resources": [],
     "matches": ["<all_urls>"]
     }],
    "content_scripts": [
