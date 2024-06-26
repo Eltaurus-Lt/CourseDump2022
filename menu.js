@@ -99,6 +99,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         target: {tabId: current_tab.id}, 
         files: ['dumpcourse.js']});
     });
+    window.close();
   }
 
   const downloadButton = document.getElementById("download-course");

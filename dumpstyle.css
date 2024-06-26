@@ -5,22 +5,58 @@
 	--mem-yellow: #ffc001;
 	--mem-darkblue: #2b3648;
 	--mem-lightblue: #b9d7e3;
+	--mem-darkerblue: #555e7d;
 }
 
-#dumpprogress {
+#MemDump-progressContainer {
 	width: 100%;
 	position: relative;
 	background: var(--mem-darkblue);
 	transition: height 1s;
 	overflow-y: hidden;
 }
-#dumpprogress::after {
+#MemDump-progressContainer::after {
   content: '';
   position: absolute;
   inset: 0;
   background: repeating-linear-gradient(#eee 0, #fff calc(.15 * var(--dumpprogress-barwidth)), #fff calc(.58 * var(--dumpprogress-barwidth)), #ccc var(--dumpprogress-barwidth));
   mix-blend-mode: multiply;
 }
+
+@keyframes bar-expand {
+	0%   {height: 0em;}
+	100% {height: var(--dumpprogress-barwidth);}
+}
+
+div[id^="MemDump-progress."] {
+	height: var(--dumpprogress-barwidth);	
+	animation: bar-expand .25s ease-out forwards;
+	left: 0;
+	top: 0;
+}
+div[id^="MemDump-progress."] {
+//	position: absolute;
+	background: var(--mem-lightblue);
+	transition: width .5s;
+}
+div[id^="MemDump-progress."]::after {
+	position: relative;
+	bottom: 5px;
+	content: attr(course-name);
+	font-family: "Arial", sans-serif;
+	font-size: 10px;
+	left: 1em;
+	text-shadow: 1px 1px 2px #000000, 0px 0px 1px #000000;
+}
+
+div[id="MemDump-progress.batch"] {
+	background: var(--mem-darkerblue);
+}
+
+
+/* ----------------------- old styles ----------------------- */
+
+
 #dumpprogress.done {
 	background: var(--mem-green);
 	height: var(--dumpprogress-barwidth);
@@ -38,23 +74,8 @@
 	opacity: 0.1;
 }
 
-@keyframes bar-expand {
-	0%   {height: 0em;}
-	100% {height: var(--dumpprogress-barwidth);}
-}
 
-.progresspadding,
-.scanprogress {
-	height: var(--dumpprogress-barwidth);	
-	animation: bar-expand .25s ease-out forwards;
-	left: 0;
-	top: 0;
-}
-.scanprogress {
-//	position: absolute;
-	background: var(--mem-lightblue);
-	transition: width .5s;
-}
+
 
 #downprogress {
 	left: 0;
