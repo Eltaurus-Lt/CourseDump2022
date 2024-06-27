@@ -97,7 +97,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     }, () => {
       chrome.scripting.executeScript({
         target: {tabId: current_tab.id}, 
-        files: ['dumpcourse.js']});
+        files: ['progressbars.js']},
+        () => {
+          chrome.scripting.executeScript({
+            target: {tabId: current_tab.id}, 
+            files: ['dumpcourse.js']});
+        }
+      );
     });
     window.close();
   }
