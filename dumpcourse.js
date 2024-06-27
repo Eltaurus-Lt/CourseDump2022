@@ -17,11 +17,13 @@ function ciddToURL(cidd) {
 
 async function fetchMeta(cidd) {
   const meta = {
+    'url': ciddToURL(cidd),
     'cid': cidd['cid'],
     'proper name': '',
     'thumbnail': '',  
     'url name': cidd['cid'],
-    'number of levels': undefined,
+    'number of levels': '??',
+    'number of items': '??',
     'description': '',
     'author': '',
     'ava': 'https://static.memrise.com/accounts/img/placeholders/empty-avatar-2.png', // -> rnd 1..4
@@ -47,6 +49,7 @@ async function fetchMeta(cidd) {
     meta['description'] = (desc => (desc ? desc.innerText : ""))(doc.querySelector('.course-description.text'));
     meta['author'] = doc.querySelector('.creator-name span').innerText;
     meta['ava'] = doc.querySelector('.creator-image img').src;
+    meta['number of items'] = parseInt(doc.querySelector('.progress-box-title').innerText.split('/').at(-1).trim());
   } catch(err) {
     console.error(`failed to parse course ${cidd['cid']} html`, err);    
   }
