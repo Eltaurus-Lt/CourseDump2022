@@ -53,6 +53,7 @@ div[id^="MemDump_progress-"]:not(:only-child):not(:has(+ #MemDump_progress-media
 	font-family: "Arial", sans-serif;
 	font-size: 10px;
 	left: 1em;
+	color: white;
 	text-shadow: 1px 1px 2px #000000, 1px 1px 2px #00000055, 0px 0px 1px #000000;
 }
 div[id^="MemDump_progress-"].off:not(:only-child):not(:has(+ #MemDump_progress-media)) {

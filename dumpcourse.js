@@ -5,7 +5,7 @@ if (typeof media_queue === 'undefined') {var media_queue = []}
 if (typeof batch_size === 'undefined') {var batch_size = 1}
 if (typeof batch_done === 'undefined') {var batch_done = 0}
 
-settings['parallel_download_limit'] = 4;
+settings['parallel_download_limit'] = 3;
 
 function sleep(ms) {
 	return new Promise(resolve => setTimeout(resolve, ms));
@@ -42,6 +42,16 @@ function progressBar(barId) {
   progress_bar.style.width = "0";
   progress_bar_container.appendChild(progress_bar);
 
+  const padId = 'MemDump_progress-padding-' + barId.split('-').at(-1);
+  const existingPad = document.getElementById(padId);
+  if (existingPad) return progress_bar;
+
+  const padding_bar = document.createElement("div");
+	padding_bar.id = padId;
+	try {
+		document.querySelector("#page-head").prepend(padding_bar);
+	} catch (err) {}
+
   return progress_bar;
 }
 
@@ -51,18 +61,29 @@ function batchProgressBar() {
 }
 
 function scanProgressBar(threadN) {
-  return progressBar('MemDump_progress-thread' + threadN);
+  return progressBar('MemDump_progress-thread-' + threadN);
 }
 
 function removeScanBar(threadN) {
-  const progressBar = document.getElementById('MemDump_progress-thread' + threadN);
+  const progress_bar = document.getElementById('MemDump_progress-thread-' + threadN);
 
-  if (progressBar) {
-    progressBar.style.animationPlayState = "paused";
+  if (progress_bar) {
+    progress_bar.style.animationPlayState = "paused";
     setTimeout(()=>{
-      void progressBar.offsetHeight;
-      progressBar.classList.add('off');
-      progressBar.style.animationPlayState = "running";
+      void progress_bar.offsetHeight;
+      progress_bar.classList.add('off');
+      progress_bar.style.animationPlayState = "running";
+    }, 500);
+  }
+
+  const padding_bar = document.getElementById('MemDump_progress-padding-' + threadN);
+
+  if (padding_bar) {
+    padding_bar.style.animationPlayState = "paused";
+    setTimeout(()=>{
+      void padding_bar.offsetHeight;
+      padding_bar.classList.add('off');
+      padding_bar.style.animationPlayState = "running";
     }, 500);
   }
 }
@@ -112,6 +133,7 @@ async function scanCourse(cidd, threadN) {
     progress += Math.floor(Math.random() * 20 + 10);
     updScanProgress(progress);
   }
+  await sleep(700);
 
 }
 
@@ -121,6 +143,12 @@ function updBatchProgress(cidd) {
   const batch_progress_bar = batchProgressBar();
   if (!batch_progress_bar) return;
   batch_progress_bar.style.width = Math.min(100, Math.round(10000. * batch_done/batch_size)/100) + "%";
+}
+
+async function fetchMeta(ccid) {
+  const meta = {};
+
+  return meta;
 }
 
 async function scanThread(threadN) {
