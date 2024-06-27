@@ -23,6 +23,18 @@
   mix-blend-mode: multiply;
 }
 
+#MemDump_progressContainer.stopped {
+	filter: grayscale(100%);
+}
+#MemDump_progressContainer.error {
+	background: var(--mem-red) !important;
+}
+#MemDump_progressContainer.error * {
+	filter: grayscale(100%);
+	mix-blend-mode: multiply;
+	opacity: 0.25;
+}
+
 @keyframes bar-expand {
 	0%   {height: 0em;}
 	100% {height: var(--dumpprogress-barwidth);}
@@ -34,8 +46,14 @@ div[id^="MemDump_progress-"] {
 	left: 0;
 	top: 0;
 }
-div[id^="MemDump_progress-media"] {
+div#MemDump_progress-media {
 	background: var(--mem-yellow);
+	position: absolute;
+	left: 0;
+	bottom: 0;
+}
+div#MemDump_progress-media.done {
+	background: var(--mem-green);
 }
 div[id^="MemDump_progress-thread"] {
 	background: var(--mem-lightblue);
@@ -66,30 +84,4 @@ div[id^="MemDump_progress-"].off:not(:only-child):not(:has(+ #MemDump_progress-m
 
 div#MemDump_progress-batch {
 	background: var(--mem-darkerblue);
-}
-
-
-/* ----------------------- old styles ----------------------- */
-
-
-#dumpprogress.done {
-	background: var(--mem-green);
-	height: var(--dumpprogress-barwidth);
-}
-#dumpprogress.halfdone {
-	height: var(--dumpprogress-barwidth);
-}
-#dumpprogress.stopped {
-	filter: grayscale(100%);
-}
-#dumpprogress.error {
-	background: var(--mem-red) !important;
-}
-#dumpprogress.error * {
-	opacity: 0.1;
-}
-
-.done .scanprogress,
-.done #downprogress {
-	display: none;
 }

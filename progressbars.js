@@ -16,7 +16,7 @@ function progressBarContainer() {
   return progress_bar_container;
 }
 
-function progressBar(barId) {
+function progressBar(barId, padding = true) {
   const existingBar = document.getElementById(barId);
   if (existingBar) return existingBar;
 
@@ -30,7 +30,7 @@ function progressBar(barId) {
 
   const padId = 'MemDump_progress-padding-' + barId.split('-').at(-1);
   const existingPad = document.getElementById(padId);
-  if (existingPad) return progress_bar;
+  if (!padding || existingPad) return progress_bar;
 
   const padding_bar = document.createElement("div");
 	padding_bar.id = padId;
@@ -48,6 +48,10 @@ function batchProgressBar() {
 
 function scanProgressBar(threadN) {
   return progressBar('MemDump_progress-thread-' + threadN);
+}
+
+function mediaProgressBar() {
+  return progressBar('MemDump_progress-media', false);
 }
 
 function removeScanBar(threadN) {

@@ -5,7 +5,7 @@ if (typeof media_queue === 'undefined') {var media_queue = []}
 if (typeof batch_size === 'undefined') {var batch_size = 1}
 if (typeof batch_done === 'undefined') {var batch_done = 0}
 
-settings['parallel_download_limit'] = 3;
+settings['parallel_download_limit'] = 6;
 
 function sleep(ms) {
 	return new Promise(resolve => setTimeout(resolve, ms));
@@ -64,6 +64,21 @@ function updBatchProgress(cidd) {
   batch_progress_bar.style.width = Math.min(100, Math.round(10000. * batch_done/batch_size)/100) + "%";
 }
 
+function updMediaProgress(media_done) {
+  const media_total = 100;
+  const done_str = `${media_done}/${media_total}`;
+  const media_progress_bar = mediaProgressBar();
+  if (!media_progress_bar) return;
+  if (media_done === "done") {
+    media_progress_bar.setAttribute("progress-text", "done!");
+    media_progress_bar.classList.add('done');
+    media_progress_bar.style.width = "100%";
+    return;
+  }
+  media_progress_bar.setAttribute("progress-text", done_str);
+  media_progress_bar.style.width = Math.min(100, Math.round(10000. * media_done/media_total)/100) + "%";
+}
+
 async function fetchMeta(ccid) {
   const meta = {};
 
@@ -113,10 +128,24 @@ async function scanThread(threadN) {
     // console.log(`new thread started: ${threadCounter} ${settings['parallel_download_limit']} ${cidds.length}`);
     threads.push(scanThread(threadCounter));
   }
-  batchProgressBar();
   updBatchProgress("");
   await Promise.all(threads);
   console.log('scanning complete');
-  //mediaProgressBar = assignMediaProgressBar();
-  //downloadMedia();
+  await sleep(500);
+
+  media_progress = 0;
+
+  //media download emulation
+  updMediaProgress("");
+  while (media_progress < 100) {
+    await sleep(Math.floor(Math.random() * 100 + 50));
+    media_progress += Math.floor(Math.random() * 2 + 1);
+    updMediaProgress(media_progress);
+  }
+
+  setTimeout(()=>{
+    updMediaProgress("done");
+  }, 550);
+  console.log('media download complete');
+  
 })();
