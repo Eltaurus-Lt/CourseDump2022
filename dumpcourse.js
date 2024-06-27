@@ -11,6 +11,50 @@ function sleep(ms) {
 	return new Promise(resolve => setTimeout(resolve, ms));
 }
 
+function ciddToURL(cidd) {
+  return `https://${cidd['domain']}/community/course/${cidd['cid']}`;
+}
+
+async function fetchMeta(cidd) {
+  const meta = {
+    'cid': cidd['cid'],
+    'proper name': '',
+    'thumbnail': '',  
+    'url name': cidd['cid'],
+    'number of levels': undefined,
+    'description': '',
+    'author': '',
+    'ava': 'https://static.memrise.com/accounts/img/placeholders/empty-avatar-2.png', // -> rnd 1..4
+  };
+
+  let course_page;
+  try {
+    course_page = await fetch(ciddToURL(cidd));
+  } catch(err) {
+    console.error(`failed to fetch course ${cidd['cid']} html`, err);
+  }
+  if (!course_page) return meta;
+
+  meta['url name'] = course_page.url.split("/")[6]; // course name from the ending of the url after redirections
+
+  try {
+    const parser =  new DOMParser();
+    const doc = parser.parseFromString(await course_page.text(), "text/html");
+
+    meta['proper name'] = doc.querySelector('.course-name').innerText;
+    meta['thumbnail'] = doc.querySelector('.course-photo img').src;
+    meta['number of levels'] = (query => (query ? query.childElementCount : 1))(doc.querySelector('div.levels'));
+    meta['description'] = (desc => (desc ? desc.innerText : ""))(doc.querySelector('.course-description.text'));
+    meta['author'] = doc.querySelector('.creator-name span').innerText;
+    meta['ava'] = doc.querySelector('.creator-image img').src;
+  } catch(err) {
+    console.error(`failed to parse course ${cidd['cid']} html`, err);    
+  }
+
+	console.log(JSON.stringify(meta));
+
+  return meta;
+}
 
 //THE MAIN FUNCTION FOR SCANNING ALL LEVELS OF A COURSE
 async function scanCourse(cidd, threadN) {
@@ -39,10 +83,9 @@ async function scanCourse(cidd, threadN) {
   updScanProgress(progress);
 
   //scan emulation
-  const name = Math.random().toString().slice(2, 7);
-  await sleep(1000);
+  const meta = await fetchMeta(cidd);
   if (progress_bar) {
-    progress_bar.setAttribute("progress-text", name);
+    progress_bar.setAttribute("progress-text", meta['proper name'] || meta['url name']);
   }
   while (progress < 100) {
     await sleep(Math.floor(Math.random() * 1000 + 500));
@@ -79,11 +122,7 @@ function updMediaProgress(media_done) {
   media_progress_bar.style.width = Math.min(100, Math.round(10000. * media_done/media_total)/100) + "%";
 }
 
-async function fetchMeta(ccid) {
-  const meta = {};
 
-  return meta;
-}
 
 async function scanThread(threadN) {
   let cidd;

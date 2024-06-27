@@ -78,8 +78,3 @@ function removeScanBar(threadN) {
     }, 500);
   }
 }
-
-// function assignMediaProgressBar() {
-//   const progress_bar_container = progressBarContainer();
-//   return progress_bar_container.querySelector(":last-child") || createnew;//🤔
-// }
