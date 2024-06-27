@@ -22,7 +22,7 @@ async function scanCourse(cidd, threadN) {
         progress_bar.style.width = Math.min(100, Math.round(100. * progress)/100) + "%";
       }
     } else {
-      console.log(`thread: ${threadN} | Begin scanning ${cidd['cid']}`);
+      console.log(`thread: ${threadN} | Start scanning ${cidd['cid']}`);
       if (progress_bar) {
         progress_bar.classList.add('resetting');
         progress_bar.style.width = "0%";
@@ -110,13 +110,13 @@ async function scanThread(threadN) {
   media_queue = [];
   progressBarContainer();
   for (let threadCounter = 0; threadCounter < settings['parallel_download_limit'] && cidds.length > 0; threadCounter++) {
-    console.log(`new thread started: ${threadCounter} ${settings['parallel_download_limit']} ${cidds.length}`);
+    // console.log(`new thread started: ${threadCounter} ${settings['parallel_download_limit']} ${cidds.length}`);
     threads.push(scanThread(threadCounter));
   }
   batchProgressBar();
   updBatchProgress("");
   await Promise.all(threads);
-  console.log('all done');
+  console.log('scanning complete');
   //mediaProgressBar = assignMediaProgressBar();
   //downloadMedia();
 })();
