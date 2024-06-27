@@ -24,25 +24,25 @@ async function scanCourse(cidd, threadN) {
     } else {
       console.log(`thread: ${threadN} | Begin scanning ${cidd['cid']}`);
       if (progress_bar) {
-        progress_bar.classList.add('abrupt');
+        progress_bar.classList.add('resetting');
         progress_bar.style.width = "0%";
-        setTimeout(()=>{
-          progress_bar.classList.remove('abrupt');
-        }, 50);
+        setTimeout(() => {
+          progress_bar.classList.remove('resetting');
+        }, 500);
       }
     }
   }
 
   //init
   let progress = 0;
-  progress_bar.setAttribute("course-name", "");
+  progress_bar.setAttribute("progress-text", "");
   updScanProgress(progress);
 
   //scan emulation
   const name = Math.random().toString().slice(2, 7);
   await sleep(1000);
   if (progress_bar) {
-    progress_bar.setAttribute("course-name", name);
+    progress_bar.setAttribute("progress-text", name);
   }
   while (progress < 100) {
     await sleep(Math.floor(Math.random() * 1000 + 500));
@@ -54,10 +54,13 @@ async function scanCourse(cidd, threadN) {
 }
 
 function updBatchProgress(cidd) {
-  batch_done++;
-  console.log(`cid: ${cidd['cid']} | scan complete (${batch_done}/${batch_size})`);
+  const done_str = `${batch_done}/${batch_size}`;
+  if (cidd) {
+    console.log(`cid: ${cidd['cid']} | scan complete (${done_str})`);
+  }  
   const batch_progress_bar = batchProgressBar();
   if (!batch_progress_bar) return;
+  batch_progress_bar.setAttribute("progress-text", done_str);
   batch_progress_bar.style.width = Math.min(100, Math.round(10000. * batch_done/batch_size)/100) + "%";
 }
 
@@ -84,6 +87,7 @@ async function scanThread(threadN) {
     } else {
       console.log(`${cidd} does not match tab domain ${tabDomain}`);
     }
+    batch_done++;
     updBatchProgress(cidd);
   }
 
@@ -110,6 +114,7 @@ async function scanThread(threadN) {
     threads.push(scanThread(threadCounter));
   }
   batchProgressBar();
+  updBatchProgress("");
   await Promise.all(threads);
   console.log('all done');
   //mediaProgressBar = assignMediaProgressBar();

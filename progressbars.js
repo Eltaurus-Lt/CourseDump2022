@@ -42,7 +42,7 @@ function progressBar(barId) {
 }
 
 function batchProgressBar() {
-  if (batch_size < 2) return;
+  if (typeof batch_size === 'undefined' || batch_size < 2) return;
   return progressBar('MemDump_progress-batch');
 }
 
@@ -63,8 +63,9 @@ function removeScanBar(threadN) {
   }
 
   const padding_bar = document.getElementById('MemDump_progress-padding-' + threadN);
+  const remaining_count = document.querySelectorAll('[id^="MemDump_progress-padding-"]').length;
 
-  if (padding_bar) {
+  if (padding_bar && remaining_count > 1) {
     padding_bar.style.animationPlayState = "paused";
     setTimeout(()=>{
       void padding_bar.offsetHeight;

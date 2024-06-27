@@ -137,7 +137,7 @@ input.expander:checked {
 
 input.toggle {
   position: absolute;
-  right: 0;.25em;
+  right: 0;
   top: 50%;
   translate: 0 -50%;
 

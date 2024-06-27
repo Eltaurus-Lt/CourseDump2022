@@ -5,7 +5,7 @@
 	--mem-yellow: #ffc001;
 	--mem-darkblue: #2b3648;
 	--mem-lightblue: #b9d7e3;
-	--mem-darkerblue: #555e7d;
+	--mem-darkerblue: #336ba5;/*#6a717b;*/
 }
 
 #MemDump_progressContainer {
@@ -43,18 +43,21 @@ div[id^="MemDump_progress-thread"] {
 div[id^="MemDump_progress-"] {
 	transition: width .5s;
 }
-div[id^="MemDump_progress-"].abrupt {
-	transition: width .1s;
+div[id^="MemDump_progress-"].resetting {
+	transition: width .1s .35s, background-color .3s;
+	background-color: var(--mem-darkblue);
 }
-div[id^="MemDump_progress-"]:not(:only-child):not(:has(+ #MemDump_progress-media))::after {
+div[id^="MemDump_progress-"]::after {
 	position: relative;
 	bottom: 5px;
-	content: attr(course-name);
 	font-family: "Arial", sans-serif;
 	font-size: 10px;
 	left: 1em;
 	color: white;
 	text-shadow: 1px 1px 2px #000000, 1px 1px 2px #00000055, 0px 0px 1px #000000;
+}
+div[id^="MemDump_progress-"]:not(:only-child):not(:has(+ #MemDump_progress-media))::after {
+	content: attr(progress-text);
 }
 div[id^="MemDump_progress-"].off:not(:only-child):not(:has(+ #MemDump_progress-media)) {
 	animation: bar-expand 0.30s ease-out reverse forwards;
