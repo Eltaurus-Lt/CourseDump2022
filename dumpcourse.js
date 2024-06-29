@@ -49,7 +49,12 @@ async function fetchMeta(cidd) {
     meta['description'] = (desc => (desc ? desc.innerText : ""))(doc.querySelector('.course-description.text'));
     meta['author'] = doc.querySelector('.creator-name span').innerText;
     meta['ava'] = doc.querySelector('.creator-image img').src;
-    meta['number of items'] = parseInt(doc.querySelector('.progress-box-title').innerText.split('/').at(-1).trim());
+    try {
+      //only works for courses that have been started, otherwise the info is not present on the page
+      meta['number of items'] = parseInt(doc.querySelector('.progress-box-title').innerText.split('/').at(-1).trim());
+    } catch(err) {
+      console.log(`course ${cidd['cid']} has not been started, info for 'number of items' unavailable`);
+    }
   } catch(err) {
     console.error(`failed to parse course ${cidd['cid']} html`, err);    
   }
@@ -61,71 +66,23 @@ async function fetchMeta(cidd) {
 
 //THE MAIN FUNCTION FOR SCANNING ALL LEVELS OF A COURSE
 async function scanCourse(cidd, threadN) {
-  const progress_bar = scanProgressBar(threadN);
-  function updScanProgress(progress) {
-    if (progress > 0) {
-      console.log(`thread: ${threadN} | cid: ${cidd['cid']} | ${progress}%`);
-      if (progress_bar) {
-        progress_bar.style.width = Math.min(100, Math.round(100. * progress)/100) + "%";
-      }
-    } else {
-      console.log(`thread: ${threadN} | Start scanning ${cidd['cid']}`);
-      if (progress_bar) {
-        progress_bar.classList.add('resetting');
-        progress_bar.style.width = "0%";
-        setTimeout(() => {
-          progress_bar.classList.remove('resetting');
-        }, 500);
-      }
-    }
-  }
 
   //init
-  let progress = 0;
-  progress_bar.setAttribute("progress-text", "");
-  updScanProgress(progress);
+  let levels_done = 0;  
+  updScanProgress(threadN, cidd, levels_done, "", "");
+  const meta = await fetchMeta(cidd);
+  await sleep(500);
+  updScanProgress(threadN, cidd, levels_done, meta['number of levels'], meta['proper name'] || meta['url name']);
 
   //scan emulation
-  const meta = await fetchMeta(cidd);
-  if (progress_bar) {
-    progress_bar.setAttribute("progress-text", meta['proper name'] || meta['url name']);
+  while (levels_done < meta['number of levels'] + 5) {
+    await sleep(Math.floor(Math.random() * 500 + 200));
+    levels_done++;
+    const done_clamped = Math.min(levels_done, meta['number of levels']);
+    updScanProgress(threadN, cidd, isNaN(done_clamped) ? levels_done : done_clamped, meta['number of levels']);
   }
-  while (progress < 100) {
-    await sleep(Math.floor(Math.random() * 1000 + 500));
-    progress += Math.floor(Math.random() * 20 + 10);
-    updScanProgress(progress);
-  }
-  await sleep(700);
 
 }
-
-function updBatchProgress(cidd) {
-  const done_str = `${batch_done}/${batch_size}`;
-  if (cidd) {
-    console.log(`cid: ${cidd['cid']} | scan complete (${done_str})`);
-  }  
-  const batch_progress_bar = batchProgressBar();
-  if (!batch_progress_bar) return;
-  batch_progress_bar.setAttribute("progress-text", done_str);
-  batch_progress_bar.style.width = Math.min(100, Math.round(10000. * batch_done/batch_size)/100) + "%";
-}
-
-function updMediaProgress(media_done) {
-  const media_total = 100;
-  const done_str = `${media_done}/${media_total}`;
-  const media_progress_bar = mediaProgressBar();
-  if (!media_progress_bar) return;
-  if (media_done === "done") {
-    media_progress_bar.setAttribute("progress-text", "done!");
-    media_progress_bar.classList.add('done');
-    media_progress_bar.style.width = "100%";
-    return;
-  }
-  media_progress_bar.setAttribute("progress-text", done_str);
-  media_progress_bar.style.width = Math.min(100, Math.round(10000. * media_done/media_total)/100) + "%";
-}
-
-
 
 async function scanThread(threadN) {
   let cidd;
@@ -145,7 +102,7 @@ async function scanThread(threadN) {
       console.log(`${cidd} does not match tab domain ${tabDomain}`);
     }
     batch_done++;
-    updBatchProgress(cidd);
+    updBatchProgress(batch_done, batch_size, cidd);
   }
 
   removeScanBar(threadN);
@@ -170,24 +127,27 @@ async function scanThread(threadN) {
     // console.log(`new thread started: ${threadCounter} ${settings['parallel_download_limit']} ${cidds.length}`);
     threads.push(scanThread(threadCounter));
   }
-  updBatchProgress("");
+  updBatchProgress(batch_done, batch_size);
   await Promise.all(threads);
   console.log('scanning complete');
   await sleep(500);
 
-  media_progress = 0;
+  file_queue = [...Array(58).keys()];
+
+  media_done = 0;
 
   //media download emulation
-  updMediaProgress("");
-  while (media_progress < 100) {
+  updMediaProgress(media_done, file_queue.length);
+  while (media_done < file_queue.length) {
     await sleep(Math.floor(Math.random() * 100 + 50));
-    media_progress += Math.floor(Math.random() * 2 + 1);
-    updMediaProgress(media_progress);
+    media_done += 1;
+    updMediaProgress(media_done, file_queue.length);
   }
 
   setTimeout(()=>{
     updMediaProgress("done");
   }, 550);
-  console.log('media download complete');
-  
+
+
 })();
+

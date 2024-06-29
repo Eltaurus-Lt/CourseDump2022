@@ -47,37 +47,50 @@ div[id^="MemDump_progress-"] {
 	top: 0;
 }
 div#MemDump_progress-media {
-	background: var(--mem-yellow);
+	--bar-color: var(--mem-yellow);
 	position: absolute;
-	left: 0;
-	bottom: 0;
+	inset: 0;
 }
 div#MemDump_progress-media.done {
 	background: var(--mem-green);
 }
 div[id^="MemDump_progress-thread"] {
-	background: var(--mem-lightblue);
+	--bar-color: var(--mem-lightblue);
 }
 div[id^="MemDump_progress-"] {
-	transition: width .5s;
+	transition: background-position-x .5s;
+	background-image: linear-gradient(to left, transparent 50%, var(--bar-color) 50%);
+	background-size: 200% 110%;
+	background-position: 100%;
+	position: relative;
 }
 div[id^="MemDump_progress-"].resetting {
-	transition: width .1s .35s, background-color .3s;
-	background-color: var(--mem-darkblue);
+	transition: background-position-x 0s .31s, opacity .3s;
+	opacity: 0;
 }
+div[id^="MemDump_progress-"]::before,
 div[id^="MemDump_progress-"]::after {
-	position: relative;
-	bottom: 2px;
+	position: absolute;
+	bottom: 50%;
+	translate: 0 calc(50% - 1px);
 	font-family: "Arial", sans-serif;
 	font-size: 10px;
-	left: 1em;
 	color: white;
 	text-shadow: 1px 1px 2px #000000, 1px 1px 2px #00000055, 0px 0px 1px #000000;
 	display: block;
 	width: max-content;
 }
-div[id^="MemDump_progress-"]:not(:only-child):not(:has(+ #MemDump_progress-media))::after {
-	content: attr(progress-text);
+div[id^="MemDump_progress-"]::before {
+	left: 1em;
+}
+div[id^="MemDump_progress-"]::after {
+	right: 1em;
+}
+div[id^="MemDump_progress-"]:not(:only-child):not(:has(+ #MemDump_progress-media))::before {
+	content: attr(progress-label);
+}
+div[id^="MemDump_progress-"]::after {
+	content: attr(progress-ratio);
 }
 div[id^="MemDump_progress-"].off:not(:only-child):not(:has(+ #MemDump_progress-media)) {
 	animation: bar-expand 0.30s ease-out reverse forwards;
@@ -85,5 +98,5 @@ div[id^="MemDump_progress-"].off:not(:only-child):not(:has(+ #MemDump_progress-m
 }
 
 div#MemDump_progress-batch {
-	background: var(--mem-darkerblue);
+	--bar-color: var(--mem-darkerblue);
 }
