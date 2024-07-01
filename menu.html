@@ -7,12 +7,13 @@
     <script src="menu.js"></script>
     <title>Course Dump Menu</title>
 </head>
-<body>
-    <h4 id="download-course"><img src="icons/icon.png"/> Download current course</h4>
+<body data-ongoing-download="false">
+    <h4 id="download-course" disabled><img src="icons/icon.png"/> Download current course</h4>
+    <h4 id="stop-download"><img src="icons/stop.png"/> Stop ongoing download</h4>
 
     <hr>
 
-    <h4 id="link-help"onclick="">Help / GitHub repo</h4>
+    <h4 id="link-help">Help / GitHub repo</h4>
     <h4 id="link-forum">Feedback / Discussion</h4>
     <h4 id="link-ankiweb">Anki Templates</h4>
     <h4 id="link-coffee"><img src="icons/coffee.png"/>Buy Me a Coffee</h4>
@@ -20,8 +21,8 @@
     <hr>
 
     <h3>Batch download</h3>
-    <h4 id="batch-add">Add to queue</h4>
-    <h4 id="batch-download" counter="0"><img src="icons/icon.png"/> Download all</h4>
+    <h4 id="batch-add" disabled>Add to queue</h4>
+    <h4 id="batch-download" counter="0" disabled><img src="icons/icon.png"/> Download all</h4>
     <h4 id="batch-view" counter="0">View queued courses</h4>
     <h4 id="batch-import">Import course list</h4>
     <h4 id="batch-clear" class="danger" counter="0">Clear queue</h4>

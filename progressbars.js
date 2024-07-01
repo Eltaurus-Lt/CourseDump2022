@@ -83,9 +83,13 @@ function updScanProgress(threadN, cidd, levels_done, levels_todo, label = undefi
   //text progress (console)
   const done_str = levels_todo !== "" ? `${levels_done}/${levels_todo}` : "";
   if (levels_done === 0) {
-    console.log(`thread: ${threadN} | Start scanning ${cidd['cid']}`);
+    if (levels_todo || label) {
+      console.log(`thread: ${threadN} | Start scanning ${cidd['cid']}`);
+    } else {
+      console.log(`thread: ${threadN} | Fetching metadata for ${cidd['cid']}`);
+    }
   } else {
-    console.log(`thread: ${threadN} | cid: ${cidd['cid']} | progress: ${done_str}`);
+    console.log(`thread: ${threadN} | cid: ${cidd['cid']} | scan progress: ${done_str}`);
   }
 
   const progress_bar = scanProgressBar(threadN);
@@ -98,7 +102,7 @@ function updScanProgress(threadN, cidd, levels_done, levels_todo, label = undefi
   progress_bar.setAttribute("progress-ratio", done_str);
   
   if (levels_todo || label) {
-    if (!isNaN(parseInt(levels_todo))) {
+    if (!isNaN(parseInt(levels_todo, 10))) {
       progress_bar.style.backgroundPosition = (100 * (1. - levels_done/levels_todo)).toFixed(2)+"%";
     } else {
       progress_bar.style.backgroundPosition = "42%";
@@ -108,7 +112,7 @@ function updScanProgress(threadN, cidd, levels_done, levels_todo, label = undefi
     progress_bar.style.backgroundPosition = "100%";
     setTimeout(() => {
       progress_bar.classList.remove('resetting');
-    }, 320);      
+    }, 500);      
   }
 }
 

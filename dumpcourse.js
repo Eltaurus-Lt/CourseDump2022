@@ -1,5 +1,8 @@
 //global variables
-if (typeof threads !== 'undefined' && threads != []) {alert('Script is already executing');}
+if (typeof threads !== 'undefined' && threads != []) {
+  alert('Script is already executing or has been executed. Retry after reloading...');
+  window.location.reload();
+}
 if (typeof cidds === 'undefined') {var cidds = []}
 if (typeof media_queue === 'undefined') {var media_queue = []}
 if (typeof batch_size === 'undefined') {var batch_size = 1}
@@ -51,7 +54,7 @@ async function fetchMeta(cidd) {
     meta['ava'] = doc.querySelector('.creator-image img').src;
     try {
       //only works for courses that have been started, otherwise the info is not present on the page
-      meta['number of items'] = parseInt(doc.querySelector('.progress-box-title').innerText.split('/').at(-1).trim());
+      meta['number of items'] = parseInt(doc.querySelector('.progress-box-title').innerText.split('/').at(-1).trim(), 10);
     } catch(err) {
       console.log(`course ${cidd['cid']} has not been started, info for 'number of items' unavailable`);
     }
@@ -66,8 +69,14 @@ async function fetchMeta(cidd) {
 
 //THE MAIN FUNCTION FOR SCANNING ALL LEVELS OF A COURSE
 async function scanCourse(cidd, threadN) {
-
   //init
+  let stopped = false;
+  chrome.runtime.onMessage.addListener((arg, sender, sendResponse) => {
+    if (arg.type === "coursedump_stopScan") {
+      console.log(`cid: ${cidd['cid']} - scanning stopped by user`);
+      stopped = true;
+    }
+  });
   let levels_done = 0;  
   updScanProgress(threadN, cidd, levels_done, "", "");
   const meta = await fetchMeta(cidd);
@@ -75,13 +84,18 @@ async function scanCourse(cidd, threadN) {
   updScanProgress(threadN, cidd, levels_done, meta['number of levels'], meta['proper name'] || meta['url name']);
 
   //scan emulation
-  while (levels_done < meta['number of levels'] + 5) {
+  while (levels_done < meta['number of levels'] + 5 && !stopped) {
     await sleep(Math.floor(Math.random() * 500 + 200));
     levels_done++;
     const done_clamped = Math.min(levels_done, meta['number of levels']);
     updScanProgress(threadN, cidd, isNaN(done_clamped) ? levels_done : done_clamped, meta['number of levels']);
   }
 
+  if (stopped) {
+    return "stopped";
+  } else {
+    return "completed";
+  }
 }
 
 async function scanThread(threadN) {
@@ -97,7 +111,11 @@ async function scanThread(threadN) {
 
   while (cidd = ciddParse(cidds.pop())) {
     if (cidd['domain'] === tabDomain) {
-      await scanCourse(cidd, threadN);
+      // const closeingEvent = ;
+      if (await scanCourse(cidd, threadN) === "stopped") {
+        console.log(`thread ${threadN} (cid: ${cidd['cid']}) - scanning stopped by user`);
+        return "stopped";       
+      };
     } else {
       console.log(`${cidd} does not match tab domain ${tabDomain}`);
     }
@@ -122,32 +140,53 @@ async function scanThread(threadN) {
   batch_done = 0;
   threads = [];
   media_queue = [];
-  progressBarContainer();
+  const progress_container = progressBarContainer();
+  //removing traces of a previous run
+  while (progress_container.firstChild) {progress_container.removeChild(progress_container.firstChild);}
+  progress_container.classList.remove('stopped'); progress_container.classList.remove('error');
+  document.querySelectorAll('div[id^="MemDump_progress-padding"]').forEach(element => {element.remove();});
+
   for (let threadCounter = 0; threadCounter < settings['parallel_download_limit'] && cidds.length > 0; threadCounter++) {
     // console.log(`new thread started: ${threadCounter} ${settings['parallel_download_limit']} ${cidds.length}`);
     threads.push(scanThread(threadCounter));
   }
   updBatchProgress(batch_done, batch_size);
-  await Promise.all(threads);
+  const thread_res = await Promise.all(threads);
+
+  if (thread_res.includes("stopped")) {
+    console.log("all scanning threads stopped");
+    progress_container.classList.add('stopped');
+    return "scanning stopped";
+  }
+  file_queue = [...Array(58).keys()]; //emulation
   console.log('scanning complete');
+
   await sleep(500);
 
-  file_queue = [...Array(58).keys()];
+  //downloading files
+  chrome.runtime.onMessage.addListener((arg, sender, sendResponse) => {
+    if (arg.type === "coursedump_error") {
+      console.log(`an error occured during file download ${arg.url} - ${arg.filename}`);
+      console.log(arg.error);
+      progress_container.classList.add('error');
+    } else if (arg.type === "coursedump_progressMedia_upd") {
+      updMediaProgress(arg.done, arg.todo);
+    } else if (arg.type === "coursedump_mediaFinished") {
+      if (arg.status === "done") {
+        updMediaProgress("done");
+      } else if (arg.status === "stopped") {
+        console.log("stopped during file download");
+        progress_container.classList.add('stopped');
+      }
+      threads = []; //revert state for resetting
+    }
+  });
 
-  media_done = 0;
-
-  //media download emulation
-  updMediaProgress(media_done, file_queue.length);
-  while (media_done < file_queue.length) {
-    await sleep(Math.floor(Math.random() * 100 + 50));
-    media_done += 1;
-    updMediaProgress(media_done, file_queue.length);
-  }
-
-  setTimeout(()=>{
-    updMediaProgress("done");
-  }, 550);
-
+  chrome.runtime.sendMessage({
+    type: "coursedump_downloadFiles",
+    file_queue,
+		maxThreads: settings["parallel_download_limit"]
+  });
 
 })();
 

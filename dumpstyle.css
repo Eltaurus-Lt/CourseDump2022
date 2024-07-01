@@ -65,7 +65,7 @@ div[id^="MemDump_progress-"] {
 	position: relative;
 }
 div[id^="MemDump_progress-"].resetting {
-	transition: background-position-x 0s .31s, opacity .3s;
+	transition: background-position-x 0s .4s, opacity .3s;
 	opacity: 0;
 }
 div[id^="MemDump_progress-"]::before,

@@ -87,83 +87,109 @@ document.addEventListener('DOMContentLoaded', async () => {
   const {domain, cid} = getDomainAndId(current_tab.url);
   const cidd = JSON.stringify({domain, cid});
 
-  //content script wrapper for calling with arguments
+  //initiate download through message to the BG script
   async function downloadCourses(cidds) {
     const settings = await loadSettings();
-    chrome.scripting.executeScript({
-      target: {tabId: current_tab.id},
-      args: [{cidds, settings}],
-      func: vars => Object.assign(self, vars),
-    }, () => {
-      chrome.scripting.executeScript({
-        target: {tabId: current_tab.id}, 
-        files: ['progressbars.js']},
-        () => {
-          chrome.scripting.executeScript({
-            target: {tabId: current_tab.id}, 
-            files: ['dumpcourse.js']});
-        }
-      );
-    });
+    chrome.runtime.sendMessage({
+        type: "coursedump_startDownload",
+        tab_id: current_tab.id,
+        settings, cidds
+      }, (response) => {
+        console.log(response);
+        updOngoingStatus();
+      }
+    );
+
     window.close();
   }
 
   const downloadButton = document.getElementById("download-course");
+  const stopButton = document.getElementById("stop-download");
   const BatchAddButton = document.getElementById("batch-add");
   const BatchDownloadButton = document.getElementById("batch-download");
   const BatchViewButton = document.getElementById("batch-view");
   const BatchImportButton = document.getElementById("batch-import");
   const BatchClearButton = document.getElementById("batch-clear");
 
-  async function updateCounters() {
+  async function updCounters() {
     const queue = await loadFromStorage('queue');
     const count = `${queue.length}`;
     BatchDownloadButton.setAttribute("counter", count);
     BatchViewButton.setAttribute("counter", count);
     BatchClearButton.setAttribute("counter", count);
   }
+
+  async function addToQueue() {
+    const queue = await loadFromStorage('queue');
+    const queuetxt = await loadFromStorage('queue-text');
+    if (queue.includes(cidd)) {return} //list is supposedly faster than a set, because the number of itmes is small
+    if (queue) {
+      saveToStorage({'queue': [...queue, cidd]});
+    } else {
+      saveToStorage({'queue': [cidd]});
+    }
+    if (queuetxt) {
+      saveToStorage({'queue-text': [...queuetxt, current_tab.url]});
+    } else {
+      saveToStorage({'queue-text': [current_tab.url]});
+    }
+    updCounters();
+  }
+
+  function updOngoingStatus() {  
+    chrome.runtime.sendMessage({
+      type: "coursedump_checkOngoing"
+    }, (response) => {
+      document.body.setAttribute("data-ongoing-download", response['ongoing-status']);
+      if (response['ongoing-status'] && BatchDownloadButton.title === "") {
+        BatchDownloadButton.title = "A download is already in progress";
+      }
+      if (!response['ongoing-status'] && BatchDownloadButton.title === "A download is already in progress") {
+        BatchDownloadButton.title = "";
+      }
+      stopButton.removeAttribute('disabled');
+    });
+  }
   
-  updateCounters();
+  updCounters();
+  updOngoingStatus();
+
+  stopButton.addEventListener('click', () => {
+    stopButton.setAttribute('disabled', true);
+    chrome.runtime.sendMessage({
+        type: "coursedump_stopDownload",
+      }, (response) => {
+        console.log(response);
+        updOngoingStatus();
+      }
+    );
+  });
 
   //download and add buttons
   if (!domain) {
     downloadButton.title = "Has to be used on a memrise.com course page";
-    downloadButton.setAttribute("disabled", true);
     BatchAddButton.title = "Has to be used on a memrise.com course page";
-    BatchAddButton.setAttribute("disabled", true);
     BatchDownloadButton.title = "Has to be used from memrise.com";
-    BatchDownloadButton.setAttribute("disabled", true);
   } else {
+    BatchDownloadButton.removeAttribute('disabled');
+
     if (!cid) {
       downloadButton.title = "Has to be used from a specific course page";
-      downloadButton.setAttribute("disabled", true);
       BatchAddButton.title = "Has to be used from a specific course page";
-      BatchAddButton.setAttribute("disabled", true);
     } else {
+      downloadButton.removeAttribute('disabled');
+      BatchAddButton.removeAttribute('disabled');
+
       downloadButton.addEventListener('click', () => {
         downloadCourses([cidd]);
       });
-      BatchAddButton.addEventListener('click', async () => {
-        const queue = await loadFromStorage('queue');
-        const queuetxt = await loadFromStorage('queue-text');
-        if (queue.includes(cidd)) {return} //list is supposedly faster than a set, because the number of itmes is small
-        if (queue) {
-          saveToStorage({'queue': [...queue, cidd]});
-        } else {
-          saveToStorage({'queue': [cidd]});
-        }
-        if (queuetxt) {
-          saveToStorage({'queue-text': [...queuetxt, current_tab.url]});
-        } else {
-          saveToStorage({'queue-text': [current_tab.url]});
-        }
-        updateCounters();
-      })
+      BatchAddButton.addEventListener('click', addToQueue);
     }
     
     BatchDownloadButton.addEventListener('click', async () => {
       const cidds = await loadFromStorage('queue');
-      if (cidds && cidds.length > 0) {
+      if (cidds && cidds.length > 0 && document.body.getAttribute("data-ongoing-download") !== "true") {
+        console.log("download batch EL");
         downloadCourses(cidds);
       }
     });
@@ -217,7 +243,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
         saveToStorage({'queue-text': courseList});
         saveToStorage({'queue': cidds});
-        updateCounters();
+        updCounters();
       } catch (error) {
         console.log('Error reading file:', error);
       }
@@ -228,7 +254,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (BatchClearButton.getAttribute("counter") !== '0' && confirm("Clear the list of queued courses?")) {
       saveToStorage({'queue': []});
       saveToStorage({'queue-text': []});
-      updateCounters();
+      updCounters();
     }
   })
 
@@ -260,7 +286,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       }
     }
 
-    saveToStorage({ 'settings': current_settings});
+    saveToStorage({ 'settings': current_settings });
   }
   
   async function togglesFromSettings() {

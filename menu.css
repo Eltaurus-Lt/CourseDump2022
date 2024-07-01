@@ -25,6 +25,7 @@ body {
     margin: .25em;
     padding: 0;
     min-width: max-content;
+    width: 205px;
 }
 
 body * {
@@ -35,7 +36,8 @@ body * {
     display: none;
 }
 
-body > :first-child {
+#download-course,
+#stop-download {
   margin-top: .75em;
   font-weight: bold;
 }
@@ -87,6 +89,13 @@ h4.danger {
   color: #fffa;
   font-size: .8em;
   padding-left: calc(1.5em / 0.8);
+}
+
+body[data-ongoing-download="false"] #stop-download {
+  display: none;
+}
+body[data-ongoing-download="true"] #download-course {
+  display: none;
 }
 
 /* interactive styles */
@@ -164,6 +173,7 @@ input.toggle:checked {
   background-color: var(--mem-lightgreen);
 }
 
+body[data-ongoing-download="true"] h4#batch-download,
 h4#batch-download[counter="0"],
 h4#batch-clear[counter="0"],
 h4[disabled],
@@ -174,6 +184,7 @@ input.toggle:disabled {
   background-color: lightgray;
   filter: brightness(50%);
 }
+body[data-ongoing-download="true"] h4#batch-download img,
 h4#batch-download[counter="0"] img,
 h4[disabled] img {
   filter: grayscale(100)
