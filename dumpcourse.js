@@ -174,6 +174,10 @@ async function scanThread(threadN) {
     } else if (arg.type === "coursedump_mediaFinished") {
       if (arg.status === "done") {
         updMediaProgress("done");
+        setTimeout(()=> {
+          if (settings['anki_import_prompt'] && confirm('Would you like some help with importing the downloaded data into Anki?')) {
+          window.open('https://github.com/Eltaurus-Lt/CourseDump2022#importing-into-anki', '_blank').focus();
+        }}, 200);
       } else if (arg.status === "stopped") {
         console.log("stopped during file download");
         progress_container.classList.add('stopped');
