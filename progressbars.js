@@ -40,8 +40,8 @@ function progressBar(barId, padding = true) {
   return progress_bar;
 }
 
-function batchProgressBar() {
-  if (typeof batch_size === 'undefined' || batch_size < 2) return;
+function batchProgressBar(batch_size) {
+  if (batch_size < 2) return;
   return progressBar('MemDump_progress-batch');
 }
 
@@ -66,7 +66,7 @@ function removeScanBar(threadN) {
   }
 
   const padding_bar = document.getElementById('MemDump_progress-padding-' + threadN);
-  const remaining_count = document.querySelectorAll('[id^="MemDump_progress-padding-"]').length;
+  const remaining_count = document.querySelector  ('[id^="MemDump_progress-padding-"]').length;
 
   if (padding_bar && remaining_count > 1) {
     padding_bar.style.animationPlayState = "paused";
@@ -120,9 +120,11 @@ function updBatchProgress(batch_done = 0, batch_size = 1, cidd = "") {
   const done_str = `${batch_done}/${batch_size}`;
   if (cidd) {
     console.log(`cid: ${cidd['cid']} | scan complete (${done_str})`);
-  }  
-  const batch_progress_bar = batchProgressBar();
+  }
+
+  const batch_progress_bar = batchProgressBar(batch_size);
   if (!batch_progress_bar) return;
+  
   batch_progress_bar.setAttribute("progress-label", "Batch progress");
   batch_progress_bar.setAttribute("progress-ratio", done_str);
   batch_progress_bar.style.backgroundPosition = (100 * (1. - batch_done/batch_size)).toFixed(2)+"%";

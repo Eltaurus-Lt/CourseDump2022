@@ -1,13 +1,3 @@
-//global variables
-if (typeof threads !== 'undefined' && threads != []) {
-  alert('Script is already executing or has been executed. Retry after reloading...');
-  window.location.reload();
-}
-if (typeof cidds === 'undefined') {var cidds = []}
-if (typeof media_queue === 'undefined') {var media_queue = []}
-if (typeof batch_size === 'undefined') {var batch_size = 1}
-if (typeof batch_done === 'undefined') {var batch_done = 0}
-
 settings['parallel_download_limit'] = 6;
 
 function sleep(ms) {
@@ -71,12 +61,14 @@ async function fetchMeta(cidd) {
 async function scanCourse(cidd, threadN) {
   //init
   let stopped = false;
-  chrome.runtime.onMessage.addListener((arg, sender, sendResponse) => {
+  function stopScan(arg, sender, sendResponse) {
     if (arg.type === "coursedump_stopScan") {
-      console.log(`cid: ${cidd['cid']} - scanning stopped by user`);
+      //console.log(`cid: ${cidd['cid']} - scanning stopped by user`);
+      chrome.runtime.onMessage.removeListener(stopScan);
       stopped = true;
     }
-  });
+  }
+  chrome.runtime.onMessage.addListener(stopScan);
   let levels_done = 0;  
   updScanProgress(threadN, cidd, levels_done, "", "");
   const meta = await fetchMeta(cidd);
@@ -98,7 +90,7 @@ async function scanCourse(cidd, threadN) {
   }
 }
 
-async function scanThread(threadN) {
+async function scanThread(threadN, batch_size) {
   let cidd;
 
   function ciddParse(cidd) {
@@ -127,8 +119,8 @@ async function scanThread(threadN) {
 }
 
 
-//main execution
-(async () => {
+//batch scheduling
+async function batchDownload() {
   tabDomain = window.location.toString().split("/")[2];
   if (tabDomain !== 'app.memrise.com' && tabDomain !== 'community-courses.memrise.com') {
       alert("The extension should be used on the memrise.com site"); 
@@ -136,10 +128,10 @@ async function scanThread(threadN) {
   }
 
   //global scan variables
-  batch_size = cidds.length;
-  batch_done = 0;
   threads = [];
-  media_queue = [];
+  file_queue = [...Array(58).keys()]; //emulation
+  batch_done = 0;
+  const batch_size = cidds.length;
   const progress_container = progressBarContainer();
   //removing traces of a previous run
   while (progress_container.firstChild) {progress_container.removeChild(progress_container.firstChild);}
@@ -148,7 +140,7 @@ async function scanThread(threadN) {
 
   for (let threadCounter = 0; threadCounter < settings['parallel_download_limit'] && cidds.length > 0; threadCounter++) {
     // console.log(`new thread started: ${threadCounter} ${settings['parallel_download_limit']} ${cidds.length}`);
-    threads.push(scanThread(threadCounter));
+    threads.push(scanThread(threadCounter, batch_size));
   }
   updBatchProgress(batch_done, batch_size);
   const thread_res = await Promise.all(threads);
@@ -156,16 +148,17 @@ async function scanThread(threadN) {
   if (thread_res.includes("stopped")) {
     console.log("all scanning threads stopped");
     progress_container.classList.add('stopped');
+    threads = undefined; //reset state to enable restarting
     return "scanning stopped";
   }
-  file_queue = [...Array(58).keys()]; //emulation
+  
   console.log('scanning complete');
 
   await sleep(500);
   updMediaProgress(0, file_queue.length);
 
   //downloading files
-  chrome.runtime.onMessage.addListener((arg, sender, sendResponse) => {
+  function mediaDownloadMessages(arg, sender, sendResponse) {
     if (arg.type === "coursedump_error") {
       console.log(`an error occured during file download ${arg.url} - ${arg.filename}`);
       console.log(arg.error);
@@ -183,9 +176,11 @@ async function scanThread(threadN) {
         console.log("stopped during file download");
         progress_container.classList.add('stopped');
       }
-      threads = []; //reset state to enable restarting
+      chrome.runtime.onMessage.removeListener(mediaDownloadMessages);
+      threads = undefined; //reset state to enable restarting
     }
-  });
+  }
+  chrome.runtime.onMessage.addListener(mediaDownloadMessages);
 
   chrome.runtime.sendMessage({
     type: "coursedump_downloadFiles",
@@ -193,5 +188,15 @@ async function scanThread(threadN) {
 		maxThreads: settings["parallel_download_limit"]
   });
 
-})();
+}
 
+
+
+//global variables
+if (typeof cidds === 'undefined') {var cidds = []} //should be defined as an argument passed from menu.js through background.js
+if (typeof batch_done === 'undefined') {var batch_done = 0} //global progress counter
+if (typeof threads !== 'undefined') {
+  alert('Script is already executing on this page. Reload to retry');
+} else {
+  batchDownload();
+}
