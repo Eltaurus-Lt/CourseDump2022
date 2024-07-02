@@ -66,7 +66,7 @@ function removeScanBar(threadN) {
   }
 
   const padding_bar = document.getElementById('MemDump_progress-padding-' + threadN);
-  const remaining_count = document.querySelector  ('[id^="MemDump_progress-padding-"]').length;
+  const remaining_count = document.querySelectorAll('[id^="MemDump_progress-padding-"]').length;
 
   if (padding_bar && remaining_count > 1) {
     padding_bar.style.animationPlayState = "paused";
