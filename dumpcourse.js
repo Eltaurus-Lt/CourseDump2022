@@ -162,6 +162,7 @@ async function scanThread(threadN) {
   console.log('scanning complete');
 
   await sleep(500);
+  updMediaProgress(0, file_queue.length);
 
   //downloading files
   chrome.runtime.onMessage.addListener((arg, sender, sendResponse) => {
@@ -182,7 +183,7 @@ async function scanThread(threadN) {
         console.log("stopped during file download");
         progress_container.classList.add('stopped');
       }
-      threads = []; //revert state for resetting
+      threads = []; //reset state to enable restarting
     }
   });
 

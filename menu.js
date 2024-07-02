@@ -171,25 +171,25 @@ document.addEventListener('DOMContentLoaded', async () => {
     BatchAddButton.title = "Has to be used on a memrise.com course page";
     BatchDownloadButton.title = "Has to be used from memrise.com";
   } else {
-    BatchDownloadButton.removeAttribute('disabled');
-
     if (!cid) {
       downloadButton.title = "Has to be used from a specific course page";
       BatchAddButton.title = "Has to be used from a specific course page";
     } else {
       downloadButton.removeAttribute('disabled');
-      BatchAddButton.removeAttribute('disabled');
-
       downloadButton.addEventListener('click', () => {
-        downloadCourses([cidd]);
+        if (document.body.getAttribute("data-ongoing-download") !== "true") {
+          downloadCourses([cidd]);
+        }
       });
+
+      BatchAddButton.removeAttribute('disabled');
       BatchAddButton.addEventListener('click', addToQueue);
     }
-    
+
+    BatchDownloadButton.removeAttribute('disabled');
     BatchDownloadButton.addEventListener('click', async () => {
       const cidds = await loadFromStorage('queue');
       if (cidds && cidds.length > 0 && document.body.getAttribute("data-ongoing-download") !== "true") {
-        console.log("download batch EL");
         downloadCourses(cidds);
       }
     });

@@ -1,6 +1,4 @@
 const apiTimeout = 25000;
-let stopFlag = true;
-
 let ongoingTab = null;
 
 function sleep(ms) {
@@ -68,7 +66,7 @@ function downloadFile(options) {
 
 
 chrome.runtime.onMessage.addListener(async (arg, sender, sendResponse) => {
-	//download messages from menu
+	//messages from menu
 	if (arg.type === "coursedump_checkOngoing") {
 		sendResponse({ "ongoing-status": !!ongoingTab });
 		return;
@@ -111,18 +109,23 @@ chrome.runtime.onMessage.addListener(async (arg, sender, sendResponse) => {
 			sendResponse({ 'status': "error", 'error': "no downloads in progress" });
 			return;
 		}
-		chrome.tabs.sendMessage(ongoingTab, {
-			type: "coursedump_stopScan"
-		});
+		try {
+			chrome.tabs.sendMessage(ongoingTab, {
+				type: "coursedump_stopScan"
+			});
+			sendResponse({ 'status': "download stopped" });
+		} catch (err) {
+			console.warn('ongoing tab no longer exists');
+			sendResponse({ 'status': "error", 'error': err});
+		}
 		ongoingTab = null;
-		sendResponse({ 'status': "download stopped" });
 		return;
 	}
 
 	//messages from the scanning script
 	const tabId = sender.tab.id;
 	if (tabId !== ongoingTab) {
-		console.error(`download request from unrecognized tab ${tabId} regected (ongoing download was initiated by tab ${ongoingTab})`);
+		console.warn(`download request from ${tabId} rejected - ongoing download was initiated by ${ongoingTab}`);
 		return;
 	};
 	let maxConnections = 5;
