@@ -54,9 +54,9 @@ function downloadFile(options) {
 		}, apiTimeout);
 		try {
 			iid = await chrome.downloads.download(options);
-		} catch (e) {
+		} catch (err) {
 			chrome.downloads.onChanged.removeListener(onDownloadComplete);
-			return reject(e);
+			return reject(err);
 		} finally {
 			clearTimeout(timeId);
 		}
@@ -81,44 +81,53 @@ chrome.runtime.onMessage.addListener(async (arg, sender, sendResponse) => {
 			target: {tabId: ongoingTab},
 			args: [{'cidds': arg.cidds, 'settings': arg.settings}],
 			func: vars => Object.assign(self, vars),
-		  }, () => {
+		}, () => {
 			//import module
 			chrome.scripting.executeScript({
-			  target: {tabId: ongoingTab}, 
-			  files: ['progressbars.js']},
-			  () => {
-				//execute scanning script
-				chrome.scripting.executeScript({
-				  target: {tabId: ongoingTab}, 
-				  files: ['dumpcourse.js']}, (scanningFeedback) => {
-					//return signal from scanning script
-					if (scanningFeedback === "scanning stopped") {
-						console.log('BG: all scanning stopped');
-						sendResponse({ 'status': "stopped" });
-					}
-				  }
-				);
-			  }
+				target: {tabId: ongoingTab}, 
+				files: ['progressbars.js']
+			}, () => {
+					// run scanning script
+					chrome.scripting.executeScript({
+						target: {tabId: ongoingTab}, 
+						files: ['dumpcourse.js']},
+						(scanningFeedback) => {
+							if (chrome.runtime.lastError) {
+								console.log('origin tab was closed'); //during scan phase
+								ongoingTab = null;
+								//sendResponse({ 'status': "tab closed"});
+							}
+							console.log('scanning script callback', scanningFeedback);
+							//return signal from scanning script
+							if (scanningFeedback?.result === "scanning stopped") {
+								console.log('scanning stopped by user');
+								//sendResponse({ 'status': "stopped" });
+							}
+						}
+					);
+				}
 			);
-		  });
-		
+		});
+	
 		sendResponse({ 'status': "initiated" });
 		return;
+
 	} else if (arg.type === "coursedump_stopDownload") {
 		if (!ongoingTab) {
 			sendResponse({ 'status': "error", 'error': "no downloads in progress" });
 			return;
 		}
-		try {
-			chrome.tabs.sendMessage(ongoingTab, {
-				type: "coursedump_stopScan"
-			});
-			sendResponse({ 'status': "download stopped" });
-		} catch (err) {
+		chrome.tabs.sendMessage(ongoingTab, {
+			type: "coursedump_stopScan"
+		}).then(re => {
+			sendResponse({ 'status': "scan script stopped" });
+		}).catch(err => {
 			console.warn('ongoing tab no longer exists');
 			sendResponse({ 'status': "error", 'error': err});
-		}
+		});
+
 		ongoingTab = null;
+		sendResponse({ 'status': "bg script stopped" });
 		return;
 	}
 
@@ -146,22 +155,28 @@ chrome.runtime.onMessage.addListener(async (arg, sender, sendResponse) => {
 	 			try {
 	 				//did = await downloadFile({url, filename, conflictAction: "overwrite" });
 					did = await sleep(Math.floor(Math.random() * 600 + 300)); //emulate download
-	 			} catch (e) {
-	 				console.error(filename, e);
-	 				chrome.tabs.sendMessage(tabId, {
-	 					type: "coursedump_error",
-	 					error: e.message,
-	 					url, filename
-	 				});
+	 			} catch (err) {
+	 				console.error(filename, err);
+					chrome.tabs.sendMessage(tabId, {
+						type: "coursedump_error",
+						error: err.message,
+						url, filename
+					}).catch(err => {});
 	 			}
 	 			if (did !== undefined) {
 	 				await chrome.downloads.erase({ did });
 	 			}
 	 			done++;
-	 			chrome.tabs.sendMessage(tabId, {
-	 				type: "coursedump_progressMedia_upd",
-	 				done, todo
-	 			});
+				chrome.tabs.sendMessage(tabId, {
+					type: "coursedump_progressMedia_upd",
+					done, todo
+				}).catch(err => {
+					console.warn(err);
+					if (err.message.includes('Could not establish connection. Receiving end does not exist.')) {
+						console.log('original tab appears to be closed. terminating file download.');
+						ongoingTab = null;
+					}
+				})
 	 		}
 	 	}));
 		
@@ -176,13 +191,13 @@ chrome.runtime.onMessage.addListener(async (arg, sender, sendResponse) => {
 			chrome.tabs.sendMessage(tabId, {
 				type: "coursedump_mediaFinished",
 				status: "done"
-			});
+			}).catch(err => {});
 			ongoingTab = null;
 		} else {
 			chrome.tabs.sendMessage(tabId, {
 				type: "coursedump_mediaFinished",
 				status: "stopped"
-			});
+			}).catch(err => {});
 		}
 	}
 });

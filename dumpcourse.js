@@ -129,8 +129,8 @@ async function batchDownload() {
 
   //global scan variables
   threads = [];
-  file_queue = [...Array(58).keys()]; //emulation
-  batch_done = 0;
+  const file_queue = [...Array(58).keys()]; //emulation
+  batch_done = 0; //global
   const batch_size = cidds.length;
   const progress_container = progressBarContainer();
   //removing traces of a previous run
@@ -160,8 +160,8 @@ async function batchDownload() {
   //downloading files
   function mediaDownloadMessages(arg, sender, sendResponse) {
     if (arg.type === "coursedump_error") {
-      console.log(`an error occured during file download ${arg.url} - ${arg.filename}`);
-      console.log(arg.error);
+      console.warn(`an error occured during file download ${arg.url} - ${arg.filename}`);
+      console.error(arg.error);
       progress_container.classList.add('error');
     } else if (arg.type === "coursedump_progressMedia_upd") {
       updMediaProgress(arg.done, arg.todo);
