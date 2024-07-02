@@ -100,3 +100,8 @@ div[id^="MemDump_progress-"].off:not(:only-child):not(:has(+ #MemDump_progress-m
 div#MemDump_progress-batch {
 	--bar-color: var(--mem-darkerblue);
 }
+
+div[id^="MemDump_progress-"]:has(+ #MemDump_progress-media)::before,
+div[id^="MemDump_progress-"]:has(+ #MemDump_progress-media)::after {
+	content: '' !important;
+}
