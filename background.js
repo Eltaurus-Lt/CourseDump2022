@@ -64,6 +64,23 @@ function downloadFile(options) {
 	});
 }
 
+async function menuAlert(msg, decline_msg = "") {
+	await sleep(400);
+	chrome.runtime.sendMessage({ 
+		type: "coursedump_alert", 
+		msg
+	}).catch(err=>{
+		if (decline_msg) {
+			console.log(decline_msg);
+		}
+	});
+}
+
+function updAllOngoing() {
+	chrome.runtime.sendMessage({ 
+		type: "coursedump_updateOngoings" 
+	}).catch(err=>{});		
+}
 
 chrome.runtime.onMessage.addListener(async (arg, sender, sendResponse) => {
 	//messages from menu
@@ -72,10 +89,11 @@ chrome.runtime.onMessage.addListener(async (arg, sender, sendResponse) => {
 		return;
 	} else if (arg.type === "coursedump_startDownload") {
 		if (ongoingTab) {
-			sendResponse({ 'status': "error", 'error': "a download is already in progress" });
+			sendResponse({ status: "error", msg: "A download is already in progress in another tab" });
 			return;
 		}
 		ongoingTab = arg.tab_id;
+		updAllOngoing();
 		//pass arguments
 		chrome.scripting.executeScript({
 			target: {tabId: ongoingTab},
@@ -93,15 +111,17 @@ chrome.runtime.onMessage.addListener(async (arg, sender, sendResponse) => {
 						files: ['dumpcourse.js']},
 						(scanningFeedback) => {
 							if (chrome.runtime.lastError) {
-								console.log('origin tab was closed'); //during scan phase
+								console.log('Downloading tab was closed'); //during scan phase
 								ongoingTab = null;
-								//sendResponse({ 'status': "tab closed"});
+								menuAlert("Scanning tab was closed. Download terminated",
+									"no open menus left, download termination alert was not sent");
+								updAllOngoing();
 							}
-							console.log('scanning script callback', scanningFeedback);
-							//return signal from scanning script
-							if (scanningFeedback?.result === "scanning stopped") {
-								console.log('scanning stopped by user');
-								//sendResponse({ 'status': "stopped" });
+							// console.log('scanning script callback', scanningFeedback);
+							//return signal from the scanning script
+							if (scanningFeedback?.[0]?.result === "scanning stopped") {
+								console.log('Download stopped by user during scanning phase');
+								updAllOngoing();
 							}
 						}
 					);
@@ -114,20 +134,22 @@ chrome.runtime.onMessage.addListener(async (arg, sender, sendResponse) => {
 
 	} else if (arg.type === "coursedump_stopDownload") {
 		if (!ongoingTab) {
-			sendResponse({ 'status': "error", 'error': "no downloads in progress" });
+			sendResponse({ status: "error", msg: "No downloads in progress" });
+			updAllOngoing();
 			return;
 		}
 		chrome.tabs.sendMessage(ongoingTab, {
 			type: "coursedump_stopScan"
 		}).then(re => {
-			sendResponse({ 'status': "scan script stopped" });
+			console.log("stop scanning signal went through");
 		}).catch(err => {
-			console.warn('ongoing tab no longer exists');
-			sendResponse({ 'status': "error", 'error': err});
+			console.log("Downloading tab no longer exists - no scanning to stop");
 		});
 
 		ongoingTab = null;
-		sendResponse({ 'status': "bg script stopped" });
+		console.log("bg stopped");
+		//updAllOngoing();
+		sendResponse({ status: "stop signals sent" });
 		return;
 	}
 
@@ -135,11 +157,13 @@ chrome.runtime.onMessage.addListener(async (arg, sender, sendResponse) => {
 	const tabId = sender.tab.id;
 	if (tabId !== ongoingTab) {
 		console.warn(`download request from ${tabId} rejected - ongoing download was initiated by ${ongoingTab}`);
+		menuAlert("File download request from a conflicting tab received and rejected");
 		return;
 	};
 	let maxConnections = 5;
 	let urls = [];
 	if (arg.type === "coursedump_downloadFiles") {
+		let terminated = false;
 	 	if (arg.file_queue) urls = arg.file_queue;
 	 	const todo = urls.length;
 	 	if (arg.maxThreads) maxConnections = arg.maxThreads;
@@ -173,7 +197,8 @@ chrome.runtime.onMessage.addListener(async (arg, sender, sendResponse) => {
 				}).catch(err => {
 					console.warn(err);
 					if (err.message.includes('Could not establish connection. Receiving end does not exist.')) {
-						console.log('original tab appears to be closed. terminating file download.');
+						console.log('Downloading tab appears to be closed. terminating file download.');
+						terminated = true;
 						ongoingTab = null;
 					}
 				})
@@ -194,10 +219,18 @@ chrome.runtime.onMessage.addListener(async (arg, sender, sendResponse) => {
 			}).catch(err => {});
 			ongoingTab = null;
 		} else {
+			if (!terminated) {
+				console.log('Download stopped by user during file downloading phase');
+			} else {
+				console.log('Downloading tab was closed during file downloading phase');
+				menuAlert("Downloading tab was closed. Download terminated",
+					"no open menus left, download termination alert was not sent");
+			}
 			chrome.tabs.sendMessage(tabId, {
 				type: "coursedump_mediaFinished",
 				status: "stopped"
 			}).catch(err => {});
 		}
+		updAllOngoing();
 	}
 });

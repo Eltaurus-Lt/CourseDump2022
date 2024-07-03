@@ -96,11 +96,14 @@ document.addEventListener('DOMContentLoaded', async () => {
         settings, cidds
       }, (response) => {
         console.log(response);
-        updOngoingStatus();
+        if (response.status === "error") {
+          alert(response.msg);
+        }
+        // updOngoingStatus();
       }
     );
 
-    window.close();
+   // window.close();
   }
 
   const downloadButton = document.getElementById("download-course");
@@ -154,13 +157,27 @@ document.addEventListener('DOMContentLoaded', async () => {
   updCounters();
   updOngoingStatus();
 
+  //messages from background
+  chrome.runtime.onMessage.addListener(async (arg, sender, sendResponse) => {
+    if (arg.type === "coursedump_alert") {
+        alert(arg.msg);
+        updOngoingStatus();
+    } else if (arg.type === "coursedump_updateOngoings") {
+      updOngoingStatus();
+    }
+  });
+
+  //stop button
   stopButton.addEventListener('click', () => {
     stopButton.setAttribute('disabled', true);
     chrome.runtime.sendMessage({
         type: "coursedump_stopDownload",
       }, (response) => {
         console.log(response);
-        updOngoingStatus();
+        if (response.status === "error") {
+          alert(response.msg);
+        }
+        //updOngoingStatus();
       }
     );
   });
