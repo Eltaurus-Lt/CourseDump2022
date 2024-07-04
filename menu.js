@@ -8,6 +8,8 @@ const default_settings = {
   "skip_media_download": false,
   "course_metadata": true,
 
+  "videofiles_limit": 'Infinity',
+
   "max_level_skip": 5,
   "max_extra_fields": 5,
   "parallel_download_limit": 15
@@ -285,6 +287,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   const toggleSkipMedia = document.getElementById("setting-skipMedia");
   const toggleCourseMeta = document.getElementById("setting-courseMeta");
 
+  const toggleVideo = document.getElementById("setting-videoFiles");
+
   async function settingsFromToggles() {
     let current_settings = {
       "download_media": toggleDownloadMedia.checked,
@@ -294,7 +298,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     
       "learnable_ids": toggleLearnableIds.checked,
       "skip_media_download": toggleSkipMedia.checked,
-      "course_metadata": toggleCourseMeta.checked
+      "course_metadata": toggleCourseMeta.checked,
+
+      "videofiles_limit": toggleVideo.checked ? 'Infinity' : 0
     };
 
     for (const [setting, default_value] of Object.entries(default_settings)) {
@@ -317,6 +323,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     toggleLearnableIds.checked = settings["learnable_ids"];
     toggleSkipMedia.checked = settings["skip_media_download"];
     toggleCourseMeta.checked = settings["course_metadata"];
+
+    toggleVideo.checked = (settings["videofiles_limit"] > 0);
   }
 
 

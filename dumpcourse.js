@@ -1,5 +1,7 @@
 settings['parallel_download_limit'] = 6;
 
+console.log('course dump settings: ', settings);
+
 function sleep(ms) {
 	return new Promise(resolve => setTimeout(resolve, ms));
 }

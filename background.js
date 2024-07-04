@@ -76,7 +76,7 @@ async function menuAlert(msg, decline_msg = "") {
 	});
 }
 
-function updAllOngoing() {
+function updAllMenus() {
 	chrome.runtime.sendMessage({ 
 		type: "coursedump_updateOngoings" 
 	}).catch(err=>{});		
@@ -93,7 +93,7 @@ chrome.runtime.onMessage.addListener(async (arg, sender, sendResponse) => {
 			return;
 		}
 		ongoingTab = arg.tab_id;
-		updAllOngoing();
+		updAllMenus();
 		//pass arguments
 		chrome.scripting.executeScript({
 			target: {tabId: ongoingTab},
@@ -115,13 +115,13 @@ chrome.runtime.onMessage.addListener(async (arg, sender, sendResponse) => {
 								ongoingTab = null;
 								menuAlert("Scanning tab was closed. Download terminated",
 									"no open menus left, download termination alert was not sent");
-								updAllOngoing();
+								updAllMenus();
 							}
 							// console.log('scanning script callback', scanningFeedback);
 							//return signal from the scanning script
 							if (scanningFeedback?.[0]?.result === "scanning stopped") {
 								console.log('Download stopped by user during scanning phase');
-								updAllOngoing();
+								updAllMenus();
 							}
 						}
 					);
@@ -135,7 +135,7 @@ chrome.runtime.onMessage.addListener(async (arg, sender, sendResponse) => {
 	} else if (arg.type === "coursedump_stopDownload") {
 		if (!ongoingTab) {
 			sendResponse({ status: "error", msg: "No downloads in progress" });
-			updAllOngoing();
+			updAllMenus();
 			return;
 		}
 		chrome.tabs.sendMessage(ongoingTab, {
@@ -148,7 +148,7 @@ chrome.runtime.onMessage.addListener(async (arg, sender, sendResponse) => {
 
 		ongoingTab = null;
 		console.log("bg stopped");
-		//updAllOngoing();
+		//updAllMenus();
 		sendResponse({ status: "stop signals sent" });
 		return;
 	}
@@ -231,6 +231,6 @@ chrome.runtime.onMessage.addListener(async (arg, sender, sendResponse) => {
 				status: "stopped"
 			}).catch(err => {});
 		}
-		updAllOngoing();
+		updAllMenus();
 	}
 });
