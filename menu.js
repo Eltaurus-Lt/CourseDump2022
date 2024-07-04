@@ -11,7 +11,7 @@ const default_settings = {
   "videofiles_limit": 'Infinity',
 
   "max_level_skip": 5,
-  "max_extra_fields": 5, //attributs/ visible info/ hidden info each
+  "max_extra_fields": 5, //attributes/ visible info/ hidden info each
   "parallel_download_limit": 15
 };
 

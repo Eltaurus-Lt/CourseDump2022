@@ -1,4 +1,5 @@
 settings['parallel_download_limit'] = 6;
+ANKI_HEADERS = true;
 
 console.log('course dump settings: ', settings);
 
@@ -60,6 +61,23 @@ async function fetchMeta(cidd) {
   return meta;
 }
 
+function meta2txt(meta, course_fields) {
+	let text = 'data:md/plain;charset=utf-8,' + encodeURIComponent( 
+		`# **` + meta['proper name'] || meta['url name'] + `**\n` + 
+		`### by _` + meta['author'] + `_\n` + 
+		`\n` + 
+		meta['description']
+		);
+	if (!ANKI_HEADERS) {
+		text = text + encodeURIComponent( 
+		`\n\n` + 
+		`## Course Fields\n` +
+		`| ` + course_fields.join(` | `) + ` |`
+		);
+	}
+  return text
+}
+
 //THE MAIN FUNCTION FOR SCANNING ALL LEVELS OF A COURSE
 async function scanCourse(cidd, threadN) {
   //stop message listener
@@ -111,22 +129,22 @@ async function scanCourse(cidd, threadN) {
   let err_count = 0;
 	let has_audio = false;
 	let has_video = false;
-	let attributes = [];
-	let visible_info = [];
-	let hidden_info = [];
+	const attributes = [];
+	const visible_info = [];
+	const hidden_info = [];
 	let has_definitions = false;
 	let has_learnable = false;
-	let course_media_urls = new Set();
-	let table = [];
+	const course_media_urls = new Set();
+	const table = [];
 
   // SCANNING LEVELS
   let levels_done = 0;  
-  let next = true; //fallback flag in case the number of levels is unavailable from meta or incorrect
-  while ((next || levels_done < meta['number of levels']) && !stopped) {
+  let proceed = true; //fallback flag in case the number of levels is unavailable from meta or incorrect
+  while ((proceed || levels_done < meta['number of levels']) && !stopped) {
     levels_done++;
     //emulation
     await sleep(Math.floor(Math.random() * 500 + 200));
-    next = (levels_done < meta['number of levels'] + settings["max_level_skip"]);
+    proceed = (levels_done < meta['number of levels'] + settings["max_level_skip"]);
     const done_clamped_emu = Math.min(levels_done, meta['number of levels']);
     updScanProgress(threadN, cidd, isNaN(done_clamped_emu) ? levels_done : done_clamped_emu, meta['number of levels']);
     file_queue.push(42);
@@ -330,9 +348,9 @@ async function scanCourse(cidd, threadN) {
         //likely due to scanning being performed beyond number levels identified from metadata, which is left as a fallback in case parsed value appears incorrect
         console.log(`${cidd['cid']}: Level ${levels_done} does not exist or has no learnable words. Level skip count: ` + (err_count + 1));
         err_count++;
-        next = false;
+        proceed = false;
         if (err_count < settings["max_level_skip"]) {
-          next = true; // precaution in case value in settings has wrong type
+          proceed = true; // precaution in case value in settings has wrong type
         }
       }
 		}
@@ -345,23 +363,66 @@ async function scanCourse(cidd, threadN) {
 
   //scanning of the course complete - processing the retrieved data:
 
+  //select non-empty fields
+  const course_fields = [];
+	if (has_learnable) {course_fields.push("Learnable")};
+	if (has_definitions) {course_fields.push("Definition")};
+	if (has_audio) {course_fields.push("Audio")};
+	if (has_video) {course_fields.push("Video")};
+	course_fields.push(...attributes);
+	course_fields.push(...visible_info);
+	course_fields.push(...hidden_info);
+	if (settings["level_tags"]) {course_fields.push("Level tags")};
+	if (settings["learnable_ids"]) {course_fields.push("Learnable ID")};
+
+  // convert table to plain text (csv)
+  let csv_data = table.map(row => {
+		const line = [];
+		if (has_learnable) {line.push(row[0])};
+		if (has_definitions) {line.push(row[1])};
+		if (has_audio) {line.push(row[2])};
+		if (has_video) {line.push(row[3])};
+		line.push(...row.slice(4, 4 + attributes.length));
+		line.push(...row.slice(4 + settings["max_extra_fields"], 4 + settings["max_extra_fields"] + visible_info.length));
+		line.push(...row.slice(4 + 2 * settings["max_extra_fields"], 4 + 2 * settings["max_extra_fields"] + hidden_info.length));
+		if (settings["level_tags"]) {line.push(row[4 + 3 * settings["max_extra_fields"]])};
+		if (settings["learnable_ids"]) {line.push(row[4 + 3 * settings["max_extra_fields"] + 1])};
+		return line.join(`,`);
+	}).join("\n") + "\n";
+	//add Anki headers
+	if (ANKI_HEADERS) {
+		csv_data = "#separator:comma\n" +
+				 "#html:true\n" +
+				 (settings["level_tags"] ? (`#tags column:${settings["learnable_ids"] ? course_fields.length-1 : course_fields.length}\n`) : ``) +
+				 "#columns:" + course_fields.join(",") + "\n" +
+				 csv_data;
+	}
+  const csv_encoded = 'data:text/csv;charset=utf-8,%EF%BB%BF' + encodeURIComponent(csv_data);
 
   //names for directory and spreadsheet
-	let saveas, subfolder; //rename
+	let course_filename, course_folder;
 	if (settings["course_metadata"]) {
-		saveas = meta['url name'] + " [" + cidd['cid'] + "]";
-		subfolder = meta['url name'] + " by " + meta['author'] + " [" + cidd['cid'] + "]/";
-
-		file_queue.push([meta['ava'], subfolder + meta['author'] + '.' + meta['ava'].split(".").slice(-1)]);
-		file_queue.push([meta['thumbnail'], subfolder + meta['url name'] + '.' + meta['thumbnail'].split(".").slice(-1)]);
+		course_filename = meta['url name'] + " [" + cidd['cid'] + "]";
+		course_folder = meta['url name'] + " by " + meta['author'] + " [" + cidd['cid'] + "]/";
 	} else {
-    saveas = meta['url name'] + " by " + meta['author'] + " [" + cidd['cid'] + "]"; 
-		subfolder = "";
+    course_filename = meta['url name'] + " by " + meta['author'] + " [" + cidd['cid'] + "]"; 
+		course_folder = "";
 	}
 
-  //process table into formated spreadsheet
+  if (settings["download_media"]) {
+    console.log(`Media files found in ${meta['url name']}[${cidd['cid']}]: ${course_media_urls.size}`);
+  };	
   //add all files to global queue
-
+  file_queue.push([csv_encoded, course_folder + course_filename + '.csv']);
+  if (settings["course_metadata"]) {
+    file_queue.push([meta2txt(meta, course_fields), course_folder + 'info.md']);
+    file_queue.push([meta['ava'], course_folder + meta['author'] + '.' + meta['ava'].split(".").slice(-1)]);
+		file_queue.push([meta['thumbnail'], course_folder + meta['url name'] + '.' + meta['thumbnail'].split(".").slice(-1)]);
+  }
+  if (!settings["skip_media_download"]) {
+		const media_batch = Array.from(course_media_urls).map(url => [url, `${course_folder}${course_filename}_media(${course_media_urls.size})/` + UniqueDecodedFilename(url)]);
+		file_queue.push(...media_batch);
+	} 
 
 
   if (stopped) {
@@ -390,7 +451,7 @@ async function scanThread(threadN, batch_size) {
         return "stopped";       
       };
     } else {
-      console.log(`${cidd} does not match tab domain ${tabDomain}`);
+      console.warn(`${cidd} does not match downloading tab domain ${tabDomain}`);
     }
     batch_done++;
     updBatchProgress(batch_done, batch_size, cidd);
@@ -476,9 +537,9 @@ async function batchDownload() {
 //global variables
 if (typeof cidds === 'undefined') {var cidds = []} //should be defined as an argument passed from menu.js through background.js
 if (typeof batch_done === 'undefined') {var batch_done = 0} //global progress counter
-if (typeof file_queue === 'undefined') {var file_queue = []} //global media files list
+if (typeof file_queue === 'undefined') {var file_queue = []} //global list of files
 if (typeof threads !== 'undefined') {
-  alert('Script is already executing on this page. Reload to retry');
+  alert('Script is already executing on this page. Reload to retry'); //should be impossible to trigger if the menu state is correct
 } else {
   batchDownload();
 }
