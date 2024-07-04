@@ -11,11 +11,11 @@ const default_settings = {
   "videofiles_limit": 'Infinity',
 
   "max_level_skip": 5,
-  "max_extra_fields": 5,
+  "max_extra_fields": 5, //attributs/ visible info/ hidden info each
   "parallel_download_limit": 15
 };
 
-function extractNumberValue(string, key) {
+function extractNumericValue(string, key) {
 	const regex = new RegExp(`${key}(\\d+)`);
 	const match = string.match(regex);
   
@@ -23,9 +23,9 @@ function extractNumberValue(string, key) {
 }
   
 function getDomainAndId(url) {
-	const cid = extractNumberValue(url, "course_id=") ||
-			 extractNumberValue(url, "category_id=") ||
-			 extractNumberValue(url, "course/");
+	const cid = extractNumericValue(url, "course_id=") ||
+			 extractNumericValue(url, "category_id=") ||
+			 extractNumericValue(url, "course/");
 	let domain = "";
 	if (url.includes("app.memrise.com")) {
 	  domain = "app.memrise.com";
