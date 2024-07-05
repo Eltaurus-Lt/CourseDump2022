@@ -1,4 +1,3 @@
-settings['parallel_download_limit'] = 6;
 ANKI_HEADERS = true;
 
 console.log('course dump settings: ', settings);
@@ -63,7 +62,7 @@ async function fetchMeta(cidd) {
 
 function meta2txt(meta, course_fields) {
 	let text = 'data:md/plain;charset=utf-8,' + encodeURIComponent( 
-		`# **` + meta['proper name'] || meta['url name'] + `**\n` + 
+		`# **` + (meta['proper name'] || meta['url name']) + `**\n` + 
 		`### by _` + meta['author'] + `_\n` + 
 		`\n` + 
 		meta['description']
@@ -143,16 +142,16 @@ async function scanCourse(cidd, threadN) {
   while ((proceed || levels_done < meta['number of levels']) && !stopped) {
     levels_done++;
     //emulation
-    await sleep(Math.floor(Math.random() * 500 + 200));
-    proceed = (levels_done < meta['number of levels'] + settings["max_level_skip"]);
-    const done_clamped_emu = Math.min(levels_done, meta['number of levels']);
-    updScanProgress(threadN, cidd, isNaN(done_clamped_emu) ? levels_done : done_clamped_emu, meta['number of levels']);
-    file_queue.push(42);
-    continue;
+    // await sleep(Math.floor(Math.random() * 500 + 200));
+    // proceed = (levels_done < meta['number of levels'] + settings["max_level_skip"]);
+    // const done_clamped_emu = Math.min(levels_done, meta['number of levels']);
+    // updScanProgress(threadN, cidd, isNaN(done_clamped_emu) ? levels_done : done_clamped_emu, meta['number of levels']);
+    // file_queue.push(42);
+    // continue;
 
     let is_mediaLevel = false;
 		try {
-			await sleep(200);
+			//await sleep(50);
 			
       //fetch data from memrise
 			const token = document.cookie.split(" ").find(cookie => cookie.includes("csrftoken")).split(/[=;]/g)[1]; // get CSRF header
@@ -172,7 +171,7 @@ async function scanCourse(cidd, threadN) {
 				try {
           //add the name of the level to the tags in Anki hierarchical tag format
 					tags = `"` + response.session_source_info.name.replaceAll('"', '""') + 
-                      `::` + levels_done.toString.padStart(meta['number of levels'].length, "0") + 
+                      `::` + levels_done.toString().padStart(meta['number of levels'].toString().length, "0") + 
                       `_` + response.session_source_info.level_name.replaceAll('"', '""') + `"`;
 				} catch (err) {console.log(`${err.name}: ${err.message}`);}
 				tags = tags.replaceAll(' ','_');
@@ -412,6 +411,7 @@ async function scanCourse(cidd, threadN) {
   if (settings["download_media"]) {
     console.log(`Media files found in ${meta['url name']}[${cidd['cid']}]: ${course_media_urls.size}`);
   };	
+  
   //add all files to global queue
   file_queue.push([csv_encoded, course_folder + course_filename + '.csv']);
   if (settings["course_metadata"]) {

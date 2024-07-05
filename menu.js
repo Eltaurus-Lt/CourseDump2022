@@ -12,7 +12,7 @@ const default_settings = {
 
   "max_level_skip": 5,
   "max_extra_fields": 5, //attributes/ visible info/ hidden info each
-  "parallel_download_limit": 15
+  "parallel_download_limit": 9
 };
 
 function extractNumericValue(string, key) {

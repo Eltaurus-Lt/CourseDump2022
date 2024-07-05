@@ -10,8 +10,8 @@ function downloadFile(options) {
 		let iid, deltas = {};
 		const onDownloadComplete = delta => {
 			if (iid === undefined) {
-				deltas[delta.iid] = delta;
-			} else if (delta.iid == iid) {
+				deltas[delta.id] = delta;
+			} else if (delta.id == iid) {
 				checkDelta(delta);
 			}
 		}
@@ -19,7 +19,7 @@ function downloadFile(options) {
 		function checkDelta(delta) {
 			if (delta.state && delta.state.current === "complete") {
 				chrome.downloads.onChanged.removeListener(onDownloadComplete);
-				resolve(delta.iid);
+				resolve(delta.id);
 			} else if (delta.error) {
 				chrome.downloads.onChanged.removeListener(onDownloadComplete);
 				reject(new Error(delta.error.current));
@@ -172,13 +172,14 @@ chrome.runtime.onMessage.addListener(async (arg, sender, sendResponse) => {
 	 	let pids = Array(maxConnections).fill().map((_, i) => i + 1);
 	 	const results = await Promise.allSettled(pids.map(async pid => {
 	 		while (ongoingTab && urls.length) {
-	 			const [url, filename] = ["some url", "some filename.ext"]; //emu
-				const emu = urls.shift();//emu
+	 			// const [url, filename] = ["some url", "some filename.ext"]; //emu
+				// const emu = urls.shift();//emu
+				const [url, filename] = urls.shift();
 	 			await sleep(200);
 	 			let did;
 	 			try {
-	 				//did = await downloadFile({url, filename, conflictAction: "overwrite" });
-					did = await sleep(Math.floor(Math.random() * 600 + 300)); //emulate download
+	 				did = await downloadFile({url, filename, conflictAction: "overwrite" });
+					//did = await sleep(Math.floor(Math.random() * 600 + 300)); //emulate download
 	 			} catch (err) {
 	 				console.error(filename, err);
 					chrome.tabs.sendMessage(tabId, {
@@ -188,7 +189,7 @@ chrome.runtime.onMessage.addListener(async (arg, sender, sendResponse) => {
 					}).catch(err => {});
 	 			}
 	 			if (did !== undefined) {
-	 				await chrome.downloads.erase({ did });
+	 				await chrome.downloads.erase({ id: did });
 	 			}
 	 			done++;
 				chrome.tabs.sendMessage(tabId, {
