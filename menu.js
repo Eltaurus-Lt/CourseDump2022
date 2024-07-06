@@ -58,15 +58,34 @@ async function loadFromStorage(obj) {
 }
 
 async function loadSettings() {
-  let settings = await loadFromStorage('settings') || default_settings;
+  let settings = await loadFromStorage('settings');
+  
+    //initiate if accessed first time
+    if (!settings) {
+      settings = default_settings;
+      saveToStorage({ settings });
+    };
 
-  for (const [setting, default_value] of Object.entries(default_settings)) {
-    if (!(setting in settings && settings[setting] !== 'undefined')) {
-      settings[setting] = default_value;
-    }
-  }
+  // for (const [setting, default_value] of Object.entries(default_settings)) {
+  //   if (!(setting in settings && settings[setting] !== 'undefined')) {
+  //     settings[setting] = default_value;
+  //   }
+  // }
   
   return settings;
+}
+
+async function loadQueue(text = false) {
+  let queue = await loadFromStorage(`queue${text ? '-text' : ''}`);
+
+  //initiate queues if accessed first time
+  if (!queue) {
+    queue = [];
+    saveToStorage({ 'queue': [] });
+    saveToStorage({ 'queue-text': [] });
+  }
+
+  return queue;
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -90,12 +109,13 @@ document.addEventListener('DOMContentLoaded', async () => {
   const cidd = JSON.stringify({domain, cid});
 
   //initiate download through message to the BG script
-  async function downloadCourses(cidds) {
+  async function downloadCourses(cidd_strings) {
     const settings = await loadSettings();
+    
     chrome.runtime.sendMessage({
         type: "coursedump_startDownload",
         tab_id: current_tab.id,
-        settings, cidds
+        settings, cidd_strings
       }, (response) => {
         console.log(response);
         if (response.status === "error") {
@@ -117,7 +137,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const BatchClearButton = document.getElementById("batch-clear");
 
   async function updCounters() {
-    const queue = await loadFromStorage('queue');
+    const queue = await loadQueue();
     const count = `${queue.length}`;
     BatchDownloadButton.setAttribute("counter", count);
     BatchViewButton.setAttribute("counter", count);
@@ -125,8 +145,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   async function addToQueue() {
-    const queue = await loadFromStorage('queue');
-    const queuetxt = await loadFromStorage('queue-text');
+    const queue = await loadQueue();
+    const queuetxt = await loadQueue(true);
     if (queue.includes(cidd)) {return} //list is supposedly faster than a set, because the number of itmes is small
     if (queue) {
       saveToStorage({'queue': [...queue, cidd]});
@@ -207,7 +227,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     BatchDownloadButton.removeAttribute('disabled');
     BatchDownloadButton.addEventListener('click', async () => {
-      const cidds = await loadFromStorage('queue');
+      const cidds = await loadQueue();
       if (cidds && cidds.length > 0 && document.body.getAttribute("data-ongoing-download") !== "true") {
         downloadCourses(cidds);
       }
@@ -218,9 +238,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   BatchViewButton.addEventListener('click', async (event) => {
     let queue;
     if (event.ctrlKey) {
-      queue = await loadFromStorage('queue');
+      queue = await loadQueue();
     } else {
-      queue = await loadFromStorage('queue-text');
+      queue = await loadQueue(true);
     }
     // let queueTab = window.open("data:text/html, <html contenteditable>","queueTab");
     let queueTab = window.open("data:text/html","queueTab");
@@ -234,7 +254,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   })
 
   BatchImportButton.addEventListener('click', async () => {
-    const queue = await loadFromStorage('queue');
+    const queue = await loadQueue();
     if ((queue.length == 0) || confirm("Importing course list will overwrite all currently queued courses.\n Proceed?")) {
       try {
         const pickerOpts = {
@@ -249,7 +269,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         const [fileHandle] = await window.showOpenFilePicker(pickerOpts);
         const file = await fileHandle.getFile();
         const content = await file.text();
-        lines = content.split('\n');
+        const lines = content.split('\n');
         const cidds = [];
         const courseList = lines.filter(line => {
           const {domain, cid} = getDomainAndId(line);

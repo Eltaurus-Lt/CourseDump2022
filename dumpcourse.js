@@ -1,6 +1,7 @@
 ANKI_HEADERS = true;
 
 console.log('course dump settings: ', settings);
+console.log('course dump batch: ', cidds);
 
 function sleep(ms) {
 	return new Promise(resolve => setTimeout(resolve, ms));
@@ -8,6 +9,10 @@ function sleep(ms) {
 
 function ciddToURL(cidd) {
   return `https://${cidd['domain']}/community/course/${cidd['cid']}`;
+}
+
+function fetchURL(domain) {
+	return `https://${domain}/v1.19/learning_sessions/preview/`;
 }
 
 async function fetchMeta(cidd) {
@@ -55,7 +60,7 @@ async function fetchMeta(cidd) {
     console.error(`failed to parse course ${cidd['cid']} html`, err);    
   }
 
-	console.log(JSON.stringify(meta));
+	console.log(meta);
 
   return meta;
 }
@@ -103,7 +108,7 @@ async function scanCourse(cidd, threadN) {
 	function UniqueDecodedFilename(url) {
 		if (url in url2filenames) {return url2filenames[url];}
 
-    //select name for a new file
+    	//select name for a new file
 		let	temp_filename = decodeURIComponent(url.split("/").slice(-1)[0]);
 		// let pad = decodeURIComponent(url.split("/").slice(-2)[0]);
 		// if (pad === 'medium') {pad = decodeURIComponent(url.split("/").slice(-3)[0])};
@@ -150,37 +155,55 @@ async function scanCourse(cidd, threadN) {
     // file_queue.push(42);
     // continue;
 
-    let is_mediaLevel = false;
+    let level_is_empty = false;
 		try {
 			//await sleep(50);
 			
-      //fetch data from memrise
+      		//fetch data from memrise
 			const token = document.cookie.split(" ").find(cookie => cookie.includes("csrftoken")).split(/[=;]/g)[1]; // get CSRF header
-			const response = await (await fetch("https://" + cidd['domain'] + "/v1.19/learning_sessions/preview/", {
-				"headers": { "Accept": "*/*", "Content-Type": "Application/json", "X-CSRFToken": token },
-				"body": "{\"session_source_id\":" + cidd['cid'] + ",\"session_source_type\":\"course_id_and_level_index\",\"session_source_sub_index\":" + levels_done + "}",
+			const response = await fetch(fetchURL(cidd['domain']), {
+				"headers": { 
+					"Accept": "*/*", 
+					"Content-Type": "Application/json", 
+					"X-CSRFToken": token 
+				},
+				"body": JSON.stringify({
+					session_source_id: cidd['cid'],
+					session_source_type: "course_id_and_level_index",
+					session_source_sub_index: levels_done
+				}),
 				"method": "POST"
-			})).json();
+			});
+			if (!response.ok) {
+				if (response.status === 401) {
+					if (threadN === 0) {
+						alert("Memrise login required");
+					}
+					return "unauthorised";
+				}
+			}
+			const response_json = await response.json();
+
 			// Continue after empty set
-			if (response.code == "PREVIEW_DOESNT_LOAD") {
-				is_mediaLevel = true;
+			if (response_json.code == "PREVIEW_DOESNT_LOAD") {
+				level_is_empty = true;
 			}
 
-      //define general tags for all entries from the level
+      		//define general tags for all entries from the level
 			let tags = `"` + meta['url name'] + `"`;
 			if (settings["level_tags"]) {
 				try {
-          //add the name of the level to the tags in Anki hierarchical tag format
-					tags = `"` + response.session_source_info.name.replaceAll('"', '""') + 
+         			//add the name of the level to the tags in Anki hierarchical tag format
+					tags = `"` + response_json.session_source_info.name.replaceAll('"', '""') + 
                       `::` + levels_done.toString().padStart(meta['number of levels'].toString().length, "0") + 
-                      `_` + response.session_source_info.level_name.replaceAll('"', '""') + `"`;
+                      `_` + response_json.session_source_info.level_name.replaceAll('"', '""') + `"`;
 				} catch (err) {console.log(`${err.name}: ${err.message}`);}
 				tags = tags.replaceAll(' ','_');
 			}
 
 
 			// Adding all entries from the level to the table and their media urls to queue
-			response.learnables.map(learnable => {
+			response_json.learnables.map(learnable => {
 
 				let row = [];
 
@@ -342,8 +365,8 @@ async function scanCourse(cidd, threadN) {
 			err_count = 0; //reset number of consequent unretreaved levels if the current level scan succesfully reached the end
 		} catch (err) {
 			console.log(err);
-			if (is_mediaLevel) { 
-				console.log(`${cidd['cid']}: Level ${levels_done} identified as a media level`); 
+			if (level_is_empty) { 
+				console.log(`${cidd['cid']}: Level ${levels_done} has no learnable items`); 
 			} else {
 			  //likely due to scanning being performed beyond number levels identified from metadata, which is left as a fallback in case parsed value appears incorrect
 			  console.log(`${cidd['cid']}: Level ${levels_done} does not exist or has no learnable words. Level skip count: ` + (err_count + 1));
@@ -399,7 +422,6 @@ async function scanCourse(cidd, threadN) {
 		if (settings["learnable_ids"]) {line.push(row[4 + 3 * settings["max_extra_fields"] + 1])};
 		return line.join(`,`);
 	}).join("\n") + "\n";
-
 	//add Anki headers
 	if (ANKI_HEADERS) {
 		csv_data = "#separator:comma\n" +
@@ -447,20 +469,16 @@ async function scanCourse(cidd, threadN) {
 async function scanThread(threadN, batch_size) {
   let cidd;
 
-  function ciddParse(cidd) {
-    try {
-      return JSON.parse(cidd);
-    } catch (err) {
-      return '';
-    }
-  }
-
-  while (cidd = ciddParse(cidds.pop())) {
+  while (cidd = cidds.pop()) {
     if (cidd['domain'] === tabDomain) {
-      // const closeingEvent = ;
-      if (await scanCourse(cidd, threadN) === "stopped") {
+      const closingEvent = await scanCourse(cidd, threadN);
+      if (closingEvent === "stopped") {
         console.log(`thread ${threadN} (cid: ${cidd['cid']}) - scanning stopped by user`);
-        return "stopped";       
+        return "stopped";
+      };
+	  if (closingEvent === "unauthorised") {
+        console.log(`thread ${threadN} (cid: ${cidd['cid']}) - user is not logged in, scanning terminated`);
+        return "unauthorised";
       };
     } else {
       console.warn(`${cidd} does not match downloading tab domain ${tabDomain}`);
@@ -475,11 +493,20 @@ async function scanThread(threadN, batch_size) {
 
 //batch scheduling
 async function batchDownload() {
-  tabDomain = window.location.toString().split("/")[2];
-  if (tabDomain !== 'app.memrise.com' && tabDomain !== 'community-courses.memrise.com') {
-      alert("The extension should be used on the memrise.com site"); 
-      return -1;
-  }
+	//validity tests
+	tabDomain = window.location.toString().split("/")[2];
+	if (tabDomain !== 'app.memrise.com' && tabDomain !== 'community-courses.memrise.com') {
+		alert("The extension should be used on the memrise.com site"); 
+		return -1;
+	}
+	const test_fetch = await fetch(fetchURL(tabDomain));
+	if (!test_fetch.ok) {
+	  if (test_fetch.status === 401) {
+		  console.log("not logged in - terminating download");
+		  alert("Memrise login required");
+		  return "scanning unauthorised";
+	  }
+	}
 
   //global scan variables
   threads = [];
@@ -499,6 +526,12 @@ async function batchDownload() {
   updBatchProgress(batch_done, batch_size);
   const thread_res = await Promise.all(threads);
 
+  if (thread_res.includes("unauthorised")) {
+    console.log("all scanning threads stopped");
+    progress_container.classList.add('error');
+    threads = undefined; //reset state to enable restarting
+    return "scanning unauthorised";
+  }
   if (thread_res.includes("stopped")) {
     console.log("all scanning threads stopped");
     progress_container.classList.add('stopped');

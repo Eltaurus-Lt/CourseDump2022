@@ -82,6 +82,15 @@ function updAllMenus() {
 	}).catch(err=>{});		
 }
 
+function ciddsParse(cidd_strings) {
+    try {
+		return cidd_strings.map(cidd_string => JSON.parse(cidd_string));
+    } catch (err) {
+		console.error("Error parsing cidd strings: ", err);
+		return [];
+    }
+}
+
 chrome.runtime.onMessage.addListener(async (arg, sender, sendResponse) => {
 	//messages from menu
 	if (arg.type === "coursedump_checkOngoing") {
@@ -97,7 +106,7 @@ chrome.runtime.onMessage.addListener(async (arg, sender, sendResponse) => {
 		//pass arguments
 		chrome.scripting.executeScript({
 			target: {tabId: ongoingTab},
-			args: [{'cidds': arg.cidds, 'settings': arg.settings}],
+			args: [{'cidds': ciddsParse(arg.cidd_strings), 'settings': arg.settings}],
 			func: vars => Object.assign(self, vars),
 		}, () => {
 			//import module
@@ -117,9 +126,13 @@ chrome.runtime.onMessage.addListener(async (arg, sender, sendResponse) => {
 									"no open menus left, download termination alert was not sent");
 								updAllMenus();
 							}
-							// console.log('scanning script callback', scanningFeedback);
+							//console.log('scanning script callback', scanningFeedback);
 							//return signal from the scanning script
-							if (scanningFeedback?.[0]?.result === "scanning stopped") {
+							if (scanningFeedback?.[0]?.result === "scanning unauthorised") {
+								console.log('User not logged in. Download terminated');
+								ongoingTab = null;
+								updAllMenus();
+							} else if (scanningFeedback?.[0]?.result === "scanning stopped") {
 								console.log('Download stopped by user during scanning phase');
 								updAllMenus();
 							}
