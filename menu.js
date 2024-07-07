@@ -59,18 +59,16 @@ async function loadFromStorage(obj) {
 
 async function loadSettings() {
   let settings = await loadFromStorage('settings');
-  
-    //initiate if accessed first time
-    if (!settings) {
-      settings = default_settings;
-      saveToStorage({ settings });
-    };
 
-  // for (const [setting, default_value] of Object.entries(default_settings)) {
-  //   if (!(setting in settings && settings[setting] !== 'undefined')) {
-  //     settings[setting] = default_value;
-  //   }
-  // }
+  //initiate if accessed for the first time or a new setting is added
+  let upd = false;
+  for (const [setting, default_value] of Object.entries(default_settings)) {
+    if (!(setting in settings && settings[setting] !== 'undefined')) {
+      settings[setting] = default_value;
+      upd = true;
+    }
+  }
+  if (upd) {saveToStorage({ settings });}
   
   return settings;
 }
@@ -78,7 +76,7 @@ async function loadSettings() {
 async function loadQueue(text = false) {
   let queue = await loadFromStorage(`queue${text ? '-text' : ''}`);
 
-  //initiate queues if accessed first time
+  //initiate queues if accessed for the first time
   if (!queue) {
     queue = [];
     saveToStorage({ 'queue': [] });
@@ -109,13 +107,14 @@ document.addEventListener('DOMContentLoaded', async () => {
   const cidd = JSON.stringify({domain, cid});
 
   //initiate download through message to the BG script
-  async function downloadCourses(cidd_strings) {
+  async function downloadCourses(cidds) {
     const settings = await loadSettings();
-    
+
     chrome.runtime.sendMessage({
         type: "coursedump_startDownload",
         tab_id: current_tab.id,
-        settings, cidd_strings
+        settings,
+        cidd_strings: cidds
       }, (response) => {
         console.log(response);
         if (response.status === "error") {
@@ -236,12 +235,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   //other batch buttons
   BatchViewButton.addEventListener('click', async (event) => {
-    let queue;
-    if (event.ctrlKey) {
-      queue = await loadQueue();
-    } else {
-      queue = await loadQueue(true);
-    }
+    const queue = await loadQueue(!event.ctrlKey);
+
     // let queueTab = window.open("data:text/html, <html contenteditable>","queueTab");
     let queueTab = window.open("data:text/html","queueTab");
     queueTab.document.write(`<html>

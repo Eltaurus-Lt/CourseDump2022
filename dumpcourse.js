@@ -177,7 +177,7 @@ async function scanCourse(cidd, threadN) {
 			if (!response.ok) {
 				if (response.status === 401) {
 					if (threadN === 0) {
-						alert("Memrise login required");
+						alert("Memrise login required"); // should be impossible to trigger because of the test at the start of batchDownload()
 					}
 					return "unauthorised";
 				}
@@ -349,7 +349,7 @@ async function scanCourse(cidd, threadN) {
 				//tags
 				row.push(tags);
 
-        //learnable IDs
+        		//learnable IDs
 				if (settings["learnable_ids"]) {
 					try {
 						row.push(learnable.id);
@@ -447,11 +447,11 @@ async function scanCourse(cidd, threadN) {
   };
   
   //add all files to global queue
-  file_queue.push([csv_encoded, `${course_folder}${course_filename}_(${meta['number of items'].toString().replace("/","_")}).csv`]);
+  file_queue.unshift([csv_encoded, `${course_folder}${course_filename}_(${meta['number of items'].toString().replace("/","_")}).csv`]);
   if (settings["course_metadata"]) {
-    file_queue.push([meta2txt(meta), `${course_folder}info.md`]);
-    file_queue.push([meta['ava'], `${course_folder}${meta['author']}.${meta['ava'].split(".").slice(-1)}`]);
-	file_queue.push([meta['thumbnail'], `${course_folder}${meta['url name']}.${meta['thumbnail'].split(".").slice(-1)}`]);
+    file_queue.unshift([meta2txt(meta), `${course_folder}info.md`]);
+    file_queue.unshift([meta['ava'], `${course_folder}${meta['author']}.${meta['ava'].split(".").slice(-1)}`]);
+	file_queue.unshift([meta['thumbnail'], `${course_folder}${meta['url name']}.${meta['thumbnail'].split(".").slice(-1)}`]);
   }
   if (!settings["skip_media_download"]) {
 	course_media_urls.forEach(url => {
