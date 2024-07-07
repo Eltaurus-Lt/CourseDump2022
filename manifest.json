@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Memrise Course Dump",
-  "version": "8.6",
+  "version": "9.0",
   "description": "Download Memrise cources as Anki-compatible CSV + media files",
   "icons": {
     "16": "icons/icon.png",
@@ -16,19 +16,21 @@
     "downloads",
     "scripting"
   ],
+  "action": {
+    "default_popup": "menu.html"
+  },
   "background": {
     "service_worker": "background.js"
   },
-  "action": {},
   "content_security_policy": {},
   "web_accessible_resources": [{
-    "resources": ["queue.txt", "settings.json"],
+    "resources": [],
     "matches": ["<all_urls>"]
     }],
    "content_scripts": [
      {
        "matches": ["http://*.memrise.com/*", "https://*.memrise.com/*"],
-       "css": ["dumpstyle.css"]
+       "css": ["progressbars.css"]
      }
    ]
 }

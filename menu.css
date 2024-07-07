@@ -1,0 +1,212 @@
+@import url(https://db.onlinewebfonts.com/c/df5e41ae1af690fdb8b46ed56048dfbd?family=Boing+WEB+Bold);
+/*
+@import url(https://fonts.googleapis.com/css?family=Noto+Sans+JP:400,900&display=swap);
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:400,600,700&display=swap);
+*/
+
+:root {
+	--dumpprogress-barwidth: 1.2em;	
+	--mem-orange: #ffbb00;
+	--mem-green: #83c53d;
+	--mem-red: #ff756b;
+	--mem-yellow: #ffc001;
+	--mem-darkblue: #2b3648;
+	--mem-lightblue: #b9d7e3;
+	--mem-lightgreen: #91be51;
+	--mem-lightred: #f17e75;
+}
+
+body {
+    background: var(--mem-darkblue);
+    color: white;
+    font-family: Noto, "Noto Sans JP", "Open Sans", sans-serif;
+
+    border: solid 1px #fff6;
+    margin: .25em;
+    padding: 0;
+    min-width: max-content;
+    width: 205px;
+}
+
+body * {
+  user-select: none;
+}
+
+::-webkit-scrollbar {
+    display: none;
+}
+
+#download-course,
+#stop-download {
+  margin-top: .75em;
+  font-weight: bold;
+}
+
+h2, h3 {
+    font-family: "Boing WEB Bold", "Open Sans", sans-serif;
+}
+
+h2 {
+    color: var(--mem-orange);
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
+    margin-top: 0px;
+}
+
+h3 {
+  font-size: 1.25rem;
+  padding: .75rem 1.5rem;
+  margin: -.25rem 0 0;
+}
+
+h4 {
+  position: relative;
+  margin: 0;
+  padding: .5em 1.5em;
+  font-weight: 400;
+}
+
+hr {
+  height: 1px;
+  border: none;
+  background: white;
+  opacity: 0.25;
+  margin: 1em;
+}
+
+h4 img {
+  position: absolute;
+  max-width: 16px;
+  top: 50%;
+  translate: -150% -50%;
+  margin-right: .5em;
+}
+h4:has(img) {
+  padding-left: 3.25em;
+}
+
+h4.danger {
+  color: #fffa;
+  font-size: .8em;
+  padding-left: calc(1.5em / 0.8);
+}
+
+body[data-ongoing-download="false"] #stop-download {
+  display: none;
+}
+body[data-ongoing-download="true"] #download-course {
+  display: none;
+}
+
+/* interactive styles */
+
+h4:hover {
+  /*background: var(--mem-lightblue);*/
+  cursor: pointer;
+}
+h4::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: .25;
+  z-index: -1;
+  transition: background .25s;
+}
+h4:hover::before {
+  background: var(--mem-lightblue);
+}
+
+h4[counter]::after {
+  content: ' (' attr(counter) ')';
+}
+
+/* toggle styles: */
+
+input.expander {
+  position: relative;
+  top: 2px;
+  right: 3px;
+
+  appearance: none;
+  width: 8px;
+  aspect-ratio: 1;
+
+  background-image: linear-gradient(0.375turn, transparent 50%, white 52%);
+  transform-origin: 65% 65%;
+  rotate: -45deg;
+
+  transition: rotate .2s;
+
+  cursor: pointer;
+}
+
+input.expander:checked {
+  rotate: 45deg;
+}
+
+input.toggle {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  translate: 0 -50%;
+
+  appearance: none;
+  width: 28px;
+  height: 16px;
+  background-color: var(--mem-lightred);
+  border-radius: 100px;
+  background-repeat: no-repeat;
+  background-position: 14%;
+  background-size: 43%;
+  background-image: url( "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle r='50' cx='50' cy='50' fill='white'/></svg>" );
+  /*   background-image: radial-gradient(circle at 50%, white 50%, transparent 55%); */
+  
+  cursor: pointer;
+  box-shadow: inset .5px .5px 2px #10102050;
+}
+body.animated input.toggle {
+  transition: background .2s;
+}
+
+input.toggle:checked {
+  background-position: 86%;
+  background-color: var(--mem-lightgreen);
+}
+
+body[data-ongoing-download="true"] h4#batch-download,
+h4#batch-download[counter="0"],
+h4#batch-clear[counter="0"],
+h4[disabled],
+h4:has(input.toggle:disabled) {
+  color: gray;
+}
+input.toggle:disabled {
+  background-color: lightgray;
+  filter: brightness(50%);
+}
+body[data-ongoing-download="true"] h4#batch-download img,
+h4#batch-download[counter="0"] img,
+h4[disabled] img {
+  filter: grayscale(100)
+	  brightness(80%);
+}
+
+input.toggle {
+  display: inline-block;
+  margin: 0 1.25em;
+/*   transform-origin: 0 0;
+  scale: 50%; */
+}
+
+#advancedGrid {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows .2s;
+}
+label:has(#toggleAdvanced:checked) + #advancedGrid {
+  grid-template-rows: 1fr;
+}
+#advancedGrid > :first-child {
+  overflow: hidden;
+}
+

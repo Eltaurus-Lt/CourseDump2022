@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="menu.css">
+    <script src="menu.js"></script>
+    <title>Course Dump Menu</title>
+</head>
+<body data-ongoing-download="false">
+    <h4 id="download-course" disabled><img src="icons/icon.png"/> Download current course</h4>
+    <h4 id="stop-download"><img src="icons/stop.png"/> Stop ongoing download</h4>
+
+    <hr>
+
+    <h4 id="link-help">Help / GitHub repo</h4>
+    <h4 id="link-forum">Feedback / Discussion</h4>
+    <h4 id="link-ankiweb">Anki Templates</h4>
+    <h4 id="link-coffee"><img src="icons/coffee.png"/>Buy Me a Coffee</h4>
+
+    <hr>
+
+    <h3>Batch download</h3>
+    <h4 id="batch-add" disabled>Add to queue</h4>
+    <h4 id="batch-download" counter="0" disabled><img src="icons/icon.png"/> Download all</h4>
+    <h4 id="batch-view" counter="0">View queued courses</h4>
+    <h4 id="batch-import">Import course list</h4>
+    <h4 id="batch-clear" class="danger" counter="0">Clear queue</h4>
+
+    <hr>
+
+    <h3>Settings</h3>
+    <label for="setting-downloadMedia">
+        <h4>Download media<input id="setting-downloadMedia" type="checkbox" class="toggle" checked/>
+    </h4></label>
+    <label for="setting-extraFields">
+    <h4>Extra fields<input id="setting-extraFields" type="checkbox" class="toggle" checked/>
+    </h4></label>
+    <label for="setting-levelTags">
+        <h4>Level tags<input id="setting-levelTags"  type="checkbox" class="toggle" checked/>
+    </h4></label>
+    <label for="setting-ankiPrompt">
+        <h4>Anki import prompt<input id="setting-ankiPrompt" type="checkbox" class="toggle" checked/>
+    </h4></label>
+    <label for="toggleAdvanced">
+        <h4><input id="toggleAdvanced" type="checkbox" class="expander"/> Advanced
+    </h4></label>
+    <div id="advancedGrid">
+        <div>
+        <label for="setting-learningProgress">
+            <h4>Learning Progress<input id="setting-learningProgress" type="checkbox" class="toggle" disabled/>
+        </h4></label>
+        <label for="setting-alternativeAnswers">
+            <h4>Alternative Answers<input id="setting-alternativeAnswers" type="checkbox" class="toggle" disabled/>
+        </h4></label>
+        <label for="setting-learnableIds">
+            <h4>Learnable IDs<input id="setting-learnableIds" type="checkbox" class="toggle"/>
+        </h4></label>
+        <label for="setting-videoFiles">
+            <h4>Video Files<input id="setting-videoFiles" type="checkbox" class="toggle"/>
+        </h4></label>
+        <label for="setting-skipMedia">
+            <h4>Skip media download<input id="setting-skipMedia" type="checkbox" class="toggle"/>
+        </h4></label>
+        <label for="setting-courseMeta">
+            <h4>Course metadata<input id="setting-courseMeta" type="checkbox" class="toggle" checked/>
+        </h4></label>
+        </div>
+    </div>
+    <h4 id="settings-restore" class="danger">Restore default</h4>
+</body>
+</html>

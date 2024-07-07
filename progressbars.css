@@ -1,0 +1,107 @@
+:root {
+	--dumpprogress-barwidth: 1.2em;
+	--mem-green: #83c53d;
+	--mem-red: #ff756b;
+	--mem-yellow: #ffc001;
+	--mem-darkblue: #2b3648;
+	--mem-lightblue: #b9d7e3;
+	--mem-darkerblue: #336ba5;/*#6a717b;*/
+}
+
+#MemDump_progressContainer {
+	width: 100%;
+	position: relative;
+	background: var(--mem-darkblue);
+	transition: height 1s;
+	overflow-y: hidden;
+}
+#MemDump_progressContainer::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(#eee 0, #fff calc(.15 * var(--dumpprogress-barwidth)), #fff calc(.58 * var(--dumpprogress-barwidth)), #ccc var(--dumpprogress-barwidth));
+  mix-blend-mode: multiply;
+}
+
+#MemDump_progressContainer.stopped {
+	filter: grayscale(100%);
+}
+#MemDump_progressContainer.error {
+	background: var(--mem-red) !important;
+}
+#MemDump_progressContainer.error * {
+	filter: grayscale(100%);
+	mix-blend-mode: multiply;
+	opacity: 0.25;
+}
+
+@keyframes bar-expand {
+	0%   {height: 0em;}
+	100% {height: var(--dumpprogress-barwidth);}
+}
+
+div[id^="MemDump_progress-"] {
+	height: var(--dumpprogress-barwidth);	
+	animation: bar-expand .25s ease-out forwards;
+	left: 0;
+	top: 0;
+}
+div#MemDump_progress-media {
+	--bar-color: var(--mem-yellow);
+	position: absolute;
+	inset: 0;
+}
+div#MemDump_progress-media.done {
+	background: var(--mem-green);
+}
+div[id^="MemDump_progress-thread"] {
+	--bar-color: var(--mem-lightblue);
+}
+div[id^="MemDump_progress-"] {
+	transition: background-position-x .5s;
+	background-image: linear-gradient(to left, transparent 50%, var(--bar-color) 50%);
+	background-size: 200% 110%;
+	background-position: 100%;
+	position: relative;
+}
+div[id^="MemDump_progress-"].resetting {
+	transition: background-position-x 0s .4s, opacity .3s;
+	opacity: 0;
+}
+div[id^="MemDump_progress-"]::before,
+div[id^="MemDump_progress-"]::after {
+	position: absolute;
+	bottom: 50%;
+	translate: 0 calc(50% - 1px);
+	font-family: "Arial", sans-serif;
+	font-size: 10px;
+	color: white;
+	text-shadow: 1px 1px 2px #000000, 1px 1px 2px #00000055, 0px 0px 1px #000000;
+	display: block;
+	width: max-content;
+}
+div[id^="MemDump_progress-"]::before {
+	left: 1em;
+}
+div[id^="MemDump_progress-"]::after {
+	right: 1em;
+}
+div[id^="MemDump_progress-"]:not(:only-child):not(:has(+ #MemDump_progress-media))::before {
+	content: attr(progress-label);
+}
+div[id^="MemDump_progress-"]::after {
+	content: attr(progress-ratio);
+}
+div[id^="MemDump_progress-"].off:not(:only-child):not(:has(+ #MemDump_progress-media)) {
+	animation: bar-expand 0.30s ease-out reverse forwards;
+	overflow-y: hidden;
+}
+
+div#MemDump_progress-batch {
+	--bar-color: var(--mem-darkerblue);
+}
+
+div[id^="MemDump_progress-"]:has(+ #MemDump_progress-media)::before,
+div[id^="MemDump_progress-"]:has(+ #MemDump_progress-media)::after {
+	content: '' !important;
+}
