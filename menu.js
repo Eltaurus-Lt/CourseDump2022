@@ -58,7 +58,7 @@ async function loadFromStorage(obj) {
 }
 
 async function loadSettings() {
-  let settings = await loadFromStorage('settings');
+  let settings = await loadFromStorage('settings') || default_settings;
 
   //initiate if accessed for the first time or a new setting is added
   let upd = false;
