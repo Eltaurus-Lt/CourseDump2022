@@ -117,7 +117,7 @@ chrome.runtime.onMessage.addListener(async (arg, sender, sendResponse) => {
 					// run scanning script
 					chrome.scripting.executeScript({
 						target: {tabId: ongoingTab}, 
-						files: ['dumpcourse.js']},
+						files: ['coursescan.js']},
 						(scanningFeedback) => {
 							if (chrome.runtime.lastError) {
 								console.log('Downloading tab was closed'); //during scan phase

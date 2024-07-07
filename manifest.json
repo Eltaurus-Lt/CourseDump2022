@@ -30,7 +30,7 @@
    "content_scripts": [
      {
        "matches": ["http://*.memrise.com/*", "https://*.memrise.com/*"],
-       "css": ["dumpstyle.css"]
+       "css": ["progressbars.css"]
      }
    ]
 }
