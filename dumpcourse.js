@@ -143,7 +143,7 @@ async function scanCourse(cidd, threadN) {
 	const table = [];
 
   // SCANNING LEVELS
-  let levels_done = 0;  
+  let levels_done = 0;
   let proceed = true; //fallback flag in case the number of levels is unavailable from meta or incorrect
   while ((proceed || levels_done < meta['number of levels']) && !stopped) {
     levels_done++;
@@ -395,8 +395,8 @@ async function scanCourse(cidd, threadN) {
 	meta['number of items'] = "~" + table.length;
   }
   if (table.length < meta['number of items']) {
-  	console.warn(`${cidd['cid']}: Some learnables have not been downloaded! (unignore words to download them)`);
-	meta['number of items'] = `${table.length}/${meta['number of items']}`;
+  	console.warn(`${cidd['cid']}: Only ${table.length} out of ${meta['number of items']} learnables have been downloaded! (you might want to check your internet connection and retry)`);
+	meta['number of items'] = `${table.length} of ${meta['number of items']}`;
   }
 
   //select non-empty fields
@@ -451,7 +451,7 @@ async function scanCourse(cidd, threadN) {
   };
   
   //add all files to global queue
-  file_queue.unshift([csv_encoded, `${course_folder}${course_filename}_(${meta['number of items'].toString().replace("/","_")}).csv`]);
+  file_queue.unshift([csv_encoded, `${course_folder}${course_filename}_(${meta['number of items'].toString()}).csv`]);
   if (settings["course_metadata"]) {
     file_queue.unshift([meta2txt(meta), `${course_folder}info.md`]);
     file_queue.unshift([meta['ava'], `${course_folder}${meta['author']}.${meta['ava'].split(".").slice(-1)}`]);
