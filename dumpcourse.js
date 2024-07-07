@@ -1,7 +1,7 @@
 ANKI_HEADERS = true;
 
 console.log('course dump settings: ', settings);
-console.log('course dump batch: ', cidds);
+console.log('course dump batch: ', JSON.stringify(cidds));
 
 function sleep(ms) {
 	return new Promise(resolve => setTimeout(resolve, ms));
@@ -384,6 +384,10 @@ async function scanCourse(cidd, threadN) {
     updScanProgress(threadN, cidd, isNaN(done_clamped) ? levels_done : done_clamped, meta['number of levels']);
   }
 
+  if (stopped) {
+    return "stopped";
+  }
+
   console.log('scanning complete - formatting data');
 
   //final number of learnables
@@ -459,11 +463,7 @@ async function scanCourse(cidd, threadN) {
   	});
   }
 
-  if (stopped) {
-    return "stopped";
-  } else {
-    return "completed";
-  }
+	return "completed";
 }
 
 async function scanThread(threadN, batch_size) {
