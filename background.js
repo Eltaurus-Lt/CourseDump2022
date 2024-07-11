@@ -1,3 +1,15 @@
+const preloadMenu = async () => {
+  if (!await chrome.offscreen.hasDocument()) {
+    await chrome.offscreen.createDocument({ 
+		url: "menu.html" ,
+		reasons: ["LOCAL_STORAGE"],
+		justification: 'preloading a popup menu'
+	});
+  }
+};
+preloadMenu();
+
+
 const apiTimeout = 25000;
 let ongoingTab = null;
 
