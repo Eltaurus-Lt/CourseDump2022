@@ -1,5 +1,5 @@
 # Memrise Course Dump
-This **Google Chrome** extension downloads word lists from [**Memrise**](https://memrise.com/) courses as `.csv` spreadsheets along with all the associated <ins>audio</ins> and <ins>video</ins> files. It also supports [batch download](https://github.com/Eltaurus-Lt/CourseDump2022#batch-download) of Memrise courses. The format of the downloaded data is suitable for subsequent import into [**Anki**](https://apps.ankiweb.net/). 
+This **Google Chrome** extension downloads word lists from [**Memrise**](https://memrise.com/) courses as `.csv` spreadsheets along with all associated <ins>images</ins>, <ins>audio</ins>, and <ins>video</ins> files. It also supports [batch download](https://github.com/Eltaurus-Lt/CourseDump2022#batch-download) of Memrise courses. The format of the downloaded data is suitable for subsequent import into [**Anki**](https://apps.ankiweb.net/). 
 
 The extension *does not* download personal study data (although it is planned to be added in the future). It also *does not* download the words you have marked as "ignored" on Memrise. You might want to unignore them before downloading a course or make a separate clean Memrise account specifically for downloading purposes.
 
@@ -24,7 +24,8 @@ At the top of this page click `Code` and then `Download ZIP` (Note, that the `Co
 2. Navigate to any page belonging to a course you want to download ([example-1](https://community-courses.memrise.com/community/course/1105/speak-esperanto-like-a-nativetm-1/), [example-2](https://app.memrise.com/community/course/2021573/french-1/3/))
 3. ⚠️ If you are downloading a course with a lot of media files, make sure you have the option `Ask where to save each file before downloading` in the **Chrome** settings (chrome://settings/downloads) disabled
 4. Press the extension icon and then click the "Download current course" button at the top of the menu
-![image](https://github.com/user-attachments/assets/22a70b34-e45e-4644-8ebe-e3c4bd777669)
+
+  ![image](https://github.com/user-attachments/assets/22a70b34-e45e-4644-8ebe-e3c4bd777669)
 <picture><source media="(prefers-color-scheme: dark)" srcset="https://user-images.githubusercontent.com/93875472/212484466-55d630f7-763b-44a9-a858-a7a8c5898948.png"><img src="https://user-images.githubusercontent.com/93875472/197039734-bd2efdf8-a6c6-4327-8617-f2d3a95fcb3a.png" alt="CourseDump2022 icon"></picture> on the toolbar
     <br>(if you skipped the last installation step, the extension icon will be located in a list opened by pressing the `Extensions` button <picture><source media="(prefers-color-scheme: dark)" srcset="https://user-images.githubusercontent.com/93875472/212448200-3a586992-2920-4d91-ae1b-aa7526b72d2a.png"><img src="https://user-images.githubusercontent.com/93875472/197036859-7c3ff1ab-a171-4408-8255-29ba6d8d8139.png" alt="Chrome extension icon"></picture> and then <picture><source media="(prefers-color-scheme: dark)" srcset="https://user-images.githubusercontent.com/93875472/212484476-4de62d82-525e-40cc-80ba-6901aa3398ea.png"><img src="https://user-images.githubusercontent.com/93875472/197040206-6c5298bd-0f68-418d-9efb-a3ce1b8d275d.png" alt="`CourseDump2022`"></picture>)
 *. A download can be interrupted at any point (by pressing the "Stop ongoing download" button, which will replace the "Download current course" item when there is a download in progress), but keep in mind that restarting a download will begin the whole process from scratch.
@@ -36,7 +37,7 @@ After that you should see a progress bar at the top, indicating the progress of 
  <img src="https://github.com/user-attachments/assets/9eaf8334-fe40-4a46-b371-7c56844719e4">
 </picture></p>
 
-When the scanning is complete, the extension will initiate the download of all associated files (the `.csv` file containing table data of the course alongside the course metadata and media files if you choose to download them). The progress is indicated by a yellow bar with the ratio on the right showing the number of downloaded files to the total number of files in the queue. The downloaded files should appear in your Chrome downloads directory, in a subfolder with the name comprised of the id, name, and author of that course.
+When the scanning is complete, the extension will initiate the download of all associated files (the `.csv` file containing table data of the course alongside the course metadata and media files if you choose to download them). The progress is indicated by a yellow bar with the ratio on the right showing the number of downloaded files to the total number of files in the queue.
 
 🚧
 
@@ -46,6 +47,10 @@ After a download is complete, you should see the progress bar turning green:
  <source media="(prefers-color-scheme: dark)" srcset="https://github.com/user-attachments/assets/94108260-efae-4f40-820f-8cf6fae8a001">
  <img src="https://github.com/user-attachments/assets/4fedfe1c-ee0a-463f-87f0-e596f17f8bed">
 </picture></p>
+
+The downloaded files should appear in your Chrome downloads directory, in a subfolder with the name comprised of the id, name, and author of that course.
+
+🚧
 
 ### Checking download results
 
@@ -152,22 +157,23 @@ A typical `Field mapping` for importing with media looks like this:
 
 ## Settings
 
-The settings for the extension are stored in `settings.json` file inside the extension root folder.
-For example, if you want the extension to download media by default without asking every time:
-1. Open `settings.json` in any text editor 
-2. Locate `"always_download_media": false` and change it to `"always_download_media": true`
-3. Save the file
+### Basic settings include the following toggles:
 
-The other available settings that can be changed in the same way:
+![image](https://github.com/user-attachments/assets/cb0f8d77-7101-4b4e-819d-f964d5516c81)
 
-| option                   | description                                                                        |
-| ------------------------ | ---------------------------------------------------------------------------------- |
-| display_anki_help_prompt | Setting to `false` disables the popup which links to this page after the download  |
-| batch_download           | Setting to `true` enables [batch download](https://github.com/Eltaurus-Lt/CourseDump2022#batch-download) of Memrise courses |
-| level_tags               | Setting to `false` removes column with hierarchical `course::level` tags from `.csv` |
-| extra_info               | Setting to `true` makes the extension to download additional word data and attributes if present |
-| collapse_columns         | Setting to `false` leaves empty columns in the `.csv` tables, so that the numbering of fields ([step 3.iii.](https://github.com/Eltaurus-Lt/CourseDump2022#simple-import-without-media)) would always be the same: 1 - _Learned word_, 2 - _Definition_, 3 - _Audio_, 4 - _Video_, 5 - _Tags_, 6-9 - _Extra fields_. |
+1. **Download media**: Enables downloading images, audio, and video files associated with a Memrise course
+2. **Extra fields**: Enables downloading all fields found in a course. Typical examples include "part of speech", "sample sentence", "transcription", "literal translation", etc. The labels for each field can be found in the downloaded `.csv` file. Turning this option off will limit fields to the basic set of the "Learnable", "Definition", "Audio", "Video", and "Tags" (the latter three can be also excluded by the respective settings)
+3. **Level tags**: Enables saving level structure of a Memrise course in a separate column in the format `course_name::level##` automatically converted to [hierarchical tags](https://docs.ankiweb.net/editing.html?highlight=tags#using-tags) when imported in Anki
+4. **Anki import prompt**: Enables a popup leading to this readme page after each download. If you are reading this, you already successfully found your way here and might want to turn it off
 
+### Advanced settings section:
+
+![image](https://github.com/user-attachments/assets/f90301a8-538a-44b6-9ffb-734b4e5f5bc8)
+
+5. **Learnable IDs**: Appends an additional column to the course spreadsheet containing a unique ID for each item. Can be used to manage duplicates inside Anki (if imported into the sorting field), or to cross-reference against other Memrise data downloaded separately, such as [archived mems](https://github.com/Eltaurus-Lt/MemDump)
+6. **Video files**: Allows excluding video files from a download: when turned off overwrites `Download media` setting for video files while leaving images and audio files unaffected (has no effect if the `Download media` toggle is turned off)
+7. **Skip media download**: Allows skipping media files during the file download phase. In contrast to the `Download media` setting, does not remove the respective columns from the spreadsheet when turned off. Can be helpful if a course spreadsheet needs to be updated by downloading it with different settings without downloading the whole media folder again.
+8. **Course metadata**: In addition to the course spreadsheet and media downloads three meta files: an `info.md` file containing text description of a course, a course thumbnail image, and a course author's avatar. When turned off, the course's spreadsheet and media folder (when applicable) will be placed directly into the Chrome download folder, instead of being bundeled together with meta files in a separate course folder.
 
 ## Discussion
 If you encounter errors, have further questions regarding the extension, or need any help with using the downloaded materials in Anki, please leave a comment in this thread: [An alternative to Memrise2Anki](https://forums.ankiweb.net/t/an-alternative-to-memrise2anki-support-thread/30084)
