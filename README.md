@@ -1,10 +1,10 @@
 # Memrise Course Dump
 This **Google Chrome** extension downloads word lists from [**Memrise**](https://memrise.com/) courses as `.csv` spreadsheets along with all the associated <ins>audio</ins> and <ins>video</ins> files. It also supports [batch download](https://github.com/Eltaurus-Lt/CourseDump2022#batch-download) of Memrise courses. The format of the downloaded data is suitable for subsequent import into [**Anki**](https://apps.ankiweb.net/). 
 
-The extension *does not* download personal study data (although such functionality can be added if requested). It also does not download the words you have marked as "ignored" on Memrise. You might want to unignore them before downloading a course or make a separate clean Memrise account specifically for downloading data from it.
+The extension *does not* download personal study data (although it is planned to be added in the future). It also "does not" download the words you have marked as "ignored" on Memrise. You might want to unignore them before downloading a course or make a separate clean Memrise account specifically for downloading purposes.
 
 ## Downloading the Extension
-At the top of this page click `Code` and then `Download ZIP` (Note, that the `Code` button might be hidden if your browser window is not wide enough)
+At the top of this page click `Code` and then `Download ZIP` (Note, that the `Code` button might be hidden if your browser window isn't wide enough)
 <p><picture>
   <source media="(prefers-color-scheme: dark)" srcset="https://user-images.githubusercontent.com/93875472/212448145-e33acf96-fbb7-4ee0-8f70-89d142582797.png">
   <img src="https://user-images.githubusercontent.com/93875472/212447995-ec0370a5-af67-4a7b-96ec-b7eb2dd4e803.png">
@@ -13,35 +13,51 @@ At the top of this page click `Code` and then `Download ZIP` (Note, that the `Co
 ## Installation
 1. [Download](https://github.com/Eltaurus-Lt/CourseDump2022/archive/refs/heads/main.zip) the ***CourseDump2022-main.zip*** archive and extract ***CourseDump2022-main*** folder from it. At this step, you can move the extension folder to any place in your filesystem.
 2. In *Google Chrome* click the `Extensions` button <picture><source media="(prefers-color-scheme: dark)" srcset="https://user-images.githubusercontent.com/93875472/212448200-3a586992-2920-4d91-ae1b-aa7526b72d2a.png"><img src="https://user-images.githubusercontent.com/93875472/197036859-7c3ff1ab-a171-4408-8255-29ba6d8d8139.png" alt="Chrome extension icon"></picture> and then <picture><source media="(prefers-color-scheme: dark)" srcset="https://user-images.githubusercontent.com/93875472/212448898-d8025f31-6981-482c-8c71-07d071ad97f7.png"><img src="https://user-images.githubusercontent.com/93875472/197037928-6c6c52f9-472f-44c0-9cbd-ef18d6a2cdda.png" alt="Manage extensions"></picture><br> 
-  (alternatively go to the Main menu <picture><source media="(prefers-color-scheme: dark)" srcset="https://user-images.githubusercontent.com/93875472/212449149-6576e8ca-38a7-471d-8f26-53e9bfe996f3.png"><img src="https://user-images.githubusercontent.com/93875472/197037696-a6258293-5de9-42c7-b971-d430abc5c7c5.png" alt="`Menu`"></picture> in the top right corner and click `More tools` -> `Extensions`) 
+  (alternatively go to the Main menu <picture><source media="(prefers-color-scheme: dark)" srcset="https://user-images.githubusercontent.com/93875472/212449149-6576e8ca-38a7-471d-8f26-53e9bfe996f3.png"><img src="https://user-images.githubusercontent.com/93875472/197037696-a6258293-5de9-42c7-b971-d430abc5c7c5.png" alt="`Menu`"></picture> in the top right corner and click `More tools` ➝ `Extensions`)
 3. Enable `Developer mode` (top right corner of the page)<br> <picture><source media="(prefers-color-scheme: dark)" srcset="https://user-images.githubusercontent.com/93875472/212449257-162c735c-4d62-4ccf-957d-af045aaa1115.png"><img src="https://user-images.githubusercontent.com/93875472/197039106-acc2abba-2a2d-4b4f-acc6-e2708341fc74.png" alt="Developer mode off->on"></picture>
 4. Choose `Load unpacked` (top left corner of the page) and select the ***CourseDump2022-main*** folder extracted in step 1
 5. (_optional_) Click the `Extensions` button from step 2 again and pin the extension to the toolbar by clicking the pin button<p>
   <picture><source media="(prefers-color-scheme: dark)" srcset="https://user-images.githubusercontent.com/93875472/212449407-f1b77649-57aa-4cdb-a713-c806a305d77b.png"><img src="https://user-images.githubusercontent.com/93875472/212449403-dee8e3df-36d6-42f0-bda6-85619813c0d4.png"></picture></p>
 
 ## Downloading a Memrise Course
-1. Make sure you are logged in on [Memrise](https://memrise.com/)
-2. Navigate to any page belonging to a course you want to download ([example-1](https://app.memrise.com/course/1105/speak-esperanto-like-a-nativetm-1/), [example-2](https://app.memrise.com/course/2021573/french-1/3/))
-3. If you are downloading a course with a lot of media files, make sure you have the option `Ask where to save each file before downloading` in the **Chrome** settings (chrome://settings/downloads) disabled
-4. Simply **click the extension icon** <picture><source media="(prefers-color-scheme: dark)" srcset="https://user-images.githubusercontent.com/93875472/212484466-55d630f7-763b-44a9-a858-a7a8c5898948.png"><img src="https://user-images.githubusercontent.com/93875472/197039734-bd2efdf8-a6c6-4327-8617-f2d3a95fcb3a.png" alt="CourseDump2022 icon"></picture> on the toolbar
-    <br>(if you skipped the last installation step, click the `Extensions` button <picture><source media="(prefers-color-scheme: dark)" srcset="https://user-images.githubusercontent.com/93875472/212448200-3a586992-2920-4d91-ae1b-aa7526b72d2a.png"><img src="https://user-images.githubusercontent.com/93875472/197036859-7c3ff1ab-a171-4408-8255-29ba6d8d8139.png" alt="Chrome extension icon"></picture> and then <picture><source media="(prefers-color-scheme: dark)" srcset="https://user-images.githubusercontent.com/93875472/212484476-4de62d82-525e-40cc-80ba-6901aa3398ea.png"><img src="https://user-images.githubusercontent.com/93875472/197040206-6c5298bd-0f68-418d-9efb-a3ce1b8d275d.png" alt="`CourseDump2022`"></picture>)
+1. Make sure you are logged in on [Memrise](https://community-courses.memrise.com/)
+2. Navigate to any page belonging to a course you want to download ([example-1](https://community-courses.memrise.com/community/course/1105/speak-esperanto-like-a-nativetm-1/), [example-2](https://app.memrise.com/community/course/2021573/french-1/3/))
+3. ⚠️ If you are downloading a course with a lot of media files, make sure you have the option `Ask where to save each file before downloading` in the **Chrome** settings (chrome://settings/downloads) disabled
+4. Press the extension icon and then click the "Download current course" button at the top of the menu <picture><source media="(prefers-color-scheme: dark)" srcset="https://user-images.githubusercontent.com/93875472/212484466-55d630f7-763b-44a9-a858-a7a8c5898948.png"><img src="https://user-images.githubusercontent.com/93875472/197039734-bd2efdf8-a6c6-4327-8617-f2d3a95fcb3a.png" alt="CourseDump2022 icon"></picture> on the toolbar
+    <br>(if you skipped the last installation step, the extension icon will be located in a list opened by pressing the `Extensions` button <picture><source media="(prefers-color-scheme: dark)" srcset="https://user-images.githubusercontent.com/93875472/212448200-3a586992-2920-4d91-ae1b-aa7526b72d2a.png"><img src="https://user-images.githubusercontent.com/93875472/197036859-7c3ff1ab-a171-4408-8255-29ba6d8d8139.png" alt="Chrome extension icon"></picture> and then <picture><source media="(prefers-color-scheme: dark)" srcset="https://user-images.githubusercontent.com/93875472/212484476-4de62d82-525e-40cc-80ba-6901aa3398ea.png"><img src="https://user-images.githubusercontent.com/93875472/197040206-6c5298bd-0f68-418d-9efb-a3ce1b8d275d.png" alt="`CourseDump2022`"></picture>)
+*. A download can be interrupted at any point (by pressing the "Stop ongoing download" button, which will replace the "Download current course" item when there is a download in progress), but keep in mind that restarting a download will begin the whole process from scratch.
  
-After that you should see a progress bar at the top, indicating the progress of the extension scanning the course's page:
+After that you should see a progress bar at the top, indicating the progress of the extension scanning the course's page with the ratio of the levels fetched to the total number of course levels in the top-right corner:
 
 <p><picture>
  <source media="(prefers-color-scheme: dark)" srcset="https://user-images.githubusercontent.com/93875472/212484712-9d9627cd-6766-4b45-af46-4809fc646dbf.png">
  <img src="https://user-images.githubusercontent.com/93875472/212484716-a5f3cb78-c150-438b-85a8-f8a6ad30d7ad.png">
 </picture></p>
 
-When the scanning is complete, the bar will start to fill with yellow, as the extension sends the `.csv` file, course metadata, and media files (if you choose to download them) to *Google Chrome* download queue. The downloaded files should appear in your downloads directory, in a subfolder named with the course's name and id, as well as the name of the author.
+When the scanning is complete, the extension will initiate the download of all associated files (the `.csv` file containing table data of the course alongside the course metadata and media files if you choose to download them). The progress is indicated by a yellow bar with the ratio on the right showing the number of downloaded files to the total number of files in the queue. The downloaded files should appear in your Chrome downloads directory, in a subfolder with the name comprised of the id, name, and author of that course.
+
+🚧
+
+After a download is complete, you should see the progress bar turning green:
+
+🚧
+
+### Checking download results
+
+🚧 numbers of words and media files
+🚧 failed downloads
 
 ### Batch download
 
-1. Make a list of urls of the Memrise courses to download in the `queue.txt` file found in the extension folder (make sure to write full urls, including the name of a course after its number – the examples are provided in the file)
-2. Set `"batch_download": true` ([changing settings](https://github.com/Eltaurus-Lt/CourseDump2022#settings))
-3. During the batch download the option of downloading media is defined by `always_download_media` parameter. So set `"always_download_media": true` to download all media files or `"always_download_media": false` to download none
-4. Open any [Memrise](https://memrise.com/) page and make sure you are logged in
-5. Click the extension icon <picture><source media="(prefers-color-scheme: dark)" srcset="https://user-images.githubusercontent.com/93875472/212484466-55d630f7-763b-44a9-a858-a7a8c5898948.png"><img src="https://user-images.githubusercontent.com/93875472/197039734-bd2efdf8-a6c6-4327-8617-f2d3a95fcb3a.png" alt="CourseDump2022 icon"></picture> 
+If you have multiple courses to download, instead of going through them one by one you can add them to a queue by pressing the respective button in the "Batch download" section of the extension menu on each of the courses' pages:
+
+🚧
+
+and then download them all at the same time by clicking the "Download all" button (the number in the brackets indicates the )
+
+import .txt
+
+memrise login
 
 ## Importing into Anki
 
