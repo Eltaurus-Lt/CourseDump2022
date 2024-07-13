@@ -23,15 +23,17 @@ At the top of this page click `Code` and then `Download ZIP` (Note, that the `Co
 1. Make sure you are logged in on [Memrise](https://community-courses.memrise.com/)
 2. Navigate to any page belonging to a course you want to download ([example-1](https://community-courses.memrise.com/community/course/1105/speak-esperanto-like-a-nativetm-1/), [example-2](https://app.memrise.com/community/course/2021573/french-1/3/))
 3. ⚠️ If you are downloading a course with a lot of media files, make sure you have the option `Ask where to save each file before downloading` in the **Chrome** settings (chrome://settings/downloads) disabled
-4. Press the extension icon and then click the "Download current course" button at the top of the menu <picture><source media="(prefers-color-scheme: dark)" srcset="https://user-images.githubusercontent.com/93875472/212484466-55d630f7-763b-44a9-a858-a7a8c5898948.png"><img src="https://user-images.githubusercontent.com/93875472/197039734-bd2efdf8-a6c6-4327-8617-f2d3a95fcb3a.png" alt="CourseDump2022 icon"></picture> on the toolbar
+4. Press the extension icon and then click the "Download current course" button at the top of the menu
+![image](https://github.com/user-attachments/assets/22a70b34-e45e-4644-8ebe-e3c4bd777669)
+<picture><source media="(prefers-color-scheme: dark)" srcset="https://user-images.githubusercontent.com/93875472/212484466-55d630f7-763b-44a9-a858-a7a8c5898948.png"><img src="https://user-images.githubusercontent.com/93875472/197039734-bd2efdf8-a6c6-4327-8617-f2d3a95fcb3a.png" alt="CourseDump2022 icon"></picture> on the toolbar
     <br>(if you skipped the last installation step, the extension icon will be located in a list opened by pressing the `Extensions` button <picture><source media="(prefers-color-scheme: dark)" srcset="https://user-images.githubusercontent.com/93875472/212448200-3a586992-2920-4d91-ae1b-aa7526b72d2a.png"><img src="https://user-images.githubusercontent.com/93875472/197036859-7c3ff1ab-a171-4408-8255-29ba6d8d8139.png" alt="Chrome extension icon"></picture> and then <picture><source media="(prefers-color-scheme: dark)" srcset="https://user-images.githubusercontent.com/93875472/212484476-4de62d82-525e-40cc-80ba-6901aa3398ea.png"><img src="https://user-images.githubusercontent.com/93875472/197040206-6c5298bd-0f68-418d-9efb-a3ce1b8d275d.png" alt="`CourseDump2022`"></picture>)
 *. A download can be interrupted at any point (by pressing the "Stop ongoing download" button, which will replace the "Download current course" item when there is a download in progress), but keep in mind that restarting a download will begin the whole process from scratch.
  
 After that you should see a progress bar at the top, indicating the progress of the extension scanning the course's page with the ratio of the levels fetched to the total number of course levels in the top-right corner:
 
 <p><picture>
- <source media="(prefers-color-scheme: dark)" srcset="https://user-images.githubusercontent.com/93875472/212484712-9d9627cd-6766-4b45-af46-4809fc646dbf.png">
- <img src="https://user-images.githubusercontent.com/93875472/212484716-a5f3cb78-c150-438b-85a8-f8a6ad30d7ad.png">
+ <source media="(prefers-color-scheme: dark)" srcset="https://github.com/user-attachments/assets/3a06cd9a-9ded-41c8-a630-fa428a8283d2">
+ <img src="https://github.com/user-attachments/assets/9eaf8334-fe40-4a46-b371-7c56844719e4">
 </picture></p>
 
 When the scanning is complete, the extension will initiate the download of all associated files (the `.csv` file containing table data of the course alongside the course metadata and media files if you choose to download them). The progress is indicated by a yellow bar with the ratio on the right showing the number of downloaded files to the total number of files in the queue. The downloaded files should appear in your Chrome downloads directory, in a subfolder with the name comprised of the id, name, and author of that course.
@@ -40,7 +42,10 @@ When the scanning is complete, the extension will initiate the download of all a
 
 After a download is complete, you should see the progress bar turning green:
 
-🚧
+<p><picture>
+ <source media="(prefers-color-scheme: dark)" srcset="https://github.com/user-attachments/assets/94108260-efae-4f40-820f-8cf6fae8a001">
+ <img src="https://github.com/user-attachments/assets/4fedfe1c-ee0a-463f-87f0-e596f17f8bed">
+</picture></p>
 
 ### Checking download results
 
@@ -51,11 +56,11 @@ After a download is complete, you should see the progress bar turning green:
 
 If you have multiple courses to download, instead of going through them one by one you can add them to a queue by pressing the respective button in the "Batch download" section of the extension menu on each of the courses' pages:
 
-🚧
+![image](https://github.com/user-attachments/assets/46a0e23d-6bfb-4450-a993-0c40ceca5223)
 
 and then download all queued courses at once by clicking the "Download all" button (the numeral in brackets indicates the total number of currently queued courses):
 
-🚧
+![image](https://github.com/user-attachments/assets/d6ca790c-58c4-4ef1-95ea-2dfece5ae42c)
 
 <sub>Note, that the download should still be initiated from (any) Memrise page since the extension needs your login to access the data.</sub>
 During the scanning phase of a batch download the progress for each course is displayed on a separate progress bar, marked by a course's name, with the total scanning progress showing on a separate bar at the bottom. The file download phase proceeds as usual, with files from all the courses being processed as a single large file queue:
@@ -64,7 +69,7 @@ During the scanning phase of a batch download the progress for each course is di
 
 If you have a list of courses in a text file somewhere (from one of the previous versions of the extension, for example), you can import it with the "Import course list" menu button:
 
-🚧
+![image](https://github.com/user-attachments/assets/e2b49059-dd30-4c98-a2a0-0de78c07c32d)
 
 The extension will accept practically any course url format (with the lines, not recognized as valid course urls being treated as text comments)
 <details>
@@ -91,7 +96,7 @@ Just make sure that each course url is placed on a separate line, and points to 
 Note, that duplicate courses are removed from the queue, which might result in the number of courses in the queue after import being less than the number of entries in the source text file.
 The list of currently queued courses can be displayed by pressing the "View queued courses" button (opens in a new tab):
 
-🚧
+![image](https://github.com/user-attachments/assets/41777822-5d6b-42ca-9106-fb34ef0285dc)
 
 This can also be used for editing the list by copy-pasting it to a text editor, making the necessary changes and then reimporting the result as a text file through the process described above.
 
