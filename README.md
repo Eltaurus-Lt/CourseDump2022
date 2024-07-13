@@ -52,7 +52,7 @@ The downloaded files should appear in your Chrome downloads directory, in a subf
 
 🚧
 
-### Checking download results
+#### Checking download results
 
 🚧 numbers of words and media files
 🚧 failed downloads
