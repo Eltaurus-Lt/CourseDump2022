@@ -53,11 +53,47 @@ If you have multiple courses to download, instead of going through them one by o
 
 🚧
 
-and then download them all at the same time by clicking the "Download all" button (the number in the brackets indicates the )
+and then download all queued courses at once by clicking the "Download all" button (the numeral in brackets indicates the total number of currently queued courses):
 
-import .txt
+🚧
 
-memrise login
+<sub>Note, that the download should still be initiated from (any) Memrise page since the extension needs your login to access the data.</sub>
+During the scanning phase of a batch download the progress for each course is displayed on a separate progress bar, marked by a course's name, with the total scanning progress showing on a separate bar at the bottom. The file download phase proceeds as usual, with files from all the courses being processed as a single large file queue:
+
+🚧
+
+If you have a list of courses in a text file somewhere (from one of the previous versions of the extension, for example), you can import it with the "Import course list" menu button:
+
+🚧
+
+The extension will accept practically any course url format (with the lines, not recognized as valid course urls being treated as text comments)
+<details>
+<summary>examples</summary>
+  
+  ```
+  https://community-courses.memrise.com/community/course/234546/breaking-into-japanese-literature/
+  https://community-courses.memrise.com/community/course/1098515/german-4
+  https://community-courses.memrise.com/community/course/1136018/
+  a plain-text comment
+  https://community-courses.memrise.com/community/course/1098188
+  community-courses.memrise.com/community/course/1891054/japanese-5/
+  https://community-courses.memrise.com/aprender/learn?course_id=5591215?recommendation_id=5144c220-f6cb-42d1-a677-ef922e3ddcb6
+  https://community-courses.memrise.com/aprender/review?category_id=963
+  community-courses.memrise.com/community/course/1136234/russisch-3
+  
+  community-courses.memrise.com/community/course/1136236
+  https://community-courses.memrise.com/community/course/43290/advanced-english-for-native-speakers/2/
+  community-courses.memrise.com/community/course/867/
+  ```
+</details>
+  
+Just make sure that each course url is placed on a separate line, and points to an existing course page. The latter might not be the case if, for example, your link was saved before Memrise moved the community courses (you can try updating community courses urls by autoreplacing `app.` domains in your list with `community-courses.`). 
+Note, that duplicate courses are removed from the queue, which might result in the number of courses in the queue after import being less than the number of entries in the source text file.
+The list of currently queued courses can be displayed by pressing the "View queued courses" button (opens in a new tab):
+
+🚧
+
+This can also be used for editing the list by copy-pasting it to a text editor, making the necessary changes and then reimporting the result as a text file through the process described above.
 
 ## Importing into Anki
 
