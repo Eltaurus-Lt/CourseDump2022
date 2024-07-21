@@ -11,9 +11,86 @@ const default_settings = {
   "videofiles_limit": 'Infinity',
 
   "max_level_skip": 5,
-  "max_extra_fields": 5, //attributes/ visible info/ hidden info each
+  "max_extra_fields": 5, //attributes/ visible info/ hidden info - each
   "parallel_download_limit": 9
 };
+
+const messages = {
+  "not memrise course": "Has to be used on a memrise.com course page",
+  "not memrise": "Has to be used from memrise.com",
+  "not a course": "Has to be used from a specific course page",
+  "already downloading": "A download is already in progress",
+
+  //confirms
+  "import queue": "Importing course list will overwrite all currently queued courses.\n Proceed?",
+  "restore settings": "Restore default settings?"
+}
+
+class menuButtons {
+  constructor () {
+    this.Download = document.getElementById("download-course");
+    this.Stop = document.getElementById("stop-download");
+    this.BatchAdd = document.getElementById("batch-add");
+    this.BatchDownload = document.getElementById("batch-download");
+    this.BatchView = document.getElementById("batch-view");
+    this.BatchImport = document.getElementById("batch-import");
+    this.BatchClear = document.getElementById("batch-clear");
+  }
+}
+
+class menuToggles {
+  constructor() {
+    this.DownloadMedia = document.getElementById("setting-downloadMedia");
+    this.ExtraFields = document.getElementById("setting-extraFields");
+    this.LevelTags = document.getElementById("setting-levelTags");
+    this.AnkiPrompt = document.getElementById("setting-ankiPrompt");
+    this.LearnableIds = document.getElementById("setting-learnableIds");
+    this.SkipMedia = document.getElementById("setting-skipMedia");
+    this.CourseMeta = document.getElementById("setting-courseMeta");
+  
+    this.Video = document.getElementById("setting-videoFiles");
+
+    this.all = document.querySelectorAll('input[type="checkbox"].toggle');
+  }
+
+  async toSettings() {
+    let current_settings = {
+      "download_media": this.DownloadMedia.checked,
+      "extra_fields": this.ExtraFields.checked,
+      "level_tags": this.LevelTags.checked,
+      "anki_import_prompt": this.AnkiPrompt.checked,
+    
+      "learnable_ids": this.LearnableIds.checked,
+      "skip_media_download": this.SkipMedia.checked,
+      "course_metadata": this.CourseMeta.checked,
+
+      "videofiles_limit": this.Video.checked ? 'Infinity' : 0
+    };
+
+    for (const [setting, default_value] of Object.entries(default_settings)) {
+      if (!(setting in current_settings && current_settings[setting] !== 'undefined')) {
+        current_settings[setting] = default_value;
+      }
+    }
+
+    saveToStorage({ 'settings': current_settings });
+  }
+  
+  async fromSettings() {
+    const settings = await loadSettings();
+
+    this.DownloadMedia.checked = settings["download_media"];
+    this.ExtraFields.checked = settings["extra_fields"];
+    this.LevelTags.checked = settings["level_tags"];
+    this.AnkiPrompt.checked = settings["anki_import_prompt"];
+  
+    this.LearnableIds.checked = settings["learnable_ids"];
+    this.SkipMedia.checked = settings["skip_media_download"];
+    this.CourseMeta.checked = settings["course_metadata"];
+
+    this.Video.checked = (settings["videofiles_limit"] > 0);
+  }
+}
 
 function extractNumericValue(string, key) {
 	const regex = new RegExp(`${key}(\\d+)`);
@@ -127,20 +204,14 @@ document.addEventListener('DOMContentLoaded', async () => {
    // window.close();
   }
 
-  const downloadButton = document.getElementById("download-course");
-  const stopButton = document.getElementById("stop-download");
-  const BatchAddButton = document.getElementById("batch-add");
-  const BatchDownloadButton = document.getElementById("batch-download");
-  const BatchViewButton = document.getElementById("batch-view");
-  const BatchImportButton = document.getElementById("batch-import");
-  const BatchClearButton = document.getElementById("batch-clear");
+  const buttons = new menuButtons();
 
   async function updCounters() {
     const queue = await loadQueue();
     const count = `${queue.length}`;
-    BatchDownloadButton.setAttribute("counter", count);
-    BatchViewButton.setAttribute("counter", count);
-    BatchClearButton.setAttribute("counter", count);
+    buttons.BatchDownload.setAttribute("counter", count);
+    buttons.BatchView.setAttribute("counter", count);
+    buttons.BatchClear.setAttribute("counter", count);
   }
 
   async function addToQueue() {
@@ -165,13 +236,13 @@ document.addEventListener('DOMContentLoaded', async () => {
       type: "coursedump_checkOngoing"
     }, (response) => {
       document.body.setAttribute("data-ongoing-download", response['ongoing-status']);
-      if (response['ongoing-status'] && BatchDownloadButton.title === "") {
-        BatchDownloadButton.title = "A download is already in progress";
+      if (response['ongoing-status'] && buttons.BatchDownload.title === "") {
+        buttons.BatchDownload.title = messages["already downloading"];
       }
-      if (!response['ongoing-status'] && BatchDownloadButton.title === "A download is already in progress") {
-        BatchDownloadButton.title = "";
+      if (!response['ongoing-status'] && buttons.BatchDownload.title === messages["already downloading"]) {
+        buttons.BatchDownload.title = "";
       }
-      stopButton.removeAttribute('disabled');
+      buttons.Stop.removeAttribute('disabled');
     });
   }
   
@@ -189,8 +260,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   });
 
   //stop button
-  stopButton.addEventListener('click', () => {
-    stopButton.setAttribute('disabled', true);
+  buttons.Stop.addEventListener('click', () => {
+    buttons.Stop.setAttribute('disabled', true);
     chrome.runtime.sendMessage({
         type: "coursedump_stopDownload",
       }, (response) => {
@@ -205,27 +276,27 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   //download and add buttons
   if (!domain) {
-    downloadButton.title = "Has to be used on a memrise.com course page";
-    BatchAddButton.title = "Has to be used on a memrise.com course page";
-    BatchDownloadButton.title = "Has to be used from memrise.com";
+    buttons.Download.title = messages["not memrise course"];
+    buttons.BatchAdd.title = messages["not memrise course"];
+    buttons.BatchDownload.title = messages["not memrise"];
   } else {
     if (!cid) {
-      downloadButton.title = "Has to be used from a specific course page";
-      BatchAddButton.title = "Has to be used from a specific course page";
+      buttons.Download.title = messages["not a course"];
+      buttons.BatchAdd.title = messages["not a course"];
     } else {
-      downloadButton.removeAttribute('disabled');
-      downloadButton.addEventListener('click', () => {
+      buttons.Download.removeAttribute('disabled');
+      buttons.Download.addEventListener('click', () => {
         if (document.body.getAttribute("data-ongoing-download") !== "true") {
           downloadCourses([cidd]);
         }
       });
 
-      BatchAddButton.removeAttribute('disabled');
-      BatchAddButton.addEventListener('click', addToQueue);
+      buttons.BatchAdd.removeAttribute('disabled');
+      buttons.BatchAdd.addEventListener('click', addToQueue);
     }
 
-    BatchDownloadButton.removeAttribute('disabled');
-    BatchDownloadButton.addEventListener('click', async () => {
+    buttons.BatchDownload.removeAttribute('disabled');
+    buttons.BatchDownload.addEventListener('click', async () => {
       const cidds = await loadQueue();
       if (cidds && cidds.length > 0 && document.body.getAttribute("data-ongoing-download") !== "true") {
         downloadCourses(cidds);
@@ -234,7 +305,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   //other batch buttons
-  BatchViewButton.addEventListener('click', async (event) => {
+  buttons.BatchView.addEventListener('click', async (event) => {
     const queue = await loadQueue(!event.ctrlKey);
 
     // let queueTab = window.open("data:text/html, <html contenteditable>","queueTab");
@@ -248,9 +319,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     queueTab.document.close();
   })
 
-  BatchImportButton.addEventListener('click', async () => {
+  buttons.BatchImport.addEventListener('click', async () => {
     const queue = await loadQueue();
-    if ((queue.length == 0) || confirm("Importing course list will overwrite all currently queued courses.\n Proceed?")) {
+    if ((queue.length == 0) || confirm(messages["import queue"])) {
       try {
         const pickerOpts = {
           types: [
@@ -284,8 +355,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   })
 
-  BatchClearButton.addEventListener('click', async () => {
-    if (BatchClearButton.getAttribute("counter") !== '0' && confirm("Clear the list of queued courses?")) {
+  buttons.BatchClear.addEventListener('click', async () => {
+    if (buttons.BatchClear.getAttribute("counter") !== '0' && confirm("Clear the list of queued courses?")) {
       saveToStorage({'queue': []});
       saveToStorage({'queue-text': []});
       updCounters();
@@ -294,69 +365,22 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 
   //settings
-  const toggleDownloadMedia = document.getElementById("setting-downloadMedia");
-  const toggleExtraFields = document.getElementById("setting-extraFields");
-  const toggleLevelTags = document.getElementById("setting-levelTags");
-  const toggleAnkiPrompt = document.getElementById("setting-ankiPrompt");
-  const toggleLearnableIds = document.getElementById("setting-learnableIds");
-  const toggleSkipMedia = document.getElementById("setting-skipMedia");
-  const toggleCourseMeta = document.getElementById("setting-courseMeta");
+  const toggles = new menuToggles();
 
-  const toggleVideo = document.getElementById("setting-videoFiles");
-
-  async function settingsFromToggles() {
-    let current_settings = {
-      "download_media": toggleDownloadMedia.checked,
-      "extra_fields": toggleExtraFields.checked,
-      "level_tags": toggleLevelTags.checked,
-      "anki_import_prompt": toggleAnkiPrompt.checked,
-    
-      "learnable_ids": toggleLearnableIds.checked,
-      "skip_media_download": toggleSkipMedia.checked,
-      "course_metadata": toggleCourseMeta.checked,
-
-      "videofiles_limit": toggleVideo.checked ? 'Infinity' : 0
-    };
-
-    for (const [setting, default_value] of Object.entries(default_settings)) {
-      if (!(setting in current_settings && current_settings[setting] !== 'undefined')) {
-        current_settings[setting] = default_value;
-      }
-    }
-
-    saveToStorage({ 'settings': current_settings });
-  }
-  
-  async function togglesFromSettings() {
-    const settings = await loadSettings();
-
-    toggleDownloadMedia.checked = settings["download_media"];
-    toggleExtraFields.checked = settings["extra_fields"];
-    toggleLevelTags.checked = settings["level_tags"];
-    toggleAnkiPrompt.checked = settings["anki_import_prompt"];
-  
-    toggleLearnableIds.checked = settings["learnable_ids"];
-    toggleSkipMedia.checked = settings["skip_media_download"];
-    toggleCourseMeta.checked = settings["course_metadata"];
-
-    toggleVideo.checked = (settings["videofiles_limit"] > 0);
-  }
-
-
-  togglesFromSettings();
+  toggles.fromSettings();
   //turn toggle animations on
   setTimeout(()=>document.querySelector('body').classList.add('animated'), 100);// awaiting above doesn't help (due to additional delay in css processing?)
 
-  document.querySelectorAll('input[type="checkbox"].toggle').forEach((checkbox) => {
+  toggles.all.forEach((checkbox) => {
     checkbox.addEventListener('change', (event) => {
-      settingsFromToggles();
+      toggles.toSettings();
     });
   });
 
   document.getElementById("settings-restore").addEventListener('click', async () => {
     if (confirm("Restore default settings?")) {
       saveToStorage({ 'settings': default_settings});
-      togglesFromSettings();
+      toggles.fromSettings();
     }
   })
 
