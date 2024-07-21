@@ -163,7 +163,7 @@ async function loadQueue(text = false) {
   return queue;
 }
 
-document.addEventListener('DOMContentLoaded', async () => {
+document.addEventListener('DOMContentLoaded', () => {setTimeout(async () => {
  
   // links
   document.getElementById("link-help").addEventListener('click', () => {
@@ -245,7 +245,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       buttons.Stop.removeAttribute('disabled');
     });
   }
-  
+
   updCounters();
   updOngoingStatus();
 
@@ -384,4 +384,4 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   })
 
-});
+}, 10)});
