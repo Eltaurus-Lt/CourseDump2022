@@ -166,23 +166,23 @@ A typical `Field mapping` for importing with media looks like this:
 
 ## Settings
 
-### Basic settings
+### Basic
 
 ![image](https://github.com/user-attachments/assets/cb0f8d77-7101-4b4e-819d-f964d5516c81)
 
 1. **Download media**: Enables downloading images, audio, and video files associated with a Memrise course
 2. **Extra fields**: Enables downloading all fields found in a course. Typical examples include "part of speech", "sample sentence", "transcription", "literal translation", etc. The labels for each field can be found in the downloaded `.csv` file. Turning this option off will limit fields to the basic set of the "Learnable", "Definition", "Audio", "Video", and "Tags" (the latter three can be also excluded by the respective settings)
-3. **Level tags**: Enables saving level structure of a Memrise course in a separate column in the format `course_name::level##` automatically converted to [hierarchical tags](https://docs.ankiweb.net/editing.html?highlight=tags#using-tags) when imported in Anki
-4. **Anki import prompt**: Enables a popup leading to this readme page after each download. If you are reading this, you already successfully found your way here and might want to turn it off
+3. **Level tags**: EAppends an additional column that Memrise course level structure in the format `course_name::level##`, which is automatically converted to [hierarchical tags](https://docs.ankiweb.net/editing.html?highlight=tags#using-tags) in Anki during import
+4. **Anki import prompt**: Enables a popup leading to the current readme page after each download. If you are reading this, you already successfully found your way here and might want to turn it off
 
-### Advanced settings
+### Advanced
 
 ![image](https://github.com/user-attachments/assets/f90301a8-538a-44b6-9ffb-734b4e5f5bc8)
 
 5. **Learnable IDs**: Appends an additional column to the course spreadsheet containing a unique ID for each item. Can be used to manage duplicates inside Anki (if imported into the sorting field), or to cross-reference against other Memrise data downloaded separately, such as [archived mems](https://github.com/Eltaurus-Lt/MemDump)
-6. **Video files**: Allows excluding video files from a download: when turned off overwrites `Download media` setting for video files while leaving images and audio files unaffected (has no effect if the `Download media` toggle is turned off)
-7. **Skip media download**: Allows skipping media files during the file download phase. In contrast to the `Download media` setting, does not remove the respective columns from the spreadsheet when turned off. Can be helpful if a course spreadsheet needs to be updated by downloading it with different settings without downloading the whole media folder again.
-8. **Course metadata**: In addition to the course spreadsheet and media downloads three meta files: an `info.md` file containing text description of a course, a course thumbnail image, and a course author's avatar. When turned off, the course's spreadsheet and media folder (when applicable) will be placed directly into the Chrome download folder, instead of being bundeled together with meta files in a separate course folder.
+6. **Video files**: Allows excluding video files from a download: when turned off overwrites the `Download media` setting for video files while leaving images and audio unaffected (has no effect if the `Download media` toggle is turned off)
+7. **Skip media download**: Allows skipping media files during the file download phase. In contrast to the `Download media` setting, does not remove the respective columns from the spreadsheet when turned off. Can be helpful if a course spreadsheet needs to be recompiled with different settings without downloading the whole media folder again
+8. **Course metadata**: In addition to the course spreadsheet and media enables downloading three metadata files: an `info.md` file containing text description of a course, the course's thumbnail image, and the course author's avatar. When turned off, the `.csv` spreadsheet and respective media folder (when applicable) will be placed directly into the Chrome download folder, instead of being bundled together with meta files in a separate course folder
 
 ## Discussion
 If you encounter errors, have further questions regarding the extension, or need any help with using the downloaded materials in Anki, please leave a comment in this thread: [An alternative to Memrise2Anki](https://forums.ankiweb.net/t/an-alternative-to-memrise2anki-support-thread/30084)
