@@ -166,7 +166,7 @@ A typical `Field mapping` for importing with media looks like this:
 
 ## Settings
 
-### Basic settings include the following toggles:
+### Basic settings
 
 ![image](https://github.com/user-attachments/assets/cb0f8d77-7101-4b4e-819d-f964d5516c81)
 
@@ -175,7 +175,7 @@ A typical `Field mapping` for importing with media looks like this:
 3. **Level tags**: Enables saving level structure of a Memrise course in a separate column in the format `course_name::level##` automatically converted to [hierarchical tags](https://docs.ankiweb.net/editing.html?highlight=tags#using-tags) when imported in Anki
 4. **Anki import prompt**: Enables a popup leading to this readme page after each download. If you are reading this, you already successfully found your way here and might want to turn it off
 
-### Advanced settings section:
+### Advanced settings
 
 ![image](https://github.com/user-attachments/assets/f90301a8-538a-44b6-9ffb-734b4e5f5bc8)
 
