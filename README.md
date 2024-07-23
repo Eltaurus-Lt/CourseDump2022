@@ -172,7 +172,7 @@ A typical `Field mapping` for importing with media looks like this:
 
 1. **Download media**: Enables downloading images, audio, and video files associated with a Memrise course
 2. **Extra fields**: Enables downloading all fields found in a course. Typical examples include "part of speech", "sample sentence", "transcription", "literal translation", etc. The labels for each field can be found in the downloaded `.csv` file. Turning this option off will limit fields to the basic set of the "Learnable", "Definition", "Audio", "Video", and "Tags" (the latter three can be also excluded by the respective settings)
-3. **Level tags**: EAppends an additional column that Memrise course level structure in the format `course_name::level##`, which is automatically converted to [hierarchical tags](https://docs.ankiweb.net/editing.html?highlight=tags#using-tags) in Anki during import
+3. **Level tags**: Appends an additional column that saves Memrise course level structure in the format `course_name::level##`, which is automatically converted to [hierarchical tags](https://docs.ankiweb.net/editing.html?highlight=tags#using-tags) in Anki during import
 4. **Anki import prompt**: Enables a popup leading to the current readme page after each download. If you are reading this, you already successfully found your way here and might want to turn it off
 
 ### Advanced
