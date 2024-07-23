@@ -45,7 +45,10 @@ When a download starts you should see a progress bar at the top of the course pa
 
 The scanning will be followed by downloading all associated files (the `.csv` file containing table data of the course alongside the course metadata and media files if you choose to download them). The progress is indicated by a yellow bar with the ratio on the right showing the number of downloaded files to the total number of files in the queue.
 
-🚧
+<p><picture>
+ <source media="(prefers-color-scheme: dark)" srcset="https://github.com/user-attachments/assets/94108260-efae-4f40-820f-8cf6fae8a001">
+ <img src="[https://github.com/user-attachments/assets/4fedfe1c-ee0a-463f-87f0-e596f17f8bed](https://github.com/user-attachments/assets/e702b698-311b-4dd8-9891-85cc62ac84e2)">
+</picture></p>
 
 After a download is complete, you should see the progress bar turning green:
 
