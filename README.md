@@ -1,4 +1,4 @@
-![image](https://github.com/user-attachments/assets/8f0af604-ba40-4f44-83b1-4850d3a55d2e)# Memrise Course Dump
+# Memrise Course Dump
 This **Google Chrome** extension downloads word lists from [**Memrise**](https://memrise.com/) courses as `.csv` spreadsheets along with all associated <ins>images</ins>, <ins>audio</ins>, and <ins>video</ins> files. It also supports [batch download](https://github.com/Eltaurus-Lt/CourseDump2022#batch-download) of Memrise courses. The format of the downloaded data is suitable for subsequent import into [**Anki**](https://apps.ankiweb.net/). 
 
 The extension *does not* download personal study data (although it is planned to be added in the future). It also *does not* download the words you have marked as "ignored" on Memrise. You might want to unignore them before downloading a course or make a separate clean Memrise account specifically for downloading purposes.
@@ -37,23 +37,23 @@ At the top of this page click `Code` and then `Download ZIP` (Note, that the `Co
     
  
 When a download starts you should see a progress bar at the top of the course page, indicating the progress of the extension scanning the course's contents with the ratio of the levels fetched to the total number of course levels in the top-right corner:
-
+<sub></sub>
 <p><picture>
- <source media="(prefers-color-scheme: dark)" srcset="https://github.com/user-attachments/assets/3a06cd9a-9ded-41c8-a630-fa428a8283d2">
+ <source media="(prefers-color-scheme: dark)" srcset="https://github.com/user-attachments/assets/84cbb9e0-e282-4136-86bf-18d097bf613b">
  <img src="https://github.com/user-attachments/assets/9df74fb2-b7d4-45ca-a809-8e969da2d895">
 </picture></p>
 
 The scanning will be followed by downloading all associated files (the `.csv` file containing table data of the course alongside the course metadata and media files if you choose to download them). The progress is indicated by a yellow bar with the ratio on the right showing the number of downloaded files to the total number of files in the queue.
 
 <p><picture>
- <source media="(prefers-color-scheme: dark)" srcset="https://github.com/user-attachments/assets/94108260-efae-4f40-820f-8cf6fae8a001">
+ <source media="(prefers-color-scheme: dark)" srcset="https://github.com/user-attachments/assets/f8d413fa-411e-4df1-a485-f591d84d05a1">
  <img src="https://github.com/user-attachments/assets/3b76a258-e6c8-45d8-914c-6739db27a6fe">
 </picture></p>
 
 After a download is complete, you should see the progress bar turning green:
 
 <p><picture>
- <source media="(prefers-color-scheme: dark)" srcset="https://github.com/user-attachments/assets/94108260-efae-4f40-820f-8cf6fae8a001">
+ <source media="(prefers-color-scheme: dark)" srcset="https://github.com/user-attachments/assets/bdcc7869-830b-43b7-995f-36403c4e0653">
  <img src="https://github.com/user-attachments/assets/0b6cb1fd-9114-4a9c-b356-da0dec19e07e">
 </picture></p>
 
@@ -62,6 +62,14 @@ The downloaded files should appear in your Chrome downloads directory, in a subf
 🚧
 
 #### Checking download results
+
+Memrise only displays the total number of items in a course beforehand if the course has been started by the user, or it is not divided into separate levels.
+
+If such a number is available it will be shown in brackets, e.g. ..._(123).csv. If you see that, you can be sure that all items (except the ignored ones!) from a course have been saved successfully (to verify that all media files have been successfully downloaded as well, you’ll need to compare the similar number at the end of the ..._media folder with the number of files inside it).
+
+If the apriori number is not available, the displayed figure will be based on the total number of items in the levels the extension managed to scrap and prefixed with a tilda to indicate an estimation, e.g. ..._(~77).csv. To verify that all items have been downloaded, you’ll have to compare this number to some independent evaluation (the easiest way would still be to press the Get started now button on the course page and check the value calculated by Memrise itself).
+
+If the number of items is available, but does not match the total number of downloaded items, both of them will be shown to indicate an incomplete download, e.g. ..._(42 of 58).csv. In such a case it’s worth checking the internet connection and repeating the download (no need to delete the files from the previous attempt or reload the page).
 
 🚧 numbers of words and media files
 🚧 failed downloads
@@ -116,7 +124,9 @@ This can also be used for editing the list by copy-pasting it to a text editor, 
 
 ## Importing into Anki
 
-### Choosing a note type
+>tl;dr: 
+
+### 1. Choosing a note type
 
 Before importing data into Anki you need to decide on the note type (card template) to use it with. You will be able to change it later – **the only important thing at this point is to have a note type with enough fields to accommodate all needed course data**. You can assess that by checking the number of columns in the downloaded `.csv` file (the "Level tags" column is special and does not require a field for import).
 There are several ways to go about it:
@@ -127,7 +137,15 @@ There are several ways to go about it:
 4. Use one of the templates provided by the Extension as a basis for your new Note Type In order to import templates into your Anki double-click the `Anki Templates.apkg` file found in the [***CourseDump2022-main***](https://github.com/Eltaurus-Lt/CourseDump2022#downloading-from-github) folder (or go to `File` -> `Import` in *Anki* and then select the `.apkg` file). It will create three Note Types for you - `Basic (with media)`, `Basic (and reversed card with media)`, and `Basic (reading, writing, and listening)` (the difference is in the number and types of questions they've been set up to produce) - any of these three can be used for importing `.csv` tables with audio and video fields. <br><sub>On top of that, importing the `Anki Templates.apkg` file adds a deck with three example cards to your Anki collection. This deck and the cards can be safely deleted right after if you don't need them.</sub> 
 5. If you only want to import the most basic data (learnable + definition) - any note type will do
 
-### Simple import without media
+### 2. Creating a deck
+
+<p><picture>
+ <source media="(prefers-color-scheme: dark)" srcset="https://github.com/user-attachments/assets/59757a1a-a8a3-4bbb-a424-26207a5d8310">
+ <img src="https://github.com/user-attachments/assets/2e0c5c1d-ef79-4f9f-91d2-d0eecf727247">
+</picture></p>
+
+### 3. Importing the spreadsheet
+
 1. In *Anki* click `File` and then `Import`
 2. Navigate to the `.csv` file created after [step 3 of downloading a course](https://github.com/Eltaurus-Lt/CourseDump2022#downloading-a-memrise-course)
 3. Adjust the import settings:
@@ -149,8 +167,18 @@ You can compare this number against the total number of words in the Memrise cou
  <img src="https://user-images.githubusercontent.com/93875472/196944394-95712a57-c13c-4bf2-bce3-574e55c02a1b.png" alt="Anki Browser Deck list">
 </picture></p>
 
+<p><picture>
+ <source media="(prefers-color-scheme: dark)" srcset="https://github.com/user-attachments/assets/583c08cd-5f5a-4f48-898e-c85f98d749cd">
+ <img src="https://github.com/user-attachments/assets/e467fd86-9b02-4328-9d3b-3976a33f5f27" alt="Anki Browser Deck list">
+</picture></p>
 
-### Full import with media
+<p><picture>
+ <source media="(prefers-color-scheme: dark)" srcset="https://github.com/user-attachments/assets/583c08cd-5f5a-4f48-898e-c85f98d749cd">
+ <img src="https://github.com/user-attachments/assets/e467fd86-9b02-4328-9d3b-3976a33f5f27" alt="Anki Browser Deck list">
+</picture></p>
+
+### 4. Moving media files
+
 The overall process is the same as [importing without media](https://github.com/Eltaurus-Lt/CourseDump2022#simple-import-without-media) with two differences:
 1. You need to move all media files from the course `..._media` subfolder they have been downloaded into to your Anki's `collection.media` folder. The default path on different systems is as follows:
     spoiler:
@@ -174,7 +202,14 @@ A typical `Field mapping` for importing with media looks like this:
 <p><picture>
  <source media="(prefers-color-scheme: dark)" srcset="https://user-images.githubusercontent.com/93875472/212491138-c8fdaf65-f666-4af9-bf71-db6b6cc8bed7.png">
  <img src="https://user-images.githubusercontent.com/93875472/200242551-5b2d4613-6cdd-4588-b472-ed24d3aac25e.png">
-</picture></p>    
+</picture></p>
+
+<p><picture>
+ <source media="(prefers-color-scheme: dark)" srcset="https://github.com/user-attachments/assets/a945f12e-803c-482e-bc88-40be14566fff">
+ <img src="https://github.com/user-attachments/assets/7f74b6c9-f47c-41b5-9aa7-31f5f0c3e70c">
+</picture></p>
+
+### 5. (optional) Adding metadata
 
 ## Settings
 
