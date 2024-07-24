@@ -1,4 +1,4 @@
-# Memrise Course Dump
+![image](https://github.com/user-attachments/assets/8f0af604-ba40-4f44-83b1-4850d3a55d2e)# Memrise Course Dump
 This **Google Chrome** extension downloads word lists from [**Memrise**](https://memrise.com/) courses as `.csv` spreadsheets along with all associated <ins>images</ins>, <ins>audio</ins>, and <ins>video</ins> files. It also supports [batch download](https://github.com/Eltaurus-Lt/CourseDump2022#batch-download) of Memrise courses. The format of the downloaded data is suitable for subsequent import into [**Anki**](https://apps.ankiweb.net/). 
 
 The extension *does not* download personal study data (although it is planned to be added in the future). It also *does not* download the words you have marked as "ignored" on Memrise. You might want to unignore them before downloading a course or make a separate clean Memrise account specifically for downloading purposes.
@@ -40,21 +40,21 @@ When a download starts you should see a progress bar at the top of the course pa
 
 <p><picture>
  <source media="(prefers-color-scheme: dark)" srcset="https://github.com/user-attachments/assets/3a06cd9a-9ded-41c8-a630-fa428a8283d2">
- <img src="https://github.com/user-attachments/assets/9eaf8334-fe40-4a46-b371-7c56844719e4">
+ <img src="https://github.com/user-attachments/assets/9df74fb2-b7d4-45ca-a809-8e969da2d895">
 </picture></p>
 
 The scanning will be followed by downloading all associated files (the `.csv` file containing table data of the course alongside the course metadata and media files if you choose to download them). The progress is indicated by a yellow bar with the ratio on the right showing the number of downloaded files to the total number of files in the queue.
 
 <p><picture>
  <source media="(prefers-color-scheme: dark)" srcset="https://github.com/user-attachments/assets/94108260-efae-4f40-820f-8cf6fae8a001">
- <img src="https://github.com/user-attachments/assets/e702b698-311b-4dd8-9891-85cc62ac84e2">
+ <img src="https://github.com/user-attachments/assets/3b76a258-e6c8-45d8-914c-6739db27a6fe">
 </picture></p>
 
 After a download is complete, you should see the progress bar turning green:
 
 <p><picture>
  <source media="(prefers-color-scheme: dark)" srcset="https://github.com/user-attachments/assets/94108260-efae-4f40-820f-8cf6fae8a001">
- <img src="https://github.com/user-attachments/assets/4fedfe1c-ee0a-463f-87f0-e596f17f8bed">
+ <img src="https://github.com/user-attachments/assets/0b6cb1fd-9114-4a9c-b356-da0dec19e07e">
 </picture></p>
 
 The downloaded files should appear in your Chrome downloads directory, in a subfolder with the name comprised of the id, name, and author of that course.
