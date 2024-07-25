@@ -130,7 +130,7 @@ This can also be used for editing the list by copy-pasting it to a text editor, 
 >    2. In Anki press `Tools` (top left menu) → `Manage Note Types` → `Add` → `Add: Basic` → put in a name (e.g. "Memrise - Japanese") → `OK` → `Fields` → add new/rename existing ones to match the columns from the `.csv` file ("Level tags" column excluded) → `Save` → close the window
 >2. Make a deck: press `Create Deck` (bottom center of the main Anki screen) → put in the course's name → `OK`
 >3. Import the spreadsheet: `File` (top left menu) → `Import` → browse to the `.csv` file → `Open` → set the `Notetype` and `Deck` (Import options section) to the ones created in the steps 1 and 2 → `Import` (top right corner) → wait for import to finish → close the window
->4. Move the media files (if the course has any): `Tools` (top left menu) → `Check Media` → `View Files` (bottom left corner) → copy all files **from inside** your downloaded course's "..._media" folder to the opened "collection.media" one → close all windows
+>4. Move the media files (if the course has any): `Tools` (top left menu) → `Check Media` → `View Files` (bottom left corner) → copy all files **from inside** your downloaded course's "..._media" subfolder to the opened "collection.media" one → close all windows
 
 ### 1. Choosing a note type
 
@@ -143,10 +143,10 @@ There are several alternative ways you can go from here:
 1. [Create a new note type](https://docs.ankiweb.net/editing.html#adding-a-note-type) by adding the required number of fields:
     1. Press `Tools` (top left menu) → `Manage Note Types`
     2. `Add` → `Add: Basic` (or clone any other template you wish to use as a basis)
-    3. Put in a name such as "Memrise – Japanese" (if you are importing several courses on the same language/topic with similar level structure you can use the same note type for all of them – it will make managing cards easier in the long run) → `OK`
+    3. Put in a name such as "Memrise – German" (if you are importing several courses on the same language/topic with similar level structure you can use the same note type for all of them – it will make managing cards easier in the long run) → `OK`
     4. Press `Fields` → `Add` to add new fields up to the number of columns from the `.csv` file (ignore the "Level tags" column – it is special and does not require a field for import). Names for fields and columns do not have to match, but it is a good idea to keep them the same. You can rename existing fields by selecting them and pressing `Rename` → When finished, press `Save` and close the window
    
-   Keep in mind, that **in order to see the content of a field during reviews, you will also have to edit the card templates** and put the field on the respective side of a card (refer to [the  Anki manual](https://docs.ankiweb.net/templates/intro.html) for all the necessary steps; when in doubt, feel free to ask, even basic, questions on [the forum](https://forums.ankiweb.net/)).
+   Keep in mind, that **in order to see the content of a field during reviews, you will also have to edit the card templates** and put the field on the respective side of a card (refer to [the Anki manual](https://docs.ankiweb.net/templates/intro.html) for all the necessary steps; when in doubt, feel free to ask, even basic, questions on [the forum](https://forums.ankiweb.net/)).
 2. Use **the dedicated [Memrise template](https://github.com/Eltaurus-Lt/Anki-Card-Templates?tab=readme-ov-file#memrise)**, which replicates the original Memrise design and most of its functionality. The template is set to have five fields by default: "Learnable", "Definition", "Audio" + two extra fields. The instructions for adding more fields or renaming the existing ones can be found in [the customization section](https://github.com/Eltaurus-Lt/Anki-Card-Templates?tab=readme-ov-file#customization). 
 3. For importing the most basic data (learnable + definition) – any note type will do, and you can simply use Anki's "Basic" one without any modifications.
 
@@ -169,71 +169,58 @@ Create a new deck for storing the cards made from the course:
     </picture></p>
   
 2. Put in the name of the course (you can copy the full name from the downloaded `info.md` file) ➝ press `OK`
-3. You can also set the course description from the same `info.md` as the deck description:
+3. You can also set the course description found in the same `info.md` as the deck description:
     1. Open the deck by clicking on its name
     2. Press `Description` at the bottom of the screen
     3. Copy the relevant text here
 4. To set a thumbnail you can use [this addon](https://github.com/Eltaurus-Lt/Lt-Anki-Addons/tree/main/Lstyle) and the image from the downloaded course folder.
 
+Note, that you will be able to easily search for items from any course/level in Anki browser using tags even if you don't make a separate deck for each course. Conversely, decks can be nested inside each other (via drag-and-drop), which can be used to group courses' decks by language/topic or subdivide a deck into subdecks representing levels.
+
 ### 3. Importing the spreadsheet
 
-1. In *Anki* click `File` and then `Import`
-2. Navigate to the `.csv` file created after [step 3 of downloading a course](https://github.com/Eltaurus-Lt/CourseDump2022#downloading-a-memrise-course)
-3. Adjust the import settings:
-    1. Indicate the Note Type you want to use in the `Type` field (if you don't have any particular Note Type in mind, the `Basic` one will do)
-    2. In the `Deck` field select the Deck you want cards to go into (you can create a new one from this menu by clicking a deck name after the `Deck` field and then `Add`)
-    3. Check the `Field mapping` (which column from the spreadsheet goes to which field (will be automatically correlated if names coincide))<p> 
-  <picture><source media="(prefers-color-scheme: dark)" srcset="https://user-images.githubusercontent.com/93875472/212490785-8b6e6090-91e8-4a80-a8af-8d836deedde2.png">
- <img src="https://user-images.githubusercontent.com/93875472/198799349-feb5d729-c33a-41e7-aa24-3d1af37e2943.png"></picture></p>
-  By default, the last column in `.csv` is filled with tags. All the fields from `.csv` that you don't want to import into Anki can be left out by selecting `Change` -> `Ignore field`. 
+1. Press `File` (top left menu) ➝ `Import`
+2. Browse to the `.csv` file in [the downloaded course's folder](https://github.com/Eltaurus-Lt/CourseDump2022#downloading-a-memrise-course) → `Open`
+3. Verify that the table in the "File" section looks good, set the `Notetype` and `Deck` in the "Import options" to the ones prepared in the previous steps:
+    <p><picture>
+     <source media="(prefers-color-scheme: dark)" srcset="https://github.com/user-attachments/assets/583c08cd-5f5a-4f48-898e-c85f98d749cd">
+     <img src="https://github.com/user-attachments/assets/e467fd86-9b02-4328-9d3b-3976a33f5f27" alt="Anki Browser Deck list">
+    </picture></p>
+4. Scroll down and adjust the "Field Mapping". This tab defines the correspondence between the Anki field names and the former Memrise field names (spreadsheet columns). All the matching names will be mapped to each other automatically (so you can skip this step if you named the fields in the chosen note type accordingly). The rest can be set up manually on the right side of the tab, by selecting the column names next to the names of the Anki fields, into which you would like to put the respective data. Columns that are not mapped to any fields will be skipped during import.
+    <p><picture>
+     <source media="(prefers-color-scheme: dark)" srcset="https://github.com/user-attachments/assets/a945f12e-803c-482e-bc88-40be14566fff">
+     <img src="https://github.com/user-attachments/assets/7f74b6c9-f47c-41b5-9aa7-31f5f0c3e70c">
+    </picture></p>
+5. Press `Import` in the top right corner. After the processing is done, you will see a report screen, with the "Overview" section indicating the overall count of imported notes:
+    <p><picture>
+     <source media="(prefers-color-scheme: dark)" srcset="https://user-images.githubusercontent.com/93875472/212490967-8432863f-f8de-4f52-9809-8cd23d5d2dd5.png">
+     <img src="https://user-images.githubusercontent.com/93875472/196944166-5fbbfec8-2415-46cd-919a-73330ca67dbb.png" alt="Anki Import report">
+    </picture></p>
+    You can check it against [the total number of items in the course](https://github.com/Eltaurus-Lt/CourseDump2022#checking-download-results). The "Details" section below will contain information on each individual note from the spreadsheet.
+    
+    You can also check out the imported notes after closing the import window by going to `Browse` (top center menu) and selecting your deck in the deck list on the left side 
+    <p><picture>
+     <source media="(prefers-color-scheme: dark)" srcset="https://user-images.githubusercontent.com/93875472/212490894-37ffd17e-d4c4-4d21-a9d1-a54430bf6f73.png">
+     <img src="https://user-images.githubusercontent.com/93875472/196944394-95712a57-c13c-4bf2-bce3-574e55c02a1b.png" alt="Anki Browser Deck list">
+    </picture></p>
 
-
-After you click the `Import` button you should see a message indicating how many notes have been imported:<p><picture>
- <source media="(prefers-color-scheme: dark)" srcset="https://user-images.githubusercontent.com/93875472/212490967-8432863f-f8de-4f52-9809-8cd23d5d2dd5.png">
- <img src="https://user-images.githubusercontent.com/93875472/196944166-5fbbfec8-2415-46cd-919a-73330ca67dbb.png" alt="Anki Import report">
-</picture></p>
-You can compare this number against the total number of words in the Memrise course you've been downloading. You can also check out the imported notes after clicking `Close` by going to `Browse` and selecting your deck in the deck list on the left side 
-<p><picture>
- <source media="(prefers-color-scheme: dark)" srcset="https://user-images.githubusercontent.com/93875472/212490894-37ffd17e-d4c4-4d21-a9d1-a54430bf6f73.png">
- <img src="https://user-images.githubusercontent.com/93875472/196944394-95712a57-c13c-4bf2-bce3-574e55c02a1b.png" alt="Anki Browser Deck list">
-</picture></p>
-
-<p><picture>
- <source media="(prefers-color-scheme: dark)" srcset="https://github.com/user-attachments/assets/583c08cd-5f5a-4f48-898e-c85f98d749cd">
- <img src="https://github.com/user-attachments/assets/e467fd86-9b02-4328-9d3b-3976a33f5f27" alt="Anki Browser Deck list">
-</picture></p>
 
 ### 4. Moving media files
 
-The overall process is the same as [importing without media](https://github.com/Eltaurus-Lt/CourseDump2022#simple-import-without-media) with two differences:
-1. You need to move all media files from the course `..._media` subfolder they have been downloaded into to your Anki's `collection.media` folder. The default path on different systems is as follows:
-    spoiler:
-    * Windows: `%APPDATA%\\Anki2\\[your Anki username]\\collection.media`
-    * Mac: `~/Library/Application Support/Anki2/[your Anki username]/collection.media` (the Library folder is hidden by default, but can be revealed in Finder by holding down the option key while clicking on the Go menu)
-    * Linux: `~/.local/share/Anki2/[your Anki username]/collection.media` for native installs or `~/.var/app/net.ankiweb.Anki/data/Anki2/[your Anki username]/collection.media` for flatpak installs
-  
-   you can also find the path by going to Anki's main menu -> check media
-    
-    **Note**, that you should move the files themselves, [**without the subfolder**](https://docs.ankiweb.net/importing.html#importing-media) containing them.
-3. In order to facilitate the further editing of cards in Anki, the extension lists media files in the spreadsheets as separate columns. Because of that, you will need a Note Type with more than two fields to be used for [step 3.i. of importing](https://github.com/Eltaurus-Lt/CourseDump2022#simple-import-without-media). If you don't already have such Note Type in mind (the `Basic` ones will not suffice in this case), you have two options:
-    *  (which you will be able to adjust to your liking at any point). 
-    * Modify an existing Note Type adding _Audio_ and/or _Video_ fields. To do so:
-        1. In *Anki* go to `Tools` -> `Manage Note Types`
-        2. Select a Note Type you would like to edit from the list (e.g. the `Basic` one)
-        3. Press `Fields` then `Add` buttons, and type a name (e.g. _Audio_. Repeat the adding for _Video_ and other extra fields as needed). <br><sub>You might want to clone the existing Note Type before adding fields though, so as to preserve the original. For that, before step b.: click Add -> select the Note Type from the list to clone -> `OK` -> enter a new name -> `OK` -> go to step b. and select the new Note Type.</sub>
+1. To locate the "collection.media" folder, in which Anki stores all media files, press `Tools` (top left menu) → `Check Media` → `View Files` (bottom left corner)
 
-    For additional information regarding the Note Types editing please refer to [this section of Anki manual](https://docs.ankiweb.net/templates/fields.html#basic-replacements). 
-    
-A typical `Field mapping` for importing with media looks like this:
-<p><picture>
- <source media="(prefers-color-scheme: dark)" srcset="https://user-images.githubusercontent.com/93875472/212491138-c8fdaf65-f666-4af9-bf71-db6b6cc8bed7.png">
- <img src="https://user-images.githubusercontent.com/93875472/200242551-5b2d4613-6cdd-4588-b472-ed24d3aac25e.png">
-</picture></p>
+    <details>
+    <summary>The default paths on different systems for opening the folder manually:</summary>
+      
+        * Windows: `%APPDATA%\Anki2\[your Anki username]\collection.media`
+        * Mac: `~/Library/Application Support/Anki2/[your Anki username]/collection.media` (the Library folder is hidden by default, but can be revealed in Finder by holding down the option key while clicking on the Go menu)
+        * Linux: `~/.local/share/Anki2/[your Anki username]/collection.media` for native installs or `~/.var/app/net.ankiweb.Anki/data/Anki2/[your Anki username]/collection.media` for flatpak installs
+    </details>   
 
-<p><picture>
- <source media="(prefers-color-scheme: dark)" srcset="https://github.com/user-attachments/assets/a945f12e-803c-482e-bc88-40be14566fff">
- <img src="https://github.com/user-attachments/assets/7f74b6c9-f47c-41b5-9aa7-31f5f0c3e70c">
-</picture></p>
+2. Move all the files from the course's "..._media" subfolder into the "collection.media" folder. Note, that you should move the files themselves, [**without the subfolder**](https://docs.ankiweb.net/importing.html#importing-media) containing them
+
+   To verify that all media files are properly referenced, after they have been completely moved close and reopen the `Tools` → `Check Media` window. If you don't see any missing or unused files from the imported course, everything is alright.
+    
 
 ## Settings
 
