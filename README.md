@@ -66,16 +66,16 @@ The downloaded files should appear in your Chrome downloads directory, in a subf
 
 #### Checking download results
 
-For convenience, the names of the downloaded ".csv" file and "..._media" folder have the counts for the total number of the downloaded items(words) and the number of the referenced media files appended at the end in the brackets.
+For convenience, the names of the downloaded ".csv" file and the "...\_media" folder have the counts for the total number of the downloaded items (words) and the number of the referenced media files appended at the end in the brackets.
 
-If the number in the spreadsheet filename appears without any additional indicators, e.g. "..._(123).csv", you can be sure that all items (**not counting the ignored ones!**) from a course have been saved successfully.
+If the number in the spreadsheet filename appears without any additional indicators, e.g. "...\_(123).csv", you can be sure that all items (**not counting the ignored ones**) from a course have been saved successfully. If the total number of the downloaded items does not match the count displayed on the Memrise page, both will be shown to indicate an incomplete download, e.g. "...\_(42 of 58).csv". In this instance, it is worth checking the internet connection and repeating the download.
 
-If the number of items is available, but does not match the total number of downloaded items, both of them will be shown to indicate an incomplete download, e.g. ..._(42 of 58).csv. In such a case it’s worth checking the internet connection and repeating the download (no need to delete the files from the previous attempt or reload the page).
+Unfortunately, Memrise displays the expected number on a course page only if the course has been started by the user or the course isn't split into levels. If this is not the case, the figure displayed in the ".csv" filename will be based on the total number of items in the levels the extension managed to scrap and prefixed with a tilde to indicate an estimation, e.g. "...\_(~77).csv". To verify that all items have been downloaded, you’ll need to compare this number to an independent evaluation (the easiest way would still be to enroll in the course by pressing the "Get started now" button, answering a couple of questions to enable the word count, and checking the main course page again to see the value displayed by Memrise).
 
-Unfortunately, Memrise displays the expected number on a course page only if the course has been started by the user or if it isn't split into levels. If this is not the case, the figure displayed in the ".csv" filename will be based on the total number of items in the levels the extension managed to scrap and prefixed with a tilde to indicate an estimation, e.g. "..._(~77).csv". To verify that all items have been downloaded, you’ll need to compare this number to an independent evaluation (the easiest way would still be to enroll in the course by pressing the "Get started now" button, answering a couple of questions to enable the word count, and checking the main course page again to see the value displayed by Memrise).
+For the media files, it is enough to compare the number at the end of the "...\_media" folder's name with the actual number of the files it contains. 
+If the two do not match, some files are likely to be missing due to connection issues (either on your side or on the side of the Memrise server). In most cases, simply retrying the download can fix the problem. You should not delete files from failed attempts – the extension will keep putting the files into the same media folder, resolving potential naming conflicts, so that even on unreliable networks several partially successful attempts can yield fully recovered course media data.
 
- (to verify that all media files have been successfully downloaded as well, you’ll need to compare the similar number at the end of the ..._media folder with the number of files inside it).
-🚧 failed downloads
+<sup>In some rare cases, however, Memrise courses might contain references to files that don't exist. Attempting to download a course with a broken link will result in the progress bar turning red during the download, and the respective error appearing on the "Manage extensions" page.</sup>
 
 ### Batch download
 
