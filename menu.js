@@ -384,4 +384,4 @@ document.addEventListener('DOMContentLoaded', () => {setTimeout(async () => {
     }
   })
 
-}, 10)});
+}, 100)});
