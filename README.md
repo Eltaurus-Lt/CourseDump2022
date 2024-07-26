@@ -1,5 +1,5 @@
 # Memrise Course Dump
-This **Google Chrome** extension downloads word lists from [**Memrise**](https://memrise.com/) courses as `.csv` spreadsheets along with all associated <ins>images</ins>, <ins>audio</ins>, and <ins>video</ins> files. It also supports [batch download](https://github.com/Eltaurus-Lt/CourseDump2022#batch-download) of Memrise courses. The format of the downloaded data is suitable for subsequent import into [**Anki**](https://apps.ankiweb.net/). 
+This **Google Chrome** extension downloads word lists from [**Memrise**](https://memrise.com/) courses as ".csv" spreadsheets along with all associated <ins>images</ins>, <ins>audio</ins>, and <ins>video</ins> files. It also supports [batch download](https://github.com/Eltaurus-Lt/CourseDump2022#batch-download) of Memrise courses. The format of the downloaded data is suitable for subsequent import into [**Anki**](https://apps.ankiweb.net/). 
 
 The extension *does not* download personal study data (although it is planned to be added in the future). It also *does not* download the words you have marked as "ignored" on Memrise. You might want to unignore them before downloading a course or make a separate clean Memrise account specifically for downloading purposes.
 
@@ -43,7 +43,7 @@ When a download starts you should see a progress bar at the top of the course pa
  <img src="https://github.com/user-attachments/assets/9df74fb2-b7d4-45ca-a809-8e969da2d895">
 </picture></p>
 
-The scanning will be followed by downloading all associated files (the `.csv` file containing table data of the course alongside the course metadata and media files if you choose to download them). The progress is indicated by a yellow bar with the ratio on the right showing the number of downloaded files to the total number of files in the queue.
+The scanning will be followed by downloading all associated files (the ".csv" file containing table data of the course alongside the course metadata and media files if you choose to download them). The progress is indicated by a yellow bar with the ratio on the right showing the number of downloaded files to the total number of files in the queue:
 
 <p><picture>
  <source media="(prefers-color-scheme: dark)" srcset="https://github.com/user-attachments/assets/f8d413fa-411e-4df1-a485-f591d84d05a1">
@@ -57,26 +57,29 @@ After a download is complete, you should see the progress bar turning green:
  <img src="https://github.com/user-attachments/assets/0b6cb1fd-9114-4a9c-b356-da0dec19e07e">
 </picture></p>
 
-The downloaded files should appear in your Chrome downloads directory, in a subfolder with the name comprised of the id, name, and author of that course.
+The downloaded files should appear in your Chrome downloads directory, in a subfolder with the name comprised of the id, name, and author of that course:
 
-🚧
+<p><picture>
+ <source media="(prefers-color-scheme: dark)" srcset="https://github.com/user-attachments/assets/9921a71a-d513-4112-882f-8434a302cf44">
+ <img src="https://github.com/user-attachments/assets/653a14f4-ff82-4edc-af1a-217482361bee">
+</picture></p>
 
 #### Checking download results
 
-Memrise only displays the total number of items in a course beforehand if the course has been started by the user, or it is not divided into separate levels.
+For convenience, the names of the downloaded ".csv" file and "..._media" folder have the counts for the total number of the downloaded items(words) and the number of the referenced media files appended at the end in the brackets.
 
-If such a number is available it will be shown in brackets, e.g. ..._(123).csv. If you see that, you can be sure that all items (except the ignored ones!) from a course have been saved successfully (to verify that all media files have been successfully downloaded as well, you’ll need to compare the similar number at the end of the ..._media folder with the number of files inside it).
-
-If the apriori number is not available, the displayed figure will be based on the total number of items in the levels the extension managed to scrap and prefixed with a tilda to indicate an estimation, e.g. ..._(~77).csv. To verify that all items have been downloaded, you’ll have to compare this number to some independent evaluation (the easiest way would still be to press the Get started now button on the course page and check the value calculated by Memrise itself).
+If the number in the spreadsheet filename appears without any additional indicators, e.g. "..._(123).csv", you can be sure that all items (**not counting the ignored ones!**) from a course have been saved successfully.
 
 If the number of items is available, but does not match the total number of downloaded items, both of them will be shown to indicate an incomplete download, e.g. ..._(42 of 58).csv. In such a case it’s worth checking the internet connection and repeating the download (no need to delete the files from the previous attempt or reload the page).
 
-🚧 numbers of words and media files
+Unfortunately, Memrise displays the expected number on a course page only if the course has been started by the user or if it isn't split into levels. If this is not the case, the figure displayed in the ".csv" filename will be based on the total number of items in the levels the extension managed to scrap and prefixed with a tilde to indicate an estimation, e.g. "..._(~77).csv". To verify that all items have been downloaded, you’ll need to compare this number to an independent evaluation (the easiest way would still be to enroll in the course by pressing the "Get started now" button, answering a couple of questions to enable the word count, and checking the main course page again to see the value displayed by Memrise).
+
+ (to verify that all media files have been successfully downloaded as well, you’ll need to compare the similar number at the end of the ..._media folder with the number of files inside it).
 🚧 failed downloads
 
 ### Batch download
 
-If you have multiple courses to download, instead of going through them one by one you can add them to a queue by pressing the respective button in the "Batch download" section of the extension menu on each of the courses' pages:
+If you have multiple courses to download, instead of going through them one by one it is more convenient to add them to a queue by pressing the respective button in the "Batch download" section of the extension menu on each of the courses' pages:
 
 ![image](https://github.com/user-attachments/assets/46a0e23d-6bfb-4450-a993-0c40ceca5223)
 
@@ -84,12 +87,12 @@ and then download all queued courses at once by clicking the "Download all" butt
 
 ![image](https://github.com/user-attachments/assets/d6ca790c-58c4-4ef1-95ea-2dfece5ae42c)
 
-<sub>Note, that the download should still be initiated from (any) Memrise page since the extension needs your login to access the data.</sub>
-During the scanning phase of a batch download the progress for each course is displayed on a separate progress bar, marked by a course's name, with the total scanning progress showing on a separate bar at the bottom. The file download phase proceeds as usual, with files from all the courses being processed as a single large file queue:
+<sub>Note, that the download should still be initiated from (any) Memrise page since the extension needs an active Memrise login to access the data.</sub>
+During the scanning phase of a batch download the progress for each course is displayed on a separate progress bar, marked by a course's name, with the total scanning progress showing on a separate bar at the bottom. The file download phase proceeds as usual, with files from all the courses being processed together as a single stack:
 
 🚧
 
-If you have a list of courses in a text file somewhere (from one of the previous versions of the extension, for example), you can import it with the "Import course list" menu button:
+If you have a list of courses in a text file somewhere (from one of the previous versions of the extension, for example), it can be imported with the "Import course list" menu button:
 
 ![image](https://github.com/user-attachments/assets/e2b49059-dd30-4c98-a2a0-0de78c07c32d)
 
@@ -126,17 +129,17 @@ This can also be used for editing the list by copy-pasting it to a text editor, 
 
 >tl;dr (most basic import):
 >1. Make a note type:
->    1. Open the downloaded `.csv` file → look at the number and names of the columns
->    2. In Anki press `Tools` (top left menu) → `Manage Note Types` → `Add` → `Add: Basic` → put in a name (e.g. "Memrise - Japanese") → `OK` → `Fields` → add new/rename existing ones to match the columns from the `.csv` file ("Level tags" column excluded) → `Save` → close the window
+>    1. Open the downloaded ".csv" file → look at the number and names of the columns
+>    2. In Anki press `Tools` (top left menu) → `Manage Note Types` → `Add` → `Add: Basic` → put in a name (e.g. "Memrise - Japanese") → `OK` → `Fields` → add new/rename existing ones to match the columns from the ".csv" file ("Level tags" column excluded) → `Save` → close the window
 >2. Make a deck: press `Create Deck` (bottom center of the main Anki screen) → put in the course's name → `OK`
->3. Import the spreadsheet: `File` (top left menu) → `Import` → browse to the `.csv` file → `Open` → set the `Notetype` and `Deck` (Import options section) to the ones created in the steps 1 and 2 → `Import` (top right corner) → wait for import to finish → close the window
+>3. Import the spreadsheet: `File` (top left menu) → `Import` → browse to the ".csv" file → `Open` → set the `Notetype` and `Deck` (Import options section) to the ones created in the steps 1 and 2 → `Import` (top right corner) → wait for import to finish → close the window
 >4. Move the media files (if the course has any): `Tools` (top left menu) → `Check Media` → `View Files` (bottom left corner) → copy all files **from inside** your downloaded course's "..._media" subfolder to the opened "collection.media" one → close all windows
 
 ### 1. Choosing a note type
 
 _Note types_ are, essentially, the Anki equivalent of Memrise database templates (with course-level settings and card templates packed inside). 
 The important thing at this step is to prepare such a **template with enough fields to accommodate all required columns of the imported course** (anything else can be modified afterward).
-You can check what columns a course has by opening the downloaded `.csv` file and looking at the row that starts with "#columns:" at the top of the table.
+You can check what columns a course has by opening the downloaded ".csv" file and looking at the row that starts with "#columns:" at the top of the table.
 
 There are several alternative ways you can go from here:
 
@@ -144,7 +147,7 @@ There are several alternative ways you can go from here:
     1. Press `Tools` (top left menu) → `Manage Note Types`
     2. `Add` → `Add: Basic` (or clone any other template you wish to use as a basis)
     3. Put in a name such as "Memrise – German" (if you are importing several courses on the same language/topic with similar level structure you can use the same note type for all of them – it will make managing cards easier in the long run) → `OK`
-    4. Press `Fields` → `Add` to add new fields up to the number of columns from the `.csv` file (ignore the "Level tags" column – it is special and does not require a field for import). Names for fields and columns do not have to match, but it is a good idea to keep them the same. You can rename existing fields by selecting them and pressing `Rename` → When finished, press `Save` and close the window
+    4. Press `Fields` → `Add` to add new fields up to the number of columns from the ".csv" file (ignore the "Level tags" column – it is special and does not require a field for import). Names for fields and columns do not have to match, but it is a good idea to keep them the same. You can rename existing fields by selecting them and pressing `Rename` → When finished, press `Save` and close the window
    
    Keep in mind, that **in order to see the content of a field during reviews, you will also have to edit the card templates** and put the field on the respective side of a card (refer to [the Anki manual](https://docs.ankiweb.net/templates/intro.html) for all the necessary steps; when in doubt, feel free to ask, even basic, questions on [the forum](https://forums.ankiweb.net/)).
 2. Use **the dedicated [Memrise template](https://github.com/Eltaurus-Lt/Anki-Card-Templates?tab=readme-ov-file#memrise)**, which replicates the original Memrise design and most of its functionality. The template is set to have five fields by default: "Learnable", "Definition", "Audio" + two extra fields. The instructions for adding more fields or renaming the existing ones can be found in [the customization section](https://github.com/Eltaurus-Lt/Anki-Card-Templates?tab=readme-ov-file#customization). 
@@ -180,7 +183,7 @@ Note, that you will be able to easily search for items from any course/level in 
 ### 3. Importing the spreadsheet
 
 1. Press `File` (top left menu) ➝ `Import`
-2. Browse to the `.csv` file in [the downloaded course's folder](https://github.com/Eltaurus-Lt/CourseDump2022#downloading-a-memrise-course) → `Open`
+2. Browse to the ".csv" file in [the downloaded course's folder](https://github.com/Eltaurus-Lt/CourseDump2022#downloading-a-memrise-course) → `Open`
 3. Verify that the table in the "File" section looks good, set the `Notetype` and `Deck` in the "Import options" to the ones prepared in the previous steps:
     <p><picture>
      <source media="(prefers-color-scheme: dark)" srcset="https://github.com/user-attachments/assets/583c08cd-5f5a-4f48-898e-c85f98d749cd">
@@ -229,7 +232,7 @@ Note, that you will be able to easily search for items from any course/level in 
 ![image](https://github.com/user-attachments/assets/cb0f8d77-7101-4b4e-819d-f964d5516c81)
 
 1. **Download media**: Enables downloading images, audio, and video files associated with a Memrise course
-2. **Extra fields**: Enables downloading all fields found in a course. Typical examples include "part of speech", "sample sentence", "transcription", "literal translation", etc. The labels for each field can be found in the downloaded `.csv` file. Turning this option off will limit fields to the basic set of the "Learnable", "Definition", "Audio", "Video", and "Tags" (the latter three can be also excluded by the respective settings)
+2. **Extra fields**: Enables downloading all fields found in a course. Typical examples include "part of speech", "sample sentence", "transcription", "literal translation", etc. The labels for each field can be found in the downloaded ".csv" file. Turning this option off will limit fields to the basic set of the "Learnable", "Definition", "Audio", "Video", and "Tags" (the latter three can be also excluded by the respective settings)
 3. **Level tags**: Appends an additional column that saves Memrise course level structure in the format `course_name::level##`, which is automatically converted to [hierarchical tags](https://docs.ankiweb.net/editing.html?highlight=tags#using-tags) in Anki during import
 4. **Anki import prompt**: Enables a popup leading to the current readme page after each download. If you are reading this, you already successfully found your way here and might want to turn it off
 
@@ -240,7 +243,7 @@ Note, that you will be able to easily search for items from any course/level in 
 5. **Learnable IDs**: Appends an additional column to the course spreadsheet containing a unique ID for each item. Can be used to manage duplicates inside Anki (if imported into the sorting field), or to cross-reference against other Memrise data downloaded separately, such as [archived mems](https://github.com/Eltaurus-Lt/MemDump)
 6. **Video files**: Allows excluding video files from a download: when turned off overwrites the `Download media` setting for video files while leaving images and audio unaffected (has no effect if the `Download media` toggle is turned off)
 7. **Skip media download**: Allows skipping media files during the file download phase. In contrast to the `Download media` setting, does not remove the respective columns from the spreadsheet when turned off. It can be helpful if a course spreadsheet needs to be recompiled with different settings without downloading the whole media folder again
-8. **Course metadata**: Enables downloading three metadata files in addition to the basic spreadsheet and media: an `info.md` file containing the text description of a course, the course's thumbnail image, and the course author's avatar. When turned off, the `.csv` spreadsheet and respective media folder (when applicable) will be placed directly into the Chrome download folder, instead of being bundled together with meta files in a separate course folder
+8. **Course metadata**: Enables downloading three metadata files in addition to the basic spreadsheet and media: an `info.md` file containing the text description of a course, the course's thumbnail image, and the course author's avatar. When turned off, the ".csv" spreadsheet and respective media folder (when applicable) will be placed directly into the Chrome download folder, instead of being bundled together with meta files in a separate course folder
 
 ## Discussion
 If you encounter errors, have further questions regarding the extension, or need any help with using the downloaded materials in Anki, please leave a comment in this thread: [An alternative to Memrise2Anki](https://forums.ankiweb.net/t/an-alternative-to-memrise2anki-support-thread/30084)
