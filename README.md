@@ -28,9 +28,12 @@ At the top of this page click `Code` and then `Download ZIP` (Note, that the `Co
 >3. 🚩 **If you are downloading a course with a lot of media files** 🚩, make sure you have disabled the option `Ask where to save each file before downloading` in the Chrome settings (chrome://settings/downloads)
 >4. Press the extension icon and then click the "Download current course" button at the top of the menu
 >   
->    ![image](https://github.com/user-attachments/assets/22a70b34-e45e-4644-8ebe-e3c4bd777669)
+>    <p><picture>
+>       <source media="(prefers-color-scheme: dark)" srcset="https://github.com/user-attachments/assets/8fac02f4-3940-4092-8125-58c4cb1ac4ca">
+>       <img src="https://github.com/user-attachments/assets/21b49afd-ac4a-4b23-8f65-c179a46c2a37">
+>    </picture></p>
 >
->    <sub>(if you don't see the extension icon on the toolbar, click the `Extensions` button <picture><source media="(prefers-color-scheme: dark)" srcset="https://user-images.githubusercontent.com/93875472/212448200-3a586992-2920-4d91-ae1b-aa7526b72d2a.png"><img src="https://user-images.githubusercontent.com/93875472/197036859-7c3ff1ab-a171-4408-8255-29ba6d8d8139.png" alt="Chrome extension icon"></picture> to locate it)</sub>
+>    <sub>(if you don't see the extension icon on the toolbar, click the `Extensions` button <picture><source media="(prefers-color-scheme: dark)" srcset="https://github.com/user-attachments/assets/6cca563b-8149-421b-a217-0664c3b872f2"><img src="https://github.com/user-attachments/assets/89838937-f887-4aa7-bff9-9f5293fa04cb" alt="Chrome extension icon"></picture> to locate it)</sub>
 >
 >5. \* **A download can be interrupted at any point** by pressing the `Stop ongoing download`, which will replace the `Download current course` button whenever there is a download in progress, but keep in mind that restarting a download will begin the whole process from scratch.
 >---
@@ -90,9 +93,14 @@ and then download all queued courses at once by clicking the "Download all" butt
 
 <sup>Note, that the download should still be initiated from (any) Memrise page since the extension needs an active Memrise login to access the data.</sup>
 
-During the scanning phase of a batch download the progress for each course is displayed on a separate progress bar, marked by a course's name, with the total scanning progress showing on a separate bar at the bottom. The file download phase proceeds as usual, with files from all the courses being processed together as a single stack:
+During the scanning phase of a batch download the progress for each course is displayed on a separate progress bar, marked by a course's name, with the total scanning progress showing on a separate bar at the bottom:
 
-🚧
+<p><picture>
+ <source media="(prefers-color-scheme: dark)" srcset="https://github.com/user-attachments/assets/ec1e3a4f-56e0-4bf2-a127-f04d0598da70">
+ <img src="https://github.com/user-attachments/assets/bdb14159-3c9c-4075-92ec-410bcac2ac62">
+</picture></p>
+
+The file download phase proceeds from there as usual, with files from all the courses being processed together as a single stack.
 
 If you have a list of courses in a text file somewhere (from one of the previous versions of the extension, for example), it can be imported with the "Import course list" menu button:
 
@@ -182,14 +190,18 @@ Create a new deck for storing the cards made from the course:
 
 Note, that you will be able to easily search for items from any course/level in Anki browser using tags even if you don't make a separate deck for each course. Conversely, decks can be nested inside each other (via drag-and-drop), which can be used to group courses' decks by language/topic or subdivide a deck into subdecks representing levels.
 
+![image]()
+![image]()
+
+
 ### 3. Importing the spreadsheet
 
 1. Press `File` (top left menu) → `Import`
 2. Browse to the ".csv" file in [the downloaded course's folder](https://github.com/Eltaurus-Lt/CourseDump2022#downloading-a-memrise-course) → `Open`
 3. Verify that the table in the "File" section looks good, set the `Notetype` and `Deck` in the "Import options" to the ones prepared in the previous steps:
     <p><picture>
-     <source media="(prefers-color-scheme: dark)" srcset="https://github.com/user-attachments/assets/583c08cd-5f5a-4f48-898e-c85f98d749cd">
-     <img src="https://github.com/user-attachments/assets/e467fd86-9b02-4328-9d3b-3976a33f5f27" alt="Anki Browser Deck list">
+     <source media="(prefers-color-scheme: dark)" srcset="https://github.com/user-attachments/assets/2e976fa9-9bd6-44e0-a75f-ac7c1e985808">
+     <img src="https://github.com/user-attachments/assets/b61ae599-08c9-4510-8f6c-050cd1ab563a" alt="Anki Browser Deck list">
     </picture></p>
 4. Scroll down and adjust the "Field Mapping". This tab defines the correspondence between the Anki field names and the former Memrise field names (spreadsheet columns). All the matching names will be mapped to each other automatically (so you can skip this step if you named the fields in the chosen note type accordingly). The rest can be set up manually on the right side of the tab, by selecting the column names next to the names of the Anki fields, into which you would like to put the respective data. Columns that are not mapped to any fields will be skipped during import.
     <p><picture>
