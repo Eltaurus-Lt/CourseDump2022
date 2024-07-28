@@ -160,7 +160,11 @@ There are several alternative ways you can go from here:
     4. Press `Fields` → `Add` to add new fields up to the number of columns from the ".csv" file (ignore the "Level tags" column – it is special and does not require a field for import). Names for fields and columns do not have to match, but it is a good idea to keep them the same. You can rename existing fields by selecting them and pressing `Rename` → When finished, press `Save` and close the window
    
    Keep in mind, that **in order to see the content of a field during reviews, you will also have to edit the card templates** and put the field on the respective side of a card (refer to [the Anki manual](https://docs.ankiweb.net/templates/intro.html) for all the necessary steps; when in doubt, feel free to ask, even basic, questions on [the forum](https://forums.ankiweb.net/)).
-2. Use **the dedicated [Memrise template](https://github.com/Eltaurus-Lt/Anki-Card-Templates?tab=readme-ov-file#memrise)**, which replicates the original Memrise design and most of its functionality. The template is set to have five fields by default: "Learnable", "Definition", "Audio" + two extra fields. The instructions for adding more fields or renaming the existing ones can be found in [the customization section](https://github.com/Eltaurus-Lt/Anki-Card-Templates?tab=readme-ov-file#customization). 
+2. Use **the dedicated [Memrise template](https://github.com/Eltaurus-Lt/Anki-Card-Templates?tab=readme-ov-file#memrise)**, which replicates the original Memrise design and most of its functionality. The template is set to have five fields by default: "Learnable", "Definition", "Audio" + two extra fields. The instructions for adding more fields or renaming the existing ones can be found in [the customization section](https://github.com/Eltaurus-Lt/Anki-Card-Templates?tab=readme-ov-file#customization).
+    <p><picture>
+       <source media="(prefers-color-scheme: dark)" srcset="https://github.com/user-attachments/assets/57c646dc-0a49-4dfc-a5ea-e46a13bcd5b3">
+       <img src="https://github.com/user-attachments/assets/f106c0a0-0c0b-4ca1-9cd7-6c54105289dd" width="50%">
+    </picture></p>
 3. For importing the most basic data (learnable + definition) – any note type will do, and you can simply use Anki's "Basic" one without any modifications.
 
    For basic data with media (audio and video) you can use any of the templates provided with the Extension – "Basic (with media)", "Basic (and reversed card with media)", "Basic (reading, writing, and listening)", which differ in the number and types of questions they've been set up to produce. To import the templates:
@@ -169,7 +173,7 @@ There are several alternative ways you can go from here:
    2. The previous step creates an example deck with three cards in your Anki collection. This deck and the cards can be safely deleted right away if you don't need them.
 
    For making any adjustments to these templates refer to point 1 of this list
-5. Look for a template elsewhere. Anki templates are distributed freely by users and can be found all over the internet. [AnkiWeb](https://ankiweb.net/shared/decks?search=template) is a good place to start
+4. Look for a template elsewhere. Anki templates are distributed freely by users and can be found all over the internet. [AnkiWeb](https://ankiweb.net/shared/decks?search=template) is a good place to start
 
 ### 2. Making a deck (optional)
 
@@ -189,10 +193,6 @@ Create a new deck for storing the cards made from the course:
 4. To set a thumbnail you can use [this addon](https://github.com/Eltaurus-Lt/Lt-Anki-Addons/tree/main/Lstyle) and the image from the downloaded course folder.
 
 Note, that you will be able to easily search for items from any course/level in Anki browser using tags even if you don't make a separate deck for each course. Conversely, decks can be nested inside each other (via drag-and-drop), which can be used to group courses' decks by language/topic or subdivide a deck into subdecks representing levels.
-
-![image]()
-![image]()
-
 
 ### 3. Importing the spreadsheet
 
