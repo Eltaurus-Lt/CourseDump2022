@@ -127,7 +127,7 @@ The extension will accept practically any course url format (with the lines, not
   ```
 </details>
   
-Just make sure that each course url is placed on a separate line, and points to an existing course page. The latter might not be the case if, for example, your link was saved before Memrise moved the community courses (you can try updating community courses urls by autoreplacing `app.` domains in your list with `community-courses.`). 
+Just make sure that each course url is placed on a separate line, and points to an existing course page. The latter might not be the case if, for example, your link was saved before Memrise moved the community courses (you can try updating community courses urls by autoreplacing "app." domains in your list with "community-courses."). 
 Note, that duplicate courses are removed from the queue, which might result in the number of courses in the queue after import being less than the number of entries in the source text file.
 The list of currently queued courses can be displayed by pressing the "View queued courses" button (opens in a new tab):
 
@@ -181,27 +181,35 @@ Create a new deck for storing the cards made from the course:
 
 1. Press `Create Deck` at the bottom of the main screen:
     <p><picture>
-     <source media="(prefers-color-scheme: dark)" srcset="https://github.com/user-attachments/assets/59757a1a-a8a3-4bbb-a424-26207a5d8310">
-     <img src="https://github.com/user-attachments/assets/2e0c5c1d-ef79-4f9f-91d2-d0eecf727247">
+     <source media="(prefers-color-scheme: dark)" srcset="https://github.com/user-attachments/assets/e4c10846-62cf-461c-90a8-4bf0c264077b">
+     <img src="https://github.com/user-attachments/assets/a985d8a8-c0bb-4909-ae83-341b6c97e94a">
     </picture></p>
   
 2. Put in the name of the course (you can copy the full name from the downloaded `info.md` file) → press `OK`
 3. You can also set the course description found in the same `info.md` as the deck description:
     1. Open the deck by clicking on its name
+        <p><picture>
+          <source media="(prefers-color-scheme: dark)" srcset="https://github.com/user-attachments/assets/181e7746-4c0b-4da9-a8d0-424b7cb3c950">
+          <img src="https://github.com/user-attachments/assets/2bf808a4-b2f0-4b01-9556-31b7392a775b">
+        </picture></p>
     2. Press `Description` at the bottom of the screen
-    3. Copy the relevant text here
+        <p><picture>
+          <source media="(prefers-color-scheme: dark)" srcset="https://github.com/user-attachments/assets/87b28a6b-aa58-43a0-841b-3f8340e40c9f">
+          <img src="https://github.com/user-attachments/assets/236facaf-5360-496b-8a05-d229c2171648">
+        </picture></p>
+    3. Copy the relevant text in the appeared window
 4. To set a thumbnail you can use [this addon](https://github.com/Eltaurus-Lt/Lt-Anki-Addons/tree/main/Lstyle) and the image from the downloaded course folder.
 
-Note, that you will be able to easily search for items from any course/level in Anki browser using tags even if you don't make a separate deck for each course. Conversely, decks can be nested inside each other (via drag-and-drop), which can be used to group courses' decks by language/topic or subdivide a deck into subdecks representing levels.
+Note, that decks can be nested inside each other (via drag-and-drop) to group courses' decks by language/topic or subdivide a deck into subdecks representing levels. However, in Anki, you are able to quickly search for items from any course/level using tags even if you skip this step entirely and don't make a separate deck for each course.
 
 ### 3. Importing the spreadsheet
 
 1. Press `File` (top left menu) → `Import`
 2. Browse to the ".csv" file in [the downloaded course's folder](https://github.com/Eltaurus-Lt/CourseDump2022#downloading-a-memrise-course) → `Open`
-3. Verify that the table in the "File" section looks good, set the `Notetype` and `Deck` in the "Import options" to the ones prepared in the previous steps:
+3. Verify that the table in the "File" section looks good and set the `Notetype` and `Deck` in the "Import options" section below to the ones prepared in the previous steps:
     <p><picture>
-     <source media="(prefers-color-scheme: dark)" srcset="https://github.com/user-attachments/assets/2e976fa9-9bd6-44e0-a75f-ac7c1e985808">
-     <img src="https://github.com/user-attachments/assets/b61ae599-08c9-4510-8f6c-050cd1ab563a" alt="Anki Browser Deck list">
+     <source media="(prefers-color-scheme: dark)" srcset="https://github.com/user-attachments/assets/a8aa02d0-6648-4b39-836e-8858e1c8e764">
+     <img src="https://github.com/user-attachments/assets/31cfc540-4301-49ea-a7f3-503e2aa02096" alt="Anki Browser Deck list">
     </picture></p>
 4. Scroll down and adjust the "Field Mapping". This tab defines the correspondence between the Anki field names and the former Memrise field names (spreadsheet columns). All the matching names will be mapped to each other automatically (so you can skip this step if you named the fields in the chosen note type accordingly). The rest can be set up manually on the right side of the tab, by selecting the column names next to the names of the Anki fields, into which you would like to put the respective data. Columns that are not mapped to any fields will be skipped during import.
     <p><picture>
@@ -210,17 +218,16 @@ Note, that you will be able to easily search for items from any course/level in 
     </picture></p>
 5. Press `Import` in the top right corner. After the processing is done, you will see a report screen, with the "Overview" section indicating the overall count of imported notes:
     <p><picture>
-     <source media="(prefers-color-scheme: dark)" srcset="https://user-images.githubusercontent.com/93875472/212490967-8432863f-f8de-4f52-9809-8cd23d5d2dd5.png">
-     <img src="https://user-images.githubusercontent.com/93875472/196944166-5fbbfec8-2415-46cd-919a-73330ca67dbb.png" alt="Anki Import report">
+     <source media="(prefers-color-scheme: dark)" srcset="https://github.com/user-attachments/assets/d5190b9c-5d2e-4ad4-a4ed-1040da3102d5">
+     <img src="https://github.com/user-attachments/assets/01dead5d-e113-4a57-8cc7-ec77f09c7804" alt="Anki Import report">
     </picture></p>
     You can check it against [the total number of items in the course](https://github.com/Eltaurus-Lt/CourseDump2022#checking-download-results). The "Details" section below will contain information on each individual note from the spreadsheet.
     
-    You can also check out the imported notes after closing the import window by going to `Browse` (top center menu) and selecting your deck in the deck list on the left side 
+    You will also be able to see the imported notes at any time by going to `Browse` (top center menu) and selecting your deck in the deck list on the left side 
     <p><picture>
-     <source media="(prefers-color-scheme: dark)" srcset="https://user-images.githubusercontent.com/93875472/212490894-37ffd17e-d4c4-4d21-a9d1-a54430bf6f73.png">
-     <img src="https://user-images.githubusercontent.com/93875472/196944394-95712a57-c13c-4bf2-bce3-574e55c02a1b.png" alt="Anki Browser Deck list">
+     <source media="(prefers-color-scheme: dark)" srcset="https://github.com/user-attachments/assets/378820b7-79f4-4485-9eec-aa97fb105e02">
+     <img src="https://github.com/user-attachments/assets/f87e25db-0e36-426c-a2d7-a9f6f3feda7d">
     </picture></p>
-
 
 ### 4. Moving media files
 
