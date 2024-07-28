@@ -127,7 +127,7 @@ The extension will accept practically any course url format (with the lines, not
   ```
 </details>
   
-Just make sure that each course url is placed on a separate line, and points to an existing course page. The latter might not be the case if, for example, your link was saved before Memrise moved the community courses (you can try updating community courses urls by autoreplacing "app." domains in your list with "community-courses."). 
+Just make sure that each course url is placed on a separate line and points to an existing course page. The latter might not be the case if, for example, your link was saved before Memrise moved the community courses (you can try updating community courses urls by autoreplacing "app." domains in your list with "community-courses."). 
 Note, that duplicate courses are removed from the queue, which might result in the number of courses in the queue after import being less than the number of entries in the source text file.
 The list of currently queued courses can be displayed by pressing the "View queued courses" button (opens in a new tab):
 
@@ -135,7 +135,7 @@ The list of currently queued courses can be displayed by pressing the "View queu
 
 This can also be used for editing the list by copy-pasting it to a text editor, making the necessary changes, and then re-importing the result as a text file through the process described above.
 
-## Importing into Anki
+## 💡 Importing into Anki
 
 >tl;dr (most basic import):
 >1. Make a note type:
@@ -221,7 +221,7 @@ Note, that decks can be nested inside each other (via drag-and-drop) to group co
      <source media="(prefers-color-scheme: dark)" srcset="https://github.com/user-attachments/assets/d5190b9c-5d2e-4ad4-a4ed-1040da3102d5">
      <img src="https://github.com/user-attachments/assets/01dead5d-e113-4a57-8cc7-ec77f09c7804" alt="Anki Import report">
     </picture></p>
-    You can check it against [the total number of items in the course](https://github.com/Eltaurus-Lt/CourseDump2022#checking-download-results). The "Details" section below will contain information on each individual note from the spreadsheet.
+    You can compare it against [the total number of items in the course](https://github.com/Eltaurus-Lt/CourseDump2022#checking-download-results). The "Details" section below will contain information on each individual note from the spreadsheet.
     
     You will also be able to see the imported notes at any time by going to `Browse` (top center menu) and selecting your deck in the deck list on the left side 
     <p><picture>
