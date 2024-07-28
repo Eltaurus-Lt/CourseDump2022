@@ -160,7 +160,7 @@ There are several alternative ways you can go from here:
     4. Press `Fields` → `Add` to add new fields up to the number of columns from the ".csv" file (ignore the "Level tags" column – it is special and does not require a field for import). Names for fields and columns do not have to match, but it is a good idea to keep them the same. You can rename existing fields by selecting them and pressing `Rename` → When finished, press `Save` and close the window
    
    Keep in mind, that **in order to see the content of a field during reviews, you will also have to edit the card templates** and put the field on the respective side of a card (refer to [the Anki manual](https://docs.ankiweb.net/templates/intro.html) for all the necessary steps; when in doubt, feel free to ask, even basic, questions on [the forum](https://forums.ankiweb.net/)).
-2. Use **the dedicated [Memrise template](https://github.com/Eltaurus-Lt/Anki-Card-Templates?tab=readme-ov-file#memrise)**, which replicates the original Memrise design and most of its functionality. The template is set to have five fields by default: "Learnable", "Definition", "Audio" + two extra fields. The instructions for adding more fields or renaming the existing ones can be found in [the customization section](https://github.com/Eltaurus-Lt/Anki-Card-Templates?tab=readme-ov-file#customization).
+2. Use **the dedicated [Memrise template](https://github.com/Eltaurus-Lt/Anki-Card-Templates#memrise)**, which replicates the original Memrise design and most of its functionality. The template is set to have five fields by default: "Learnable", "Definition", "Audio" + two extra fields. The instructions for adding more fields or renaming the existing ones can be found in [the customization section](https://github.com/Eltaurus-Lt/Anki-Card-Templates#customization).
     <p><picture>
        <source media="(prefers-color-scheme: dark)" srcset="https://github.com/user-attachments/assets/57c646dc-0a49-4dfc-a5ea-e46a13bcd5b3">
        <img src="https://github.com/user-attachments/assets/f106c0a0-0c0b-4ca1-9cd7-6c54105289dd" width="50%">
@@ -205,7 +205,7 @@ Note, that decks can be nested inside each other (via drag-and-drop) to group co
 ### 3. Importing the spreadsheet
 
 1. Press `File` (top left menu) → `Import`
-2. Browse to the ".csv" file in [the downloaded course's folder](https://github.com/Eltaurus-Lt/CourseDump2022#downloading-a-memrise-course) → `Open`
+2. Browse to the ".csv" file in [the downloaded course's folder](https://github.com/Eltaurus-Lt/CourseDump2022#-downloading-a-memrise-course) → `Open`
 3. Verify that the table in the "File" section looks good and set the `Notetype` and `Deck` in the "Import options" section below to the ones prepared in the previous steps:
     <p><picture>
      <source media="(prefers-color-scheme: dark)" srcset="https://github.com/user-attachments/assets/a8aa02d0-6648-4b39-836e-8858e1c8e764">
@@ -221,6 +221,7 @@ Note, that decks can be nested inside each other (via drag-and-drop) to group co
      <source media="(prefers-color-scheme: dark)" srcset="https://github.com/user-attachments/assets/d5190b9c-5d2e-4ad4-a4ed-1040da3102d5">
      <img src="https://github.com/user-attachments/assets/01dead5d-e113-4a57-8cc7-ec77f09c7804" alt="Anki Import report">
     </picture></p>
+    
     You can compare it against [the total number of items in the course](https://github.com/Eltaurus-Lt/CourseDump2022#checking-download-results). The "Details" section below will contain information on each individual note from the spreadsheet.
     
     You will also be able to see the imported notes at any time by going to `Browse` (top center menu) and selecting your deck in the deck list on the left side 
