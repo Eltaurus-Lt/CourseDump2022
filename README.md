@@ -169,7 +169,7 @@ There are several alternative ways you can go from here:
 
    For basic data with media (audio and video) you can use any of the templates provided with the Extension – "Basic (with media)", "Basic (and reversed card with media)", "Basic (reading, writing, and listening)", which differ in the number and types of questions they've been set up to produce. To import the templates:
    
-   1. Double-click the `Anki Templates.apkg` file found in the [***CourseDump2022-main***](https://github.com/Eltaurus-Lt/CourseDump2022?tab=readme-ov-file#downloading-from-github) folder (alternatively, press `File` → `Import` inside Anki and browse to the `.apkg` file)
+   1. Double-click the `Anki Templates.apkg` file found in the [***CourseDump2022-main***](https://github.com/Eltaurus-Lt/CourseDump2022?tab=readme-ov-file#downloading-the-extension) folder (alternatively, press `File` → `Import` inside Anki and browse to the `.apkg` file)
    2. The previous step creates an example deck with three cards in your Anki collection. This deck and the cards can be safely deleted right away if you don't need them.
 
    For making any adjustments to these templates refer to point 1 of this list
