@@ -1,5 +1,5 @@
 # Memrise Course Dump
-This **Google Chrome** extension downloads word lists from [**Memrise**](https://memrise.com/) courses as ".csv" spreadsheets along with all associated <ins>images</ins>, <ins>audio</ins>, and <ins>video</ins> files. It also supports [batch download](https://github.com/Eltaurus-Lt/CourseDump2022#batch-download) of Memrise courses. The format of the downloaded data is suitable for subsequent import into [**Anki**](https://apps.ankiweb.net/). 
+This **Google Chrome** extension downloads word lists from [**Memrise**](https://memrise.com/) courses as ".csv" spreadsheets along with all associated <ins>images</ins>, <ins>audio</ins>, and <ins>video</ins> files. It also supports [batch download](https://github.com/Eltaurus-Lt/CourseDump2022?tab=readme-ov-file#batch-download) of Memrise courses. The format of the downloaded data is suitable for subsequent import into [**Anki**](https://apps.ankiweb.net/). 
 
 The extension *does not* download personal study data (although it is planned to be added in the future). It also *does not* download the words you have marked as "ignored" on Memrise. You might want to unignore them before downloading a course or make a separate clean Memrise account specifically for downloading purposes.
 
@@ -160,7 +160,7 @@ There are several alternative ways you can go from here:
     4. Press `Fields` → `Add` to add new fields up to the number of columns from the ".csv" file (ignore the "Level tags" column – it is special and does not require a field for import). Names for fields and columns do not have to match, but it is a good idea to keep them the same. You can rename existing fields by selecting them and pressing `Rename` → When finished, press `Save` and close the window
    
    Keep in mind, that **in order to see the content of a field during reviews, you will also have to edit the card templates** and put the field on the respective side of a card (refer to [the Anki manual](https://docs.ankiweb.net/templates/intro.html) for all the necessary steps; when in doubt, feel free to ask, even basic, questions on [the forum](https://forums.ankiweb.net/)).
-2. Use **the dedicated [Memrise template](https://github.com/Eltaurus-Lt/Anki-Card-Templates#memrise)**, which replicates the original Memrise design and most of its functionality. The template is set to have five fields by default: "Learnable", "Definition", "Audio" + two extra fields. The instructions for adding more fields or renaming the existing ones can be found in [the customization section](https://github.com/Eltaurus-Lt/Anki-Card-Templates#customization).
+2. Use **the dedicated [Memrise template](https://github.com/Eltaurus-Lt/Anki-Card-Templates?tab=readme-ov-file#memrise)**, which replicates the original Memrise design and most of its functionality. The template is set to have five fields by default: "Learnable", "Definition", "Audio" + two extra fields. The instructions for adding more fields or renaming the existing ones can be found in [the customization section](https://github.com/Eltaurus-Lt/Anki-Card-Templates?tab=readme-ov-file#customization).
     <p><picture>
        <source media="(prefers-color-scheme: dark)" srcset="https://github.com/user-attachments/assets/57c646dc-0a49-4dfc-a5ea-e46a13bcd5b3">
        <img src="https://github.com/user-attachments/assets/f106c0a0-0c0b-4ca1-9cd7-6c54105289dd" width="50%">
@@ -169,7 +169,7 @@ There are several alternative ways you can go from here:
 
    For basic data with media (audio and video) you can use any of the templates provided with the Extension – "Basic (with media)", "Basic (and reversed card with media)", "Basic (reading, writing, and listening)", which differ in the number and types of questions they've been set up to produce. To import the templates:
    
-   1. Double-click the `Anki Templates.apkg` file found in the [***CourseDump2022-main***](https://github.com/Eltaurus-Lt/CourseDump2022#downloading-from-github) folder (alternatively, press `File` → `Import` inside Anki and browse to the `.apkg` file)
+   1. Double-click the `Anki Templates.apkg` file found in the [***CourseDump2022-main***](https://github.com/Eltaurus-Lt/CourseDump2022?tab=readme-ov-file#downloading-from-github) folder (alternatively, press `File` → `Import` inside Anki and browse to the `.apkg` file)
    2. The previous step creates an example deck with three cards in your Anki collection. This deck and the cards can be safely deleted right away if you don't need them.
 
    For making any adjustments to these templates refer to point 1 of this list
@@ -205,7 +205,7 @@ Note, that decks can be nested inside each other (via drag-and-drop) to group co
 ### 3. Importing the spreadsheet
 
 1. Press `File` (top left menu) → `Import`
-2. Browse to the ".csv" file in [the downloaded course's folder](https://github.com/Eltaurus-Lt/CourseDump2022#-downloading-a-memrise-course) → `Open`
+2. Browse to the ".csv" file in [the downloaded course's folder](https://github.com/Eltaurus-Lt/CourseDump2022?tab=readme-ov-file#-downloading-a-memrise-course) → `Open`
 3. Verify that the table in the "File" section looks good and set the `Notetype` and `Deck` in the "Import options" section below to the ones prepared in the previous steps:
     <p><picture>
      <source media="(prefers-color-scheme: dark)" srcset="https://github.com/user-attachments/assets/a8aa02d0-6648-4b39-836e-8858e1c8e764">
@@ -222,7 +222,7 @@ Note, that decks can be nested inside each other (via drag-and-drop) to group co
      <img src="https://github.com/user-attachments/assets/01dead5d-e113-4a57-8cc7-ec77f09c7804" alt="Anki Import report">
     </picture></p>
     
-    You can compare it against [the total number of items in the course](https://github.com/Eltaurus-Lt/CourseDump2022#checking-download-results). The "Details" section below will contain information on each individual note from the spreadsheet.
+    You can compare it against [the total number of items in the course](https://github.com/Eltaurus-Lt/CourseDump2022?tab=readme-ov-file#checking-download-results). The "Details" section below will contain information on each individual note from the spreadsheet.
     
     You will also be able to see the imported notes at any time by going to `Browse` (top center menu) and selecting your deck in the deck list on the left side 
     <p><picture>
