@@ -66,21 +66,19 @@ async function fetchMeta(cidd) {
 }
 
 function meta2txt(meta) {
-	let text = 'data:md/plain;charset=utf-8,' + encodeURIComponent( 
+	let text =
 		`# **${meta['proper name'] || meta['url name']}**\n` + 
 		`### by _${meta['author']}_\n` + 
 		`### (${meta['number of items']} learnable items)\n` + 
 		`\n` + 
-		meta['description']
-		);
+		meta['description'];
 	if (!ANKI_HEADERS) {
-		text = text + encodeURIComponent( 
+		text = text +
 		`\n\n` + 
 		`## Course Fields\n` +
-		`| ${meta['course fields']} |`
-		);
+		`| ${meta['course fields']} |`;
 	}
-  return text
+  return new Blob([text], {type: 'text/markdown'});
 }
 
 //THE MAIN FUNCTION FOR SCANNING ALL LEVELS OF A COURSE
@@ -434,7 +432,6 @@ async function scanCourse(cidd, threadN) {
 				 "#columns:" + course_fields.join(",") + "\n" +
 				 csv_data;
 	}
-  const csv_encoded = 'data:text/csv;charset=utf-8,%EF%BB%BF' + encodeURIComponent(csv_data);
 
   //names for directory and spreadsheet
   let course_filename, course_folder;
@@ -451,7 +448,7 @@ async function scanCourse(cidd, threadN) {
   };
   
   //add all files to global queue
-  file_queue.unshift([csv_encoded, `${course_folder}${course_filename}_(${meta['number of items'].toString()}).csv`]);
+  file_queue.unshift([new Blob([csv_data], {type: 'text/csv'}), `${course_folder}${course_filename}_(${meta['number of items'].toString()}).csv`]);
   if (settings["course_metadata"]) {
     file_queue.unshift([meta2txt(meta), `${course_folder}info.md`]);
     file_queue.unshift([meta['ava'], `${course_folder}${meta['author']}.${meta['ava'].split(".").slice(-1)}`]);
@@ -580,11 +577,11 @@ async function batchDownload() {
 
 
 //global variables
-if (typeof cidds === 'undefined') {var cidds = []} //should be defined as an argument passed from menu.js through background.js
-if (typeof batch_done === 'undefined') {var batch_done = 0} //global progress counter
-if (typeof file_queue === 'undefined') {var file_queue = []} //global list of files
+if (typeof cidds === 'undefined') {cidds = []} //should be defined as an argument passed from menu.js through background.js
+if (typeof batch_done === 'undefined') {batch_done = 0} //global progress counter
+if (typeof file_queue === 'undefined') {file_queue = []} //global list of files
 if (typeof threads !== 'undefined') {
   alert('Script is already executing on this page. Reload to retry'); //should be impossible to trigger if the menu state is correct
 } else {
-  batchDownload();
+  batchDownload().catch(console.error);
 }

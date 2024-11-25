@@ -1,5 +1,5 @@
 # Memrise Course Dump
-This **Google Chrome** extension downloads word lists from [**Memrise**](https://memrise.com/) courses as ".csv" spreadsheets along with all associated <ins>images</ins>, <ins>audio</ins>, and <ins>video</ins> files. It also supports [batch download](https://github.com/Eltaurus-Lt/CourseDump2022?tab=readme-ov-file#batch-download) of Memrise courses. The format of the downloaded data is suitable for subsequent import into [**Anki**](https://apps.ankiweb.net/). 
+This **Chrome** and **Firefox** extension downloads word lists from [**Memrise**](https://memrise.com/) courses as ".csv" spreadsheets along with all associated <ins>images</ins>, <ins>audio</ins>, and <ins>video</ins> files. It also supports [batch download](https://github.com/Eltaurus-Lt/CourseDump2022?tab=readme-ov-file#batch-download) of Memrise courses. The format of the downloaded data is suitable for subsequent import into [**Anki**](https://apps.ankiweb.net/). 
 
 The extension *does not* download personal study data (although it is planned to be added in the future). It also *does not* download the words you have marked as "ignored" on Memrise. You might want to unignore them before downloading a course or make a separate clean Memrise account specifically for downloading purposes.
 
@@ -10,7 +10,7 @@ At the top of this page click `Code` and then `Download ZIP` (Note, that the `Co
   <img src="https://user-images.githubusercontent.com/93875472/212447995-ec0370a5-af67-4a7b-96ec-b7eb2dd4e803.png">
 </picture></p>
 
-## Installation
+## Installation (Chrome)
 1. [Download](https://github.com/Eltaurus-Lt/CourseDump2022/archive/refs/heads/main.zip) the ***CourseDump2022-main.zip*** archive and extract ***CourseDump2022-main*** folder from it. At this step, you can move the extension folder to any place in your filesystem.
 2. In *Google Chrome* click the `Extensions` button <picture><source media="(prefers-color-scheme: dark)" srcset="https://github.com/user-attachments/assets/6cca563b-8149-421b-a217-0664c3b872f2"><img src="https://github.com/user-attachments/assets/89838937-f887-4aa7-bff9-9f5293fa04cb" alt="Chrome extension icon"></picture> and then <picture><source media="(prefers-color-scheme: dark)" srcset="https://github.com/user-attachments/assets/bff14d50-3a4c-4b89-be0a-a739beeb111c"><img src="https://github.com/user-attachments/assets/d07bfc2b-e281-4e79-bf9f-5bc5f9c50611" alt="Manage extensions"></picture><br> 
   <sub>(alternatively go to the Main menu <picture><source media="(prefers-color-scheme: dark)" srcset="https://github.com/user-attachments/assets/f36fcb90-886f-4445-98e9-7fb5d81646e1"><img src="https://github.com/user-attachments/assets/eb8d2e95-82d3-46ae-ad96-35e6d3db159b" alt="`Menu`"></picture> in the top right corner and click `Extensions` → `Manage Extensions`)</sub>
@@ -19,6 +19,15 @@ At the top of this page click `Code` and then `Download ZIP` (Note, that the `Co
 4. Choose `Load unpacked` (top left corner) and select the ***CourseDump2022-main*** folder extracted in step 1
 5. (_optional_) Click the `Extensions` button from step 2 again and pin the extension to the toolbar by clicking the pin button<p>
   <picture><source media="(prefers-color-scheme: dark)" srcset="https://github.com/user-attachments/assets/bc69c932-19a1-4ada-9c9d-e8dfd32ee000"><img src="https://github.com/user-attachments/assets/cc502262-e429-44c2-a5c2-fb277cec67c4"></picture></p>
+
+## Installation (Firefox)
+1. [Download](https://github.com/Eltaurus-Lt/CourseDump2022/archive/refs/heads/main.zip) the ***CourseDump2022-main.zip*** archive and extract ***CourseDump2022-main*** folder from it. At this step, you can move the extension folder to any place in your filesystem.
+2. Install the [`web-ext`](https://extensionworkshop.com/documentation/develop/getting-started-with-web-ext/#installation-section) command line tool.
+3. In the extension directory, run `web-ext build`. This outputs `web-ext-artifacts/memrise_course_dump-9.1.zip`.
+4. Go to `about:debugging` in your browser.
+5. Switch to "This Firefox" tab
+6. Click "Load Temporary Add-on..." and select the .zip file from step 3
+7. (_optional_) Click the extensions button in the toolbar and pin the extension to the toolbar using the gear menu
 
 ## 💡 Downloading a Memrise Course
 
@@ -61,7 +70,7 @@ After a download is complete, you should see the progress bar turning green:
  <img src="https://github.com/user-attachments/assets/0b6cb1fd-9114-4a9c-b356-da0dec19e07e">
 </picture></p>
 
-The downloaded files should appear in your Chrome downloads directory, in a subfolder with the name comprised of the id, name, and author of that course:
+The downloaded files should appear in your downloads directory, in a subfolder with the name comprised of the id, name, and author of that course:
 
 <p><picture>
  <source media="(prefers-color-scheme: dark)" srcset="https://github.com/user-attachments/assets/9921a71a-d513-4112-882f-8434a302cf44">
@@ -265,7 +274,7 @@ Note, that decks can be nested inside each other (via drag-and-drop) to group co
 5. **Learnable IDs**: Appends an additional column to the course spreadsheet containing a unique ID for each item. Can be used to manage duplicates inside Anki (if imported into the sorting field), or to cross-reference against other Memrise data downloaded separately, such as [archived mems](https://github.com/Eltaurus-Lt/MemDump)
 6. **Video files**: Allows excluding video files from a download: when turned off overwrites the `Download media` setting for video files while leaving images and audio unaffected (has no effect if the `Download media` toggle is turned off)
 7. **Skip media download**: Allows skipping media files during the file download phase. In contrast to the `Download media` setting, does not remove the respective columns from the spreadsheet when turned off. It can be helpful if a course spreadsheet needs to be recompiled with different settings without downloading the whole media folder again
-8. **Course metadata**: Enables downloading three metadata files in addition to the basic spreadsheet and media: an `info.md` file containing the text description of a course, the course's thumbnail image, and the course author's avatar. When turned off, the ".csv" spreadsheet and respective media folder (when applicable) will be placed directly into the Chrome download folder, instead of being bundled together with meta files in a separate course folder
+8. **Course metadata**: Enables downloading three metadata files in addition to the basic spreadsheet and media: an `info.md` file containing the text description of a course, the course's thumbnail image, and the course author's avatar. When turned off, the ".csv" spreadsheet and respective media folder (when applicable) will be placed directly into the download folder, instead of being bundled together with meta files in a separate course folder
 
 ## Discussion
 If you encounter errors, have further questions regarding the extension, or need any help with using the downloaded materials in Anki, please leave a comment in this thread: [An alternative to Memrise2Anki](https://forums.ankiweb.net/t/an-alternative-to-memrise2anki-support-thread/30084)
