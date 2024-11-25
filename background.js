@@ -91,7 +91,7 @@ function ciddsParse(cidd_strings) {
     }
 }
 
-chrome.runtime.onMessage.addListener(async (arg, sender, sendResponse) => {
+chrome.runtime.onMessage.addListener((arg, sender, sendResponse) => {
 	//messages from menu
 	if (arg.type === "coursedump_checkOngoing") {
 		sendResponse({ "ongoing-status": !!ongoingTab });
@@ -177,34 +177,40 @@ chrome.runtime.onMessage.addListener(async (arg, sender, sendResponse) => {
 	let urls = [];
 	if (arg.type === "coursedump_downloadFiles") {
 		let terminated = false;
-	 	if (arg.file_queue) urls = arg.file_queue;
-	 	const todo = urls.length;
-	 	if (arg.maxThreads) maxConnections = arg.maxThreads;
-	 	console.log(`max threads set to : ${maxConnections}`);
-	 	let done = 0;
-	 	let pids = Array(maxConnections).fill().map((_, i) => i + 1);
-	 	const results = await Promise.allSettled(pids.map(async pid => {
-	 		while (ongoingTab && urls.length) {
-	 			// const [url, filename] = ["some url", "some filename.ext"]; //emu
+		if (arg.file_queue) urls = arg.file_queue;
+		const todo = urls.length;
+		if (arg.maxThreads) maxConnections = arg.maxThreads;
+		console.log(`max threads set to : ${maxConnections}`);
+		let done = 0;
+		let pids = Array(maxConnections).fill().map((_, i) => i + 1);
+		Promise.allSettled(pids.map(async pid => {
+			while (ongoingTab && urls.length) {
+				// const [url, filename] = ["some url", "some filename.ext"]; //emu
 				// const emu = urls.shift();//emu
-				const [url, filename] = urls.shift();
-	 			await sleep(200);
-	 			let did;
-	 			try {
-	 				did = await downloadFile({url, filename, conflictAction: "overwrite" });
+				let [url, filename] = urls.shift();
+				if (url instanceof Blob) {
+					url = URL.createObjectURL(url);
+				}
+				await sleep(200);
+				let did;
+				try {
+					did = await downloadFile({url, filename, conflictAction: "overwrite" });
 					//did = await sleep(Math.floor(Math.random() * 600 + 300)); //emulate download
-	 			} catch (err) {
-	 				console.error(filename, err);
+				} catch (err) {
+					console.error(filename, err);
 					chrome.tabs.sendMessage(tabId, {
 						type: "coursedump_error",
 						error: err.message,
 						url, filename
 					}).catch(err => {});
-	 			}
-	 			if (did !== undefined) {
-	 				await chrome.downloads.erase({ id: did });
-	 			}
-	 			done++;
+				} finally {
+					if (new URL(url).protocol === "blob:")
+						URL.revokeObjectURL(url);
+				}
+				if (did !== undefined) {
+					await chrome.downloads.erase({ id: did });
+				}
+				done++;
 				chrome.tabs.sendMessage(tabId, {
 					type: "coursedump_progressMedia_upd",
 					done, todo
@@ -214,37 +220,37 @@ chrome.runtime.onMessage.addListener(async (arg, sender, sendResponse) => {
 						console.log('Downloading tab appears to be closed. terminating file download.');
 						terminated = true;
 						ongoingTab = null;
-					}
-				})
-	 		}
-	 	}));
-		
-	 	for (let i = 0; i < results.length; i++) {
-	 		const r = results[i];
-	 		if (r.status === "rejected") {
-	 			console.error(`pid ${i + 1}: ${r.reason}`);
-	 		}
-	 	}
-	
-		if (ongoingTab) {
-			chrome.tabs.sendMessage(tabId, {
-				type: "coursedump_mediaFinished",
-				status: "done"
-			}).catch(err => {});
-			ongoingTab = null;
-		} else {
-			if (!terminated) {
-				console.log('Download stopped by user during file downloading phase');
-			} else {
-				console.log('Downloading tab was closed during file downloading phase');
-				menuAlert("Downloading tab was closed. Download terminated",
-					"no open menus left, download termination alert was not sent");
+					} })
 			}
-			chrome.tabs.sendMessage(tabId, {
-				type: "coursedump_mediaFinished",
-				status: "stopped"
-			}).catch(err => {});
-		}
-		updAllMenus();
+		})).then((results) => {
+			for (let i = 0; i < results.length; i++) {
+				const r = results[i];
+				if (r.status === "rejected") {
+					console.error(`pid ${i + 1}: ${r.reason}`);
+				}
+			}
+
+			if (ongoingTab) {
+				chrome.tabs.sendMessage(tabId, {
+					type: "coursedump_mediaFinished",
+					status: "done"
+				}).catch(err => {});
+				ongoingTab = null;
+			} else {
+				if (!terminated) {
+					console.log('Download stopped by user during file downloading phase');
+				} else {
+					console.log('Downloading tab was closed during file downloading phase');
+					menuAlert("Downloading tab was closed. Download terminated",
+						"no open menus left, download termination alert was not sent");
+				}
+				chrome.tabs.sendMessage(tabId, {
+					type: "coursedump_mediaFinished",
+					status: "stopped"
+				}).catch(err => {});
+			}
+			updAllMenus();
+		});
+		return true;
 	}
 });

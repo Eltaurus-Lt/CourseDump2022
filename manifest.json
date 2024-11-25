@@ -20,7 +20,8 @@
     "default_popup": "menu.html"
   },
   "background": {
-    "service_worker": "background.js"
+    "service_worker": "background.js",
+    "scripts": ["background.js"]
   },
   "content_security_policy": {},
   "web_accessible_resources": [{
