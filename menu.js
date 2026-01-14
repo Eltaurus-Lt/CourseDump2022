@@ -11,13 +11,13 @@ const default_settings = {
   "videofiles_limit": 'Infinity',
 
   "max_level_skip": 5,
-  "max_extra_fields": 5, //attributes/ visible info/ hidden info - each
+  "max_extra_fields": 10, //attributes/ visible info/ hidden info - each
   "parallel_download_limit": 9
 };
 
 const messages = {
-  "not memrise course": "Has to be used on a memrise.com course page",
-  "not memrise": "Has to be used from memrise.com",
+  "not memrise course": "Has to be used on a memrise community course page",
+  "not memrise": "Has to be used from community-courses.memrise.com",
   "not a course": "Has to be used from a specific course page",
   "already downloading": "A download is already in progress",
 
@@ -104,9 +104,10 @@ function getDomainAndId(url) {
 			 extractNumericValue(url, "category_id=") ||
 			 extractNumericValue(url, "course/");
 	let domain = "";
-	if (url.includes("app.memrise.com")) {
-	  domain = "app.memrise.com";
-	} else if (url.includes("community-courses.memrise.com")) {
+	//if (url.includes("app.memrise.com")) {
+	//  domain = "app.memrise.com";
+	//} else 
+        if (url.includes("community-courses.memrise.com")) {
 	  domain = "community-courses.memrise.com";
 	}
 	

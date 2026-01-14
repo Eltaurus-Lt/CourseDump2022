@@ -495,8 +495,8 @@ async function scanThread(threadN, batch_size) {
 async function batchDownload() {
 	//validity tests
 	tabDomain = window.location.toString().split("/")[2];
-	if (tabDomain !== 'app.memrise.com' && tabDomain !== 'community-courses.memrise.com') {
-		alert("The extension should be used on the memrise.com site"); 
+	if (tabDomain !== 'community-courses.memrise.com') {
+		alert("The extension should be used on community-courses.memrise.com"); 
 		return -1;
 	}
 	const test_fetch = await fetch(fetchURL(tabDomain));
