@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Memrise Course Dump",
-  "version": "9.1",
+  "version": "9.2",
   "description": "Download Memrise cources as Anki-compatible CSV + media files",
   "icons": {
     "16": "icons/icon.png",
