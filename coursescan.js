@@ -12,7 +12,7 @@ function ciddToURL(cidd) {
 }
 
 function fetchURL(domain) {
-	return `https://${domain}/v1.19/learning_sessions/preview/`;
+	return `https://${domain}/v2.0/learning_sessions/preview/`;
 }
 
 async function fetchMeta(cidd) {
@@ -557,7 +557,7 @@ async function batchDownload() {
         updMediaProgress("done");
         setTimeout(()=> {
           if (settings['anki_import_prompt'] && confirm('Would you like some help with importing the downloaded data into Anki?')) {
-          window.open('https://github.com/Eltaurus-Lt/CourseDump2022#importing-into-anki', '_blank').focus();
+          window.open('https://github.com/Eltaurus-Lt/CourseDump2022#-importing-into-anki', '_blank').focus();
         }}, 200);
       } else if (arg.status === "stopped") {
         console.log("stopped during file download");
