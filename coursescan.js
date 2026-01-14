@@ -80,7 +80,11 @@ function meta2txt(meta) {
 		`| ${meta['course fields']} |`
 		);
 	}
-  return text
+  return text;
+}
+
+function wrapAlts(alts, hidden=false) {
+	return `\n<div class="alt"${ hidden ? ' hidden' : '' }>${ [...alts].join(" | ") }</div>`;
 }
 
 //THE MAIN FUNCTION FOR SCANNING ALL LEVELS OF A COURSE
@@ -211,7 +215,19 @@ async function scanCourse(cidd, threadN) {
 				let learnable_el = `""`;
 				if (learnable.learning_element) {
 					has_learnable = true;
-					learnable_el = `"${learnable.learning_element.replaceAll('"', '""')}"`;
+					learnable_el = learnable.learning_element;
+					if (settings["alternative_answers"]) {
+						const alts = learnable?.screens?.["1"]?.item?.alternatives;
+						const allAnss = learnable?.screens?.["4"]?.correct;
+						const hiddenAlts = allAnss.filter(ans => ans.toLowerCase() !== learnable_el.toLowerCase() && !alts.includes(ans));
+						if (Array.isArray(alts) && alts.length > 0) {
+							learnable_el += wrapAlts(alts);
+						}
+						if (Array.isArray(hiddenAlts) && hiddenAlts.length > 0) {
+							learnable_el += wrapAlts(hiddenAlts, true);
+						}
+					}
+					learnable_el = `"${learnable_el.replaceAll('"', '""')}"`;
 				} else if (settings["download_media"] && learnable.screens["1"].item.kind === "audio" && learnable.screens["1"].item.value.length > 0) {
 					has_learnable = true;
 					let temp_audio_learns = [];
@@ -231,7 +247,14 @@ async function scanCourse(cidd, threadN) {
 				let definition = `""`;
 				if (learnable.definition_element) {
 					has_definitions = true;
-					definition = `"${learnable.definition_element.replaceAll('"', '""')}"`;
+					definition = learnable.definition_element;
+					if (settings["alternative_answers"]) {
+						const alts = learnable?.screens?.["1"]?.definition?.alternatives;
+						if (Array.isArray(alts) && alts.length > 0) {
+							definition += wrapAlts(alts);
+						}
+					}
+					definition = `"${definition.replaceAll('"', '""')}"`;
 				} else if (settings["download_media"] && learnable.screens["1"].definition.kind === "audio" && learnable.screens["1"].definition.value.length > 0) {
 					has_definitions = true;
 					let temp_audio_defs = [];
@@ -308,7 +331,14 @@ async function scanCourse(cidd, threadN) {
 									temp_image_list.forEach(course_media_urls.add, course_media_urls);
 									temp_extra2[ind] = `` + temp_image_list.map(url => `<img src='${UniqueDecodedFilename(url)}'>`).join(``) + ``;
 								} else if (v_info.kind !== "audio" && v_info.kind !== "image") {
-									temp_extra2[ind] = `"${v_info.value.replaceAll('"', '""')}"`;
+									temp_extra2[ind] = v_info.value;
+									if (settings["alternative_answers"]) {
+										const alts = v_info.alternatives;
+										if (Array.isArray(alts) && alts.length > 0) {
+											temp_extra2[ind] += wrapAlts(alts);
+										}
+									}
+									temp_extra2[ind] = `"${temp_extra2[ind].replaceAll('"', '""')}"`;
 								}
 							}
 						}
@@ -338,7 +368,14 @@ async function scanCourse(cidd, threadN) {
 									temp_image_list.forEach(course_media_urls.add, course_media_urls);
 									temp_extra3[ind] = `` + temp_image_list.map(url => `<img src='${UniqueDecodedFilename(url)}'>`).join("") + ``;
 								} else if (h_info.kind !== "audio" && h_info.kind !== "image") {
-									temp_extra3[ind] = `"${h_info.value.replaceAll('"', '""')}"`;
+									temp_extra3[ind] = h_info.value;
+									if (settings["alternative_answers"]) {
+										const alts = h_info.alternatives;
+										if (Array.isArray(alts) && alts.length > 0) {
+											temp_extra3[ind] += wrapAlts(alts);
+										}
+									}
+									temp_extra3[ind] = `"${temp_extra3[ind].replaceAll('"', '""')}"`;
 								}
 							}
 						}
