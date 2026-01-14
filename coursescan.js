@@ -146,7 +146,7 @@ async function scanCourse(cidd, threadN) {
   let levels_done = 0;
   let proceed = true; //fallback flag in case the number of levels is unavailable from meta or incorrect
   while ((proceed || levels_done < meta['number of levels']) && !stopped) {
-    levels_done++;
+    levels_done += 1;
     //emulation
     // await sleep(Math.floor(Math.random() * 500 + 200));
     // proceed = (levels_done < meta['number of levels'] + settings["max_level_skip"]);
@@ -435,8 +435,9 @@ async function scanCourse(cidd, threadN) {
 				 csv_data;
 	}
   const csv_encoded = 'data:text/csv;charset=utf-8,%EF%BB%BF' + encodeURIComponent(csv_data);
+  //console.log(csv_encoded.length, csv_encoded);
 
-  //names for directory and spreadsheet
+  //names for directory and the spreadsheet
   let course_filename, course_folder;
   if (settings["course_metadata"]) {
 	course_filename = `${meta['url name']} [${cidd['cid']}]`;
@@ -450,7 +451,7 @@ async function scanCourse(cidd, threadN) {
     console.log(`Media files found in ${meta['url name']}[${cidd['cid']}]: ${course_media_urls.size}`);
   };
   
-  //add all files to global queue
+  //add all files to the global queue
   file_queue.unshift([csv_encoded, `${course_folder}${course_filename}_(${meta['number of items'].toString()}).csv`]);
   if (settings["course_metadata"]) {
     file_queue.unshift([meta2txt(meta), `${course_folder}info.md`]);
@@ -543,6 +544,8 @@ async function batchDownload() {
 
   await sleep(500);
   updMediaProgress(0, file_queue.length);
+  //console.log('initiating download');
+  //console.log(file_queue.slice(0, 10));
 
   //downloading files
   function mediaDownloadMessages(arg, sender, sendResponse) {
