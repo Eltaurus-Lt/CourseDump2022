@@ -23,7 +23,7 @@ At the top of this page click `Code` and then `Download ZIP` (Note, that the `Co
 ## 💡 Downloading a Memrise Community Course
 
 >---
->1. Make sure you are logged in on [Memrise](https://community-courses.memrise.com/)
+>1. Make sure you are logged in to the [Memrise community courses domain](https://community-courses.memrise.com/)
 >2. Navigate to any page belonging to a course you want to download ([example-1](https://community-courses.memrise.com/community/course/1105/speak-esperanto-like-a-nativetm-1/), [example-2](https://community-courses.memrise.com/community/course/548340/7-124/))
 >3. 🚩 **If you are downloading a course with a lot of media files** 🚩, make sure you have disabled the option `Ask where to save each file before downloading` in the Chrome settings (chrome://settings/downloads)
 >4. Press the extension icon and then click the "Download current course" button at the top of the menu
