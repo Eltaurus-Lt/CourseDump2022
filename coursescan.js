@@ -12,7 +12,7 @@ function ciddToURL(cidd) {
 }
 
 function fetchURL(domain) {
-	return `https://${domain}/v1.19/learning_sessions/preview/`;
+	return `https://${domain}/v2.0/learning_sessions/preview/`;
 }
 
 async function fetchMeta(cidd) {
@@ -80,7 +80,11 @@ function meta2txt(meta) {
 		`| ${meta['course fields']} |`
 		);
 	}
-  return text
+  return text;
+}
+
+function wrapAlts(alts, hidden=false) {
+	return `\n<div class="alt"${ hidden ? ' hidden' : '' }>${ [...alts].join(" | ") }</div>`;
 }
 
 //THE MAIN FUNCTION FOR SCANNING ALL LEVELS OF A COURSE
@@ -146,7 +150,7 @@ async function scanCourse(cidd, threadN) {
   let levels_done = 0;
   let proceed = true; //fallback flag in case the number of levels is unavailable from meta or incorrect
   while ((proceed || levels_done < meta['number of levels']) && !stopped) {
-    levels_done++;
+    levels_done += 1;
     //emulation
     // await sleep(Math.floor(Math.random() * 500 + 200));
     // proceed = (levels_done < meta['number of levels'] + settings["max_level_skip"]);
@@ -211,7 +215,19 @@ async function scanCourse(cidd, threadN) {
 				let learnable_el = `""`;
 				if (learnable.learning_element) {
 					has_learnable = true;
-					learnable_el = `"${learnable.learning_element.replaceAll('"', '""')}"`;
+					learnable_el = learnable.learning_element;
+					if (settings["alternative_answers"]) {
+						const alts = learnable?.screens?.["1"]?.item?.alternatives;
+						const allAnss = Object.values(learnable.screens).find(screen=>screen.template==="typing")?.correct;
+						const hiddenAlts = allAnss?.filter(ans => ans.toLowerCase().trim() !== learnable_el.toLowerCase().trim() && !alts.includes(ans));
+						if (Array.isArray(alts) && alts.length > 0) {
+							learnable_el += wrapAlts(alts);
+						}
+						if (Array.isArray(hiddenAlts) && hiddenAlts.length > 0) {
+							learnable_el += wrapAlts(hiddenAlts, true);
+						}
+					}
+					learnable_el = `"${learnable_el.replaceAll('"', '""')}"`;
 				} else if (settings["download_media"] && learnable.screens["1"].item.kind === "audio" && learnable.screens["1"].item.value.length > 0) {
 					has_learnable = true;
 					let temp_audio_learns = [];
@@ -231,7 +247,14 @@ async function scanCourse(cidd, threadN) {
 				let definition = `""`;
 				if (learnable.definition_element) {
 					has_definitions = true;
-					definition = `"${learnable.definition_element.replaceAll('"', '""')}"`;
+					definition = learnable.definition_element;
+					if (settings["alternative_answers"]) {
+						const alts = learnable?.screens?.["1"]?.definition?.alternatives;
+						if (Array.isArray(alts) && alts.length > 0) {
+							definition += wrapAlts(alts);
+						}
+					}
+					definition = `"${definition.replaceAll('"', '""')}"`;
 				} else if (settings["download_media"] && learnable.screens["1"].definition.kind === "audio" && learnable.screens["1"].definition.value.length > 0) {
 					has_definitions = true;
 					let temp_audio_defs = [];
@@ -308,7 +331,14 @@ async function scanCourse(cidd, threadN) {
 									temp_image_list.forEach(course_media_urls.add, course_media_urls);
 									temp_extra2[ind] = `` + temp_image_list.map(url => `<img src='${UniqueDecodedFilename(url)}'>`).join(``) + ``;
 								} else if (v_info.kind !== "audio" && v_info.kind !== "image") {
-									temp_extra2[ind] = `"${v_info.value.replaceAll('"', '""')}"`;
+									temp_extra2[ind] = v_info.value;
+									if (settings["alternative_answers"]) {
+										const alts = v_info.alternatives;
+										if (Array.isArray(alts) && alts.length > 0) {
+											temp_extra2[ind] += wrapAlts(alts);
+										}
+									}
+									temp_extra2[ind] = `"${temp_extra2[ind].replaceAll('"', '""')}"`;
 								}
 							}
 						}
@@ -338,7 +368,14 @@ async function scanCourse(cidd, threadN) {
 									temp_image_list.forEach(course_media_urls.add, course_media_urls);
 									temp_extra3[ind] = `` + temp_image_list.map(url => `<img src='${UniqueDecodedFilename(url)}'>`).join("") + ``;
 								} else if (h_info.kind !== "audio" && h_info.kind !== "image") {
-									temp_extra3[ind] = `"${h_info.value.replaceAll('"', '""')}"`;
+									temp_extra3[ind] = h_info.value;
+									if (settings["alternative_answers"]) {
+										const alts = h_info.alternatives;
+										if (Array.isArray(alts) && alts.length > 0) {
+											temp_extra3[ind] += wrapAlts(alts);
+										}
+									}
+									temp_extra3[ind] = `"${temp_extra3[ind].replaceAll('"', '""')}"`;
 								}
 							}
 						}
@@ -435,8 +472,9 @@ async function scanCourse(cidd, threadN) {
 				 csv_data;
 	}
   const csv_encoded = 'data:text/csv;charset=utf-8,%EF%BB%BF' + encodeURIComponent(csv_data);
+  //console.log(csv_encoded.length, csv_encoded);
 
-  //names for directory and spreadsheet
+  //names for directory and the spreadsheet
   let course_filename, course_folder;
   if (settings["course_metadata"]) {
 	course_filename = `${meta['url name']} [${cidd['cid']}]`;
@@ -450,7 +488,7 @@ async function scanCourse(cidd, threadN) {
     console.log(`Media files found in ${meta['url name']}[${cidd['cid']}]: ${course_media_urls.size}`);
   };
   
-  //add all files to global queue
+  //add all files to the global queue
   file_queue.unshift([csv_encoded, `${course_folder}${course_filename}_(${meta['number of items'].toString()}).csv`]);
   if (settings["course_metadata"]) {
     file_queue.unshift([meta2txt(meta), `${course_folder}info.md`]);
@@ -495,8 +533,8 @@ async function scanThread(threadN, batch_size) {
 async function batchDownload() {
 	//validity tests
 	tabDomain = window.location.toString().split("/")[2];
-	if (tabDomain !== 'app.memrise.com' && tabDomain !== 'community-courses.memrise.com') {
-		alert("The extension should be used on the memrise.com site"); 
+	if (tabDomain !== 'community-courses.memrise.com') {
+		alert("The extension should be used on community-courses.memrise.com"); 
 		return -1;
 	}
 	const test_fetch = await fetch(fetchURL(tabDomain));
@@ -543,6 +581,8 @@ async function batchDownload() {
 
   await sleep(500);
   updMediaProgress(0, file_queue.length);
+  //console.log('initiating download');
+  //console.log(file_queue.slice(0, 10));
 
   //downloading files
   function mediaDownloadMessages(arg, sender, sendResponse) {
@@ -557,7 +597,7 @@ async function batchDownload() {
         updMediaProgress("done");
         setTimeout(()=> {
           if (settings['anki_import_prompt'] && confirm('Would you like some help with importing the downloaded data into Anki?')) {
-          window.open('https://github.com/Eltaurus-Lt/CourseDump2022#importing-into-anki', '_blank').focus();
+          window.open('https://github.com/Eltaurus-Lt/CourseDump2022#-importing-into-anki', '_blank').focus();
         }}, 200);
       } else if (arg.status === "stopped") {
         console.log("stopped during file download");

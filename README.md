@@ -1,5 +1,5 @@
-# Memrise Course Dump
-This **Google Chrome** extension downloads word lists from [**Memrise**](https://memrise.com/) courses as ".csv" spreadsheets along with all associated <ins>images</ins>, <ins>audio</ins>, and <ins>video</ins> files. It also supports [batch download](https://github.com/Eltaurus-Lt/CourseDump2022?tab=readme-ov-file#batch-download) of Memrise courses. The format of the downloaded data is suitable for subsequent import into [**Anki**](https://apps.ankiweb.net/). 
+# Memrise Community Course Downloader v9.2
+This **Google Chrome** extension downloads word lists from [**Memrise community courses**](https://community-courses.memrise.com/community/courses/) as ".csv" spreadsheets along with all associated <ins>images</ins>, <ins>audio</ins>, and <ins>video</ins> files. It also supports [batch download](https://github.com/Eltaurus-Lt/CourseDump2022?tab=readme-ov-file#batch-download) of Memrise courses. The format of the downloaded data is suitable for subsequent import into [**Anki**](https://apps.ankiweb.net/). 
 
 The extension *does not* download personal study data (although it is planned to be added in the future). It also *does not* download the words you have marked as "ignored" on Memrise. You might want to unignore them before downloading a course or make a separate clean Memrise account specifically for downloading purposes.
 
@@ -20,11 +20,11 @@ At the top of this page click `Code` and then `Download ZIP` (Note, that the `Co
 5. (_optional_) Click the `Extensions` button from step 2 again and pin the extension to the toolbar by clicking the pin button<p>
   <picture><source media="(prefers-color-scheme: dark)" srcset="https://github.com/user-attachments/assets/bc69c932-19a1-4ada-9c9d-e8dfd32ee000"><img src="https://github.com/user-attachments/assets/cc502262-e429-44c2-a5c2-fb277cec67c4"></picture></p>
 
-## 💡 Downloading a Memrise Course
+## 💡 Downloading a Memrise Community Course
 
 >---
->1. Make sure you are logged in on [Memrise](https://community-courses.memrise.com/)
->2. Navigate to any page belonging to a course you want to download ([example-1](https://community-courses.memrise.com/community/course/1105/speak-esperanto-like-a-nativetm-1/), [example-2](https://app.memrise.com/community/course/2021573/french-1/3/))
+>1. Make sure you are logged in to the [Memrise community courses domain](https://community-courses.memrise.com/)
+>2. Navigate to any page belonging to a course you want to download ([example-1](https://community-courses.memrise.com/community/course/1105/speak-esperanto-like-a-nativetm-1/), [example-2](https://community-courses.memrise.com/community/course/548340/7-124/))
 >3. 🚩 **If you are downloading a course with a lot of media files** 🚩, make sure you have disabled the option `Ask where to save each file before downloading` in the Chrome settings (chrome://settings/downloads)
 >4. Press the extension icon and then click the "Download current course" button at the top of the menu
 >   

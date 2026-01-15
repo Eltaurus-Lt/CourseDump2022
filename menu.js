@@ -4,6 +4,7 @@ const default_settings = {
   "level_tags": true,
   "anki_import_prompt": true,
 
+  "alternative_answers": false,
   "learnable_ids": false,
   "skip_media_download": false,
   "course_metadata": true,
@@ -11,13 +12,13 @@ const default_settings = {
   "videofiles_limit": 'Infinity',
 
   "max_level_skip": 5,
-  "max_extra_fields": 5, //attributes/ visible info/ hidden info - each
+  "max_extra_fields": 10, //attributes/ visible info/ hidden info - each
   "parallel_download_limit": 9
 };
 
 const messages = {
-  "not memrise course": "Has to be used on a memrise.com course page",
-  "not memrise": "Has to be used from memrise.com",
+  "not memrise course": "Has to be used on a memrise community course page",
+  "not memrise": "Has to be used from community-courses.memrise.com",
   "not a course": "Has to be used from a specific course page",
   "already downloading": "A download is already in progress",
 
@@ -44,6 +45,8 @@ class menuToggles {
     this.ExtraFields = document.getElementById("setting-extraFields");
     this.LevelTags = document.getElementById("setting-levelTags");
     this.AnkiPrompt = document.getElementById("setting-ankiPrompt");
+
+    this.AlternativeAnswers = document.getElementById("setting-alternativeAnswers");
     this.LearnableIds = document.getElementById("setting-learnableIds");
     this.SkipMedia = document.getElementById("setting-skipMedia");
     this.CourseMeta = document.getElementById("setting-courseMeta");
@@ -60,6 +63,7 @@ class menuToggles {
       "level_tags": this.LevelTags.checked,
       "anki_import_prompt": this.AnkiPrompt.checked,
     
+      "alternative_answers": this.AlternativeAnswers.checked,
       "learnable_ids": this.LearnableIds.checked,
       "skip_media_download": this.SkipMedia.checked,
       "course_metadata": this.CourseMeta.checked,
@@ -84,6 +88,7 @@ class menuToggles {
     this.LevelTags.checked = settings["level_tags"];
     this.AnkiPrompt.checked = settings["anki_import_prompt"];
   
+    this.AlternativeAnswers.checked = settings["alternative_answers"];
     this.LearnableIds.checked = settings["learnable_ids"];
     this.SkipMedia.checked = settings["skip_media_download"];
     this.CourseMeta.checked = settings["course_metadata"];
@@ -104,9 +109,10 @@ function getDomainAndId(url) {
 			 extractNumericValue(url, "category_id=") ||
 			 extractNumericValue(url, "course/");
 	let domain = "";
-	if (url.includes("app.memrise.com")) {
-	  domain = "app.memrise.com";
-	} else if (url.includes("community-courses.memrise.com")) {
+	//if (url.includes("app.memrise.com")) {
+	//  domain = "app.memrise.com";
+	//} else 
+        if (url.includes("community-courses.memrise.com")) {
 	  domain = "community-courses.memrise.com";
 	}
 	
@@ -115,8 +121,10 @@ function getDomainAndId(url) {
 
 async function getCurrentTab() {
   try {
-      const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-      return tab;
+      const tabQuery = await chrome.tabs?.query({ active: true, currentWindow: true });
+      if (Array.isArray(tabQuery) && tabQuery.length > 0) {
+        return tabQuery[0];
+      }
   } catch (error) {
       console.error(error);
   }
@@ -180,6 +188,7 @@ document.addEventListener('DOMContentLoaded', () => {setTimeout(async () => {
   });
 
   const current_tab = await getCurrentTab();
+  if (current_tab === undefined) return; // background preload
   const {domain, cid} = getDomainAndId(current_tab.url);
   const cidd = JSON.stringify({domain, cid});
 
