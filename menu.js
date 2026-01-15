@@ -121,8 +121,10 @@ function getDomainAndId(url) {
 
 async function getCurrentTab() {
   try {
-      const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-      return tab;
+      const tabQuery = await chrome.tabs?.query({ active: true, currentWindow: true });
+      if (Array.isArray(tabQuery) && tabQuery.length > 0) {
+        return tabQuery[0];
+      }
   } catch (error) {
       console.error(error);
   }
@@ -186,6 +188,7 @@ document.addEventListener('DOMContentLoaded', () => {setTimeout(async () => {
   });
 
   const current_tab = await getCurrentTab();
+  if (current_tab === undefined) return; // background preload
   const {domain, cid} = getDomainAndId(current_tab.url);
   const cidd = JSON.stringify({domain, cid});
 
