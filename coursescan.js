@@ -218,8 +218,8 @@ async function scanCourse(cidd, threadN) {
 					learnable_el = learnable.learning_element;
 					if (settings["alternative_answers"]) {
 						const alts = learnable?.screens?.["1"]?.item?.alternatives;
-						const allAnss = learnable?.screens?.["4"]?.correct;
-						const hiddenAlts = allAnss.filter(ans => ans.toLowerCase() !== learnable_el.toLowerCase() && !alts.includes(ans));
+						const allAnss = Object.values(learnable.screens).find(screen=>screen.template==="typing")?.correct;
+						const hiddenAlts = allAnss?.filter(ans => ans.toLowerCase().trim() !== learnable_el.toLowerCase().trim() && !alts.includes(ans));
 						if (Array.isArray(alts) && alts.length > 0) {
 							learnable_el += wrapAlts(alts);
 						}
