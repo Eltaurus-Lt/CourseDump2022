@@ -6,7 +6,7 @@ const default_settings = {
 
   "learning_progress": true,
   "alternative_answers": true,
-  "multiple_choices": true,
+  "multiple_choices": false,
   "learnable_ids": false,
   "skip_media_download": false,
   "course_metadata": true,
