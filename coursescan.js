@@ -386,15 +386,19 @@ async function scanCourse(cidd, threadN) {
 				//tags
 				row.push(tags);
 
+				let lid = learnable?.id || -1;
+				
         		//learnable IDs
 				if (settings["learnable_ids"]) {
-					try {
-						row.push(learnable.id);
-					} catch (err) {
-						console.log(`no learnable id! ${err.name}: ${err.message}`, learnable);
-						row.push(-1);
-					}
+					row.push(lid);
 				}
+
+				// learning progress
+				if (settings["learning_progress"]) {
+					const prog_data = response_json.progress.find(item => item.learnable_id == lid);
+					row.push(`"${JSON.stringify(prog_data || "new").replaceAll('"', '""')}"`);
+				}
+
 				table.push(row);
 
 			});
@@ -447,6 +451,7 @@ async function scanCourse(cidd, threadN) {
   course_fields.push(...hidden_info);
   if (settings["level_tags"]) {course_fields.push("Level tags")};
   if (settings["learnable_ids"]) {course_fields.push("Learnable ID")};
+  if (settings["learning_progress"]) {course_fields.push("Progress")};
   meta['course fields'] = course_fields.join(" | ");
 
   // convert table to plain text (csv)
@@ -461,13 +466,17 @@ async function scanCourse(cidd, threadN) {
 		line.push(...row.slice(4 + 2 * settings["max_extra_fields"], 4 + 2 * settings["max_extra_fields"] + hidden_info.length));
 		if (settings["level_tags"]) {line.push(row[4 + 3 * settings["max_extra_fields"]])};
 		if (settings["learnable_ids"]) {line.push(row[4 + 3 * settings["max_extra_fields"] + 1])};
+		if (settings["learning_progress"]) {line.push(row[4 + 3 * settings["max_extra_fields"] + 1 + settings["learnable_ids"]])};
 		return line.join(`,`);
 	}).join("\n") + "\n";
 	//add Anki headers
 	if (ANKI_HEADERS) {
+		let tags_col = course_fields.length;
+		if (settings["learnable_ids"]) {tags_col--};
+		if (settings["learning_progress"]) {tags_col--};
 		csv_data = "#separator:comma\n" +
 				 "#html:true\n" +
-				 (settings["level_tags"] ? (`#tags column:${settings["learnable_ids"] ? course_fields.length-1 : course_fields.length}\n`) : ``) +
+				 (settings["level_tags"] ? (`#tags column:${tags_col}\n`) : ``) +
 				 "#columns:" + course_fields.join(",") + "\n" +
 				 csv_data;
 	}
