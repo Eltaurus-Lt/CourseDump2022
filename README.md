@@ -1,10 +1,10 @@
-# Memrise Community Course Downloader v9.2
-This **Google Chrome** extension downloads word lists from [**Memrise community courses**](https://community-courses.memrise.com/community/courses/) as ".csv" spreadsheets along with all associated <ins>images</ins>, <ins>audio</ins>, and <ins>video</ins> files. It also supports [batch download](https://github.com/Eltaurus-Lt/CourseDump2022?tab=readme-ov-file#batch-download) of Memrise courses. The format of the downloaded data is suitable for subsequent import into [**Anki**](https://apps.ankiweb.net/). 
+# Memrise Community Course Downloader v9.3
+This **Google Chrome** extension downloads word lists from [**Memrise community courses**](https://community-courses.memrise.com/community/courses/) as ".csv" spreadsheets along with all associated <ins>images</ins>, **<ins>audio</ins>**, and <ins>video</ins> files, **alternative answers** and **study progress**. Courses can be [downloaded in batch](https://github.com/Eltaurus-Lt/CourseDump2022?tab=readme-ov-file#batch-download). The format of the saved data is suitable for subsequent [import](https://github.com/Eltaurus-Lt/Anki-Card-Templates?tab=readme-ov-file#the-support-add-on) into [**Anki**](https://apps.ankiweb.net/). 
 
-The extension *does not* download personal study data (although it is planned to be added in the future). It also *does not* download the words you have marked as "ignored" on Memrise. You might want to unignore them before downloading a course or make a separate clean Memrise account specifically for downloading purposes.
+The extension *does not* download the words you have marked as "ignored" on Memrise (as they are not exposed to fetch requests by the site). You might want to unignore them before downloading or make a separate fresh Memrise account, if keeping the learning progress data is not essential.
 
 ## Downloading the Extension
-At the top of this page click `Code` and then `Download ZIP` (Note, that the `Code` button might be hidden if your browser window isn't wide enough)
+At the top of this page, click the green `Code` button and then `Download ZIP`:
 <p><picture>
   <source media="(prefers-color-scheme: dark)" srcset="https://user-images.githubusercontent.com/93875472/212448145-e33acf96-fbb7-4ee0-8f70-89d142582797.png">
   <img src="https://user-images.githubusercontent.com/93875472/212447995-ec0370a5-af67-4a7b-96ec-b7eb2dd4e803.png">
@@ -13,7 +13,7 @@ At the top of this page click `Code` and then `Download ZIP` (Note, that the `Co
 ## Installation
 1. [Download](https://github.com/Eltaurus-Lt/CourseDump2022/archive/refs/heads/main.zip) the ***CourseDump2022-main.zip*** archive and extract ***CourseDump2022-main*** folder from it. At this step, you can move the extension folder to any place in your filesystem.
 2. In *Google Chrome* click the `Extensions` button <picture><source media="(prefers-color-scheme: dark)" srcset="https://github.com/user-attachments/assets/6cca563b-8149-421b-a217-0664c3b872f2"><img src="https://github.com/user-attachments/assets/89838937-f887-4aa7-bff9-9f5293fa04cb" alt="Chrome extension icon"></picture> and then <picture><source media="(prefers-color-scheme: dark)" srcset="https://github.com/user-attachments/assets/bff14d50-3a4c-4b89-be0a-a739beeb111c"><img src="https://github.com/user-attachments/assets/d07bfc2b-e281-4e79-bf9f-5bc5f9c50611" alt="Manage extensions"></picture><br> 
-  <sub>(alternatively go to the Main menu <picture><source media="(prefers-color-scheme: dark)" srcset="https://github.com/user-attachments/assets/f36fcb90-886f-4445-98e9-7fb5d81646e1"><img src="https://github.com/user-attachments/assets/eb8d2e95-82d3-46ae-ad96-35e6d3db159b" alt="`Menu`"></picture> in the top right corner and click `Extensions` → `Manage Extensions`)</sub>
+  <sub>(alternatively, go to the Main menu <picture><source media="(prefers-color-scheme: dark)" srcset="https://github.com/user-attachments/assets/f36fcb90-886f-4445-98e9-7fb5d81646e1"><img src="https://github.com/user-attachments/assets/eb8d2e95-82d3-46ae-ad96-35e6d3db159b" alt="`Menu`"></picture> in the top right corner and click `Extensions` → `Manage Extensions`)</sub>
 3. Enable `Developer mode` (top right corner of the page)<p>
   <picture><source media="(prefers-color-scheme: dark)" srcset="https://github.com/user-attachments/assets/ff2313c8-a790-4dde-acb3-b538fafea92e"><img src="https://github.com/user-attachments/assets/52171083-6c1b-43cd-a5ea-17540b74265b" alt="Developer mode off->on"></picture></p>
 4. Choose `Load unpacked` (top left corner) and select the ***CourseDump2022-main*** folder extracted in step 1
@@ -35,26 +35,26 @@ At the top of this page click `Code` and then `Download ZIP` (Note, that the `Co
 >
 >    <sub>(if you don't see the extension icon on the toolbar, click the `Extensions` button <picture><source media="(prefers-color-scheme: dark)" srcset="https://github.com/user-attachments/assets/6cca563b-8149-421b-a217-0664c3b872f2"><img src="https://github.com/user-attachments/assets/89838937-f887-4aa7-bff9-9f5293fa04cb" alt="Chrome extension icon"></picture> to locate it)</sub>
 >
->5. \* **A download can be interrupted at any point** by pressing the `Stop ongoing download`, which will replace the `Download current course` button whenever there is a download in progress, but keep in mind that restarting a download will begin the whole process from scratch.
+>5. \* **A download can be interrupted at any point** by pressing the `Stop ongoing download`, which will be displayed in place of the `Download current course` button whenever there is a download in progress, but keep in mind that restarting a download will begin the whole process from scratch.
 >---
 
     
  
-When a download starts you should see a progress bar at the top of the course page, indicating the progress of the extension scanning the course's contents with the ratio of the levels fetched to the total number of course levels in the top-right corner:
+When a download starts, you should see a progress bar at the top of the course page, indicating the progress of scanning the course contents with the ratio of the levels fetched to the total number of course levels in the top-right corner:
 <sub></sub>
 <p><picture>
  <source media="(prefers-color-scheme: dark)" srcset="https://github.com/user-attachments/assets/84cbb9e0-e282-4136-86bf-18d097bf613b">
  <img src="https://github.com/user-attachments/assets/9df74fb2-b7d4-45ca-a809-8e969da2d895">
 </picture></p>
 
-The scanning will be followed by downloading all associated files (the ".csv" file containing table data of the course alongside the course metadata and media files if you choose to download them). The progress is indicated by a yellow bar with the ratio on the right showing the number of downloaded files to the total number of files in the queue:
+The scanning will be followed by downloading all associated files (the ".csv" file containing table data of the course, along with the course metadata and media files if you choose to download them). The progress is indicated by a yellow bar with the ratio on the right showing the number of downloaded files to the total number of files in the queue:
 
 <p><picture>
  <source media="(prefers-color-scheme: dark)" srcset="https://github.com/user-attachments/assets/f8d413fa-411e-4df1-a485-f591d84d05a1">
  <img src="https://github.com/user-attachments/assets/3b76a258-e6c8-45d8-914c-6739db27a6fe">
 </picture></p>
 
-After a download is complete, you should see the progress bar turning green:
+After the download is complete, you should see the progress bar turning green:
 
 <p><picture>
  <source media="(prefers-color-scheme: dark)" srcset="https://github.com/user-attachments/assets/bdcc7869-830b-43b7-995f-36403c4e0653">
@@ -70,43 +70,43 @@ The downloaded files should appear in your Chrome downloads directory, in a subf
 
 #### Checking download results
 
-For convenience, the names of the downloaded ".csv" file and the "...\_media" folder have the counts for the total number of the downloaded items (words) and the number of the referenced media files appended at the end in the brackets.
+For convenience, the names of the downloaded ".csv" file and the "...\_media" folder have the counts for the total number of the downloaded items (words) and the number of the referenced media files appended at the end in brackets.
 
-If the number in the spreadsheet filename appears without any additional indicators, e.g. "...\_(123).csv", you can be sure that all items (**not counting the ignored ones**) from a course have been saved successfully. If the total number of the downloaded items does not match the count displayed on the Memrise page, both will be shown to indicate an incomplete download, e.g. "...\_(42 of 58).csv". In this instance, it is worth checking the internet connection and repeating the download.
+If the number in the spreadsheet filename appears without any additional indicators, e.g., "...\_(123).csv", you can be sure that all items (**not counting the ignored ones**) from a course have been saved successfully. If the total number of the downloaded items does not match the count displayed on the Memrise page, both will be shown to indicate an incomplete download, e.g., "...\_(42 of 58).csv". In this instance, it is worth checking the internet connection and repeating the download.
 
-Unfortunately, Memrise displays the expected number on a course page only if the course has been started by the user or the course isn't split into levels. If this is not the case, the figure displayed in the ".csv" filename will be based on the total number of items in the levels the extension managed to scrap and prefixed with a tilde to indicate an estimation, e.g. "...\_(~77).csv". To verify that all items have been downloaded, you’ll need to compare this number to an independent evaluation (the easiest way would still be to enroll in the course by pressing the "Get started now" button, answering a couple of questions to enable the word count, and checking the main course page again to see the value displayed by Memrise).
+Unfortunately, Memrise displays the expected number on a course page only if the course has been started by the user or the course isn't split into levels. If this is not the case, the figure displayed in the ".csv" filename will be based on the total number of items in the levels the extension managed to scrape and prefixed with a tilde to indicate an estimation, e.g., "...\_(~77).csv". To verify that all items have been downloaded, you’ll need to compare this number to an independent evaluation (the easiest way would still be to enroll in the course by pressing the "Get started now" button, answering a couple of questions to enable the word count, and checking the main course page again to see the value displayed by Memrise).
 
 For the media files, it is enough to compare the number at the end of the "...\_media" folder's name with the actual number of the files it contains. 
-If the two do not match, some files are likely to be missing due to connection issues (either on your side or on the side of the Memrise server). In most cases, simply retrying the download can fix the problem. You should not delete files from failed attempts – the extension will keep putting the files into the same media folder, resolving potential naming conflicts, so that even on unreliable networks several partially successful attempts can yield fully recovered course media data.
+If the two do not match, some files are likely to be missing due to connection issues (either on your side or on the side of the Memrise server). In most cases, simply retrying the download can fix the problem. You should not delete files from failed attempts – the extension will keep putting the files into the same media folder, resolving potential naming conflicts, so that even on unreliable networks, several partially successful attempts can yield fully recovered course media data.
 
 <sup>In some rare cases, however, Memrise courses might contain references to files that don't exist. Attempting to download a course with a broken link will result in the progress bar turning red during the download, and the respective error appearing on the "Manage extensions" page.</sup>
 
 ### Batch download
 
-If you have multiple courses to download, instead of going through them one by one it is more convenient to add them to a queue by pressing the respective button in the "Batch download" section of the extension menu on each of the courses' pages:
+If you have multiple courses to download, instead of going through them one by one, it is more convenient to add all courses to a queue by pressing the respective button in the "Batch download" section of the extension menu on each respective course page:
 
 ![image](https://github.com/user-attachments/assets/46a0e23d-6bfb-4450-a993-0c40ceca5223)
 
-and then download all queued courses at once by clicking the "Download all" button (the numeral in brackets indicates the total number of currently queued courses):
+and then download the whole queue at once by clicking the "Download all" button (the numeral in brackets indicates the total number of currently queued courses):
 
 ![image](https://github.com/user-attachments/assets/d6ca790c-58c4-4ef1-95ea-2dfece5ae42c)
 
-<sup>Note, that the download should still be initiated from (any) Memrise page since the extension needs an active Memrise login to access the data.</sup>
+<sup>Note that the download should still be initiated from (any) page of the Memrise community-course domain, since the extension needs an active Memrise login to access the data.</sup>
 
-During the scanning phase of a batch download the progress for each course is displayed on a separate progress bar, marked by a course's name, with the total scanning progress showing on a separate bar at the bottom:
+During the scanning phase of a batch download, the progress for each course is displayed on a separate progress bar, marked by a course name, with the overall scanning progress showing on a separate bar at the bottom:
 
 <p><picture>
  <source media="(prefers-color-scheme: dark)" srcset="https://github.com/user-attachments/assets/ec1e3a4f-56e0-4bf2-a127-f04d0598da70">
  <img src="https://github.com/user-attachments/assets/bdb14159-3c9c-4075-92ec-410bcac2ac62">
 </picture></p>
 
-The file download phase proceeds from there as usual, with files from all the courses being processed together as a single stack.
+The file download phase proceeds from there as usual. Files from all the courses in the batch are processed as one combined stack.
 
 If you have a list of courses in a text file somewhere (from one of the previous versions of the extension, for example), it can be imported with the "Import course list" menu button:
 
 ![image](https://github.com/user-attachments/assets/e2b49059-dd30-4c98-a2a0-0de78c07c32d)
 
-The extension will accept practically any course url format (with the lines, not recognized as valid course urls being treated as text comments)
+The extension will accept practically any course url format (with the lines, not recognized as valid course urls being treated as text comments).
 <details>
 <summary>examples</summary>
   
@@ -127,8 +127,8 @@ The extension will accept practically any course url format (with the lines, not
   ```
 </details>
   
-Just make sure that each course url is placed on a separate line and points to an existing course page. The latter might not be the case if, for example, your link was saved before Memrise moved the community courses (you can try updating community courses urls by autoreplacing "app." domains in your list with "community-courses."). 
-Note, that duplicate courses are removed from the queue, which might result in the number of courses in the queue after import being less than the number of entries in the source text file.
+Just make sure that each course url is placed on a separate line and points to an existing course page. The latter might not be the case if, for example, your link was saved before Memrise moved the community courses (you can try updating community course urls by autoreplacing "app." domains in your list with "community-courses."). 
+Note that duplicate courses are removed from the queue, which might result in the number of courses in the queue after import being less than the number of entries in the source text file.
 The list of currently queued courses can be displayed by pressing the "View queued courses" button (opens in a new tab):
 
 ![image](https://github.com/user-attachments/assets/41777822-5d6b-42ca-9106-fb34ef0285dc)
@@ -269,3 +269,4 @@ Note, that decks can be nested inside each other (via drag-and-drop) to group co
 
 ## Discussion
 If you encounter errors, have further questions regarding the extension, or need any help with using the downloaded materials in Anki, please leave a comment in this thread: [An alternative to Memrise2Anki](https://forums.ankiweb.net/t/an-alternative-to-memrise2anki-support-thread/30084)
+
