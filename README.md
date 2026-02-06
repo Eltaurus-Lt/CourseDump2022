@@ -1,7 +1,7 @@
 # Memrise Community Course Downloader v9.3
 This **Google Chrome** extension downloads word lists from [**Memrise community courses**](https://community-courses.memrise.com/community/courses/) as ".csv" spreadsheets along with all associated <ins>images</ins>, **<ins>audio</ins>**, and <ins>video</ins> files, **alternative answers** and **study progress**. Courses can be [downloaded in batch](https://github.com/Eltaurus-Lt/CourseDump2022?tab=readme-ov-file#batch-download). The format of the saved data is suitable for subsequent [import](https://github.com/Eltaurus-Lt/Anki-Card-Templates?tab=readme-ov-file#the-support-add-on) into [**Anki**](https://apps.ankiweb.net/). 
 
-The extension *does not* download the words you have marked as "ignored" on Memrise (as they are not exposed to fetch requests by the site). You might want to unignore them before downloading or make a separate fresh Memrise account, if keeping the learning progress data is not essential.
+The extension *does not* download the words you have marked as "ignored" on Memrise (as they are not exposed to fetch requests by the site). You might want to unignore them before downloading or make a separate fresh Memrise account if the learning progress data is not required.
 
 ## Downloading the Extension
 At the top of this page, click the green `Code` button and then `Download ZIP`:
@@ -25,7 +25,7 @@ At the top of this page, click the green `Code` button and then `Download ZIP`:
 >---
 >1. Make sure you are logged in to the [Memrise community courses domain](https://community-courses.memrise.com/)
 >2. Navigate to any page belonging to a course you want to download ([example-1](https://community-courses.memrise.com/community/course/1105/speak-esperanto-like-a-nativetm-1/), [example-2](https://community-courses.memrise.com/community/course/548340/7-124/))
->3. 🚩 **If you are downloading a course with a lot of media files** 🚩, make sure you have disabled the option `Ask where to save each file before downloading` in the Chrome settings (chrome://settings/downloads)
+>3. 🚩 **If you are downloading a course with a lot of media files** 🚩, make sure you have disabled the option `Ask where to save each file before downloading` in the Chrome settings ([chrome://settings/downloads](chrome://settings/downloads))
 >4. Press the extension icon and then click the "Download current course" button at the top of the menu
 >   
 >    <p><picture>
@@ -35,12 +35,12 @@ At the top of this page, click the green `Code` button and then `Download ZIP`:
 >
 >    <sub>(if you don't see the extension icon on the toolbar, click the `Extensions` button <picture><source media="(prefers-color-scheme: dark)" srcset="https://github.com/user-attachments/assets/6cca563b-8149-421b-a217-0664c3b872f2"><img src="https://github.com/user-attachments/assets/89838937-f887-4aa7-bff9-9f5293fa04cb" alt="Chrome extension icon"></picture> to locate it)</sub>
 >
->5. \* **A download can be interrupted at any point** by pressing the `Stop ongoing download`, which will be displayed in place of the `Download current course` button whenever there is a download in progress, but keep in mind that restarting a download will begin the whole process from scratch.
+>5. \* **A download can be interrupted at any point** by pressing the `Stop ongoing download`, which will be displayed in place of the `Download current course` button whenever there is a download in progress. Keep in mind that restarting a download will begin the whole process from scratch.
 >---
 
     
  
-When a download starts, you should see a progress bar at the top of the course page, indicating the progress of scanning the course contents with the ratio of the levels fetched to the total number of course levels in the top-right corner:
+When a download starts, you should see a progress bar at the top of the course page, indicating the progress of scanning the course contents with the ratio of the scanned levels to the total number of course levels in the top-right corner:
 <sub></sub>
 <p><picture>
  <source media="(prefers-color-scheme: dark)" srcset="https://github.com/user-attachments/assets/84cbb9e0-e282-4136-86bf-18d097bf613b">
@@ -74,7 +74,7 @@ For convenience, the names of the downloaded ".csv" file and the "...\_media" fo
 
 If the number in the spreadsheet filename appears without any additional indicators, e.g., "...\_(123).csv", you can be sure that all items (**not counting the ignored ones**) from a course have been saved successfully. If the total number of the downloaded items does not match the count displayed on the Memrise page, both will be shown to indicate an incomplete download, e.g., "...\_(42 of 58).csv". In this instance, it is worth checking the internet connection and repeating the download.
 
-Unfortunately, Memrise displays the expected number on a course page only if the course has been started by the user or the course isn't split into levels. If this is not the case, the figure displayed in the ".csv" filename will be based on the total number of items in the levels the extension managed to scrape and prefixed with a tilde to indicate an estimation, e.g., "...\_(~77).csv". To verify that all items have been downloaded, you’ll need to compare this number to an independent evaluation (the easiest way would still be to enroll in the course by pressing the "Get started now" button, answering a couple of questions to enable the word count, and checking the main course page again to see the value displayed by Memrise).
+Unfortunately, Memrise displays the expected number on a course page only if the course has been started by the user or the course isn't split into levels. If this is not the case, the figure displayed in the ".csv" filename will be based on the total number of items in the levels the extension managed to scrape and prefixed with a tilde to indicate an estimation, e.g., "...\_(~77).csv". To verify that all items have been downloaded, you’ll need to compare this number to an independent evaluation (the easiest way would still be to enroll in the course by pressing the "Get started now" button, answering a couple of questions to activate the word count, and checking the main course page again to see the value displayed by Memrise).
 
 For the media files, it is enough to compare the number at the end of the "...\_media" folder's name with the actual number of the files it contains. 
 If the two do not match, some files are likely to be missing due to connection issues (either on your side or on the side of the Memrise server). In most cases, simply retrying the download can fix the problem. You should not delete files from failed attempts – the extension will keep putting the files into the same media folder, resolving potential naming conflicts, so that even on unreliable networks, several partially successful attempts can yield fully recovered course media data.
@@ -106,7 +106,7 @@ If you have a list of courses in a text file somewhere (from one of the previous
 
 ![image](https://github.com/user-attachments/assets/e2b49059-dd30-4c98-a2a0-0de78c07c32d)
 
-The extension will accept practically any course url format (with the lines, not recognized as valid course urls being treated as text comments).
+The extension will accept practically any url format (with the lines, not recognized as valid course urls being treated as text comments).
 <details>
 <summary>examples</summary>
   
@@ -127,7 +127,7 @@ The extension will accept practically any course url format (with the lines, not
   ```
 </details>
   
-Just make sure that each course url is placed on a separate line and points to an existing course page. The latter might not be the case if, for example, your link was saved before Memrise moved the community courses (you can try updating community course urls by autoreplacing "app." domains in your list with "community-courses."). 
+The only requirement is that each course url must be placed on a separate line and point to an existing course page. The latter might not be the case if, for example, your link was saved before Memrise moved the community courses (you can try updating community course urls by autoreplacing "app." domains in your list with "community-courses."). 
 Note that duplicate courses are removed from the queue, which might result in the number of courses in the queue after import being less than the number of entries in the source text file.
 The list of currently queued courses can be displayed by pressing the "View queued courses" button (opens in a new tab):
 
@@ -251,22 +251,26 @@ Note, that decks can be nested inside each other (via drag-and-drop) to group co
 
 ### Basic
 
-![image](https://github.com/user-attachments/assets/cb0f8d77-7101-4b4e-819d-f964d5516c81)
+![Basic settings](https://github.com/user-attachments/assets/7ac3c138-f3e8-416b-9359-45a6812e17aa)
 
-1. **Download media**: Enables downloading images, audio, and video files associated with a Memrise course
-2. **Extra fields**: Enables downloading all fields found in a course. Typical examples include "part of speech", "sample sentence", "transcription", "literal translation", etc. The labels for each field can be found in the downloaded ".csv" file. Turning this option off will limit fields to the basic set of the "Learnable", "Definition", "Audio", "Video", and "Tags" (the latter three can be also excluded by the respective settings)
-3. **Level tags**: Appends an additional column that saves Memrise course level structure in the format `course_name::level##`, which is automatically converted to [hierarchical tags](https://docs.ankiweb.net/editing.html?highlight=tags#using-tags) in Anki during import
-4. **Anki import prompt**: Enables a popup leading to the current readme page after each download. If you are reading this, you already successfully found your way here and might want to turn it off
+1. **Download media**: Enables downloading images, audio, and video files encountered in a Memrise course
+2. **Learning progress**: Enables downloading your personal progress from studying on Memrise in a format compatible with the [associated Anki add-on](https://github.com/Eltaurus-Lt/Anki-Card-Templates?tab=readme-ov-file#the-support-add-on)
+3. **Extra fields**: Enables downloading all fields found in a course. Typical examples include "part of speech", "sample sentence", "transcription", "literal translation", etc. The labels for each field can be found in the downloaded ".csv" file. Turning this option off will limit fields to the basic set of the "Learnable", "Definition", "Audio", "Video", and "Tags" (the latter three can also be excluded by the respective settings)
+4. **Alternative answers**: Appends alternative answers specified in a course to each relevant cell. This includes the hidden alts. The format corresponds to the one supported by the [associated Anki card template and its add-on](https://github.com/Eltaurus-Lt/Anki-Card-Templates?tab=readme-ov-file#formatting-alternative-answers)
+5. **Level tags**: Appends an additional column that saves Memrise course level structure in the format `course_name::level##`, which is automatically converted to [hierarchical tags](https://docs.ankiweb.net/editing.html?highlight=tags#using-tags) during Anki import
+6. **Anki import prompt**: Enables a pop-up leading to the current readme page after each download. If you are reading this, you already successfully found the way here and might want to turn it off
 
 ### Advanced
 
-![image](https://github.com/user-attachments/assets/f90301a8-538a-44b6-9ffb-734b4e5f5bc8)
+![Advanced settings](https://github.com/user-attachments/assets/e58304fa-3133-4f2a-9700-5e7f6da78fd2)
 
-5. **Learnable IDs**: Appends an additional column to the course spreadsheet containing a unique ID for each item. Can be used to manage duplicates inside Anki (if imported into the sorting field), or to cross-reference against other Memrise data downloaded separately, such as [archived mems](https://github.com/Eltaurus-Lt/MemDump)
-6. **Video files**: Allows excluding video files from a download: when turned off overwrites the `Download media` setting for video files while leaving images and audio unaffected (has no effect if the `Download media` toggle is turned off)
-7. **Skip media download**: Allows skipping media files during the file download phase. In contrast to the `Download media` setting, does not remove the respective columns from the spreadsheet when turned off. It can be helpful if a course spreadsheet needs to be recompiled with different settings without downloading the whole media folder again
-8. **Course metadata**: Enables downloading three metadata files in addition to the basic spreadsheet and media: an `info.md` file containing the text description of a course, the course's thumbnail image, and the course author's avatar. When turned off, the ".csv" spreadsheet and respective media folder (when applicable) will be placed directly into the Chrome download folder, instead of being bundled together with meta files in a separate course folder
+7. **Course metadata**: Enables downloading three metadata files in addition to the basic spreadsheet and media: an `info.md` file containing the text description of a course, the course's thumbnail image, and the course author's avatar. When turned off, the ".csv" spreadsheet and respective media folder (when applicable) will be placed directly into the Chrome download folder, instead of being bundled together with meta files in a separate course folder
+8. **Learnable IDs**: Appends an additional column to the course spreadsheet containing a unique ID for each item. Can be used to manage duplicates inside Anki (if imported into a Sort Field), or to cross-reference against other Memrise data downloaded separately, such as [archived mems](https://github.com/Eltaurus-Lt/MemDump)
+9. **Learnable metadata**: Appends additional technical data to make the collection more manageable when imported into Anki using the [support add-on](https://github.com/Eltaurus-Lt/Anki-Card-Templates?tab=readme-ov-file#the-support-add-on). This includes testing directions for each level and pre-made choices for multiple-choice questions
+10. **Video files**: Allows excluding video files from a download: when turned off, overrides the `Download media` setting for video files while leaving images and audio unaffected (has no effect if the `Download media` toggle is turned off)
+11. **Skip media download**: Allows skipping media files during the file download phase. In contrast to the `Download media` setting, does not remove the respective columns from the spreadsheet when turned off. It can be helpful if a course spreadsheet needs to be recompiled with different settings without downloading the whole media folder again
 
 ## Discussion
 If you encounter errors, have further questions regarding the extension, or need any help with using the downloaded materials in Anki, please leave a comment in this thread: [An alternative to Memrise2Anki](https://forums.ankiweb.net/t/an-alternative-to-memrise2anki-support-thread/30084)
+
 
