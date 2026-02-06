@@ -253,8 +253,8 @@ Note, that decks can be nested inside each other (via drag-and-drop) to group co
 
 ![Basic settings](https://github.com/user-attachments/assets/6a0db9cc-c16d-4e82-9e54-33cebfd25428)
 
-1. **Download media**: Enables downloading images, audio, and video files encountered in a Memrise course
-2. **Learning progress**: Enables downloading your personal progress of studying on Memrise in a format compatible with the [associated Anki add-on](https://github.com/Eltaurus-Lt/Anki-Card-Templates?tab=readme-ov-file#the-support-add-on) importing function
+1. **Download media**: Enables downloading images, audio, and video files encountered in a Memrise course and inserts the respective references into the spreadsheet
+2. **Learning progress**: Enables saving your personal progress of studying on Memrise in a format compatible with the [associated Anki add-on](https://github.com/Eltaurus-Lt/Anki-Card-Templates?tab=readme-ov-file#the-support-add-on) importing function
 3. **Extra fields**: Enables downloading all fields found in a course. Typical examples include "part of speech", "sample sentence", "transcription", "literal translation", etc. The labels for each field can be found in the downloaded ".csv" file. Turning this option off will limit fields to the basic set consisting of "Learnable", "Definition", "Audio", "Video", and "Tags" (the latter three can also be excluded by the respective settings)
 4. **Alternative answers**: Appends alternative answers specified in a course to each relevant cell. This includes the hidden alts. The format matches the one supported by the [associated Anki card template and its add-on](https://github.com/Eltaurus-Lt/Anki-Card-Templates?tab=readme-ov-file#formatting-alternative-answers)
 5. **Level tags**: Appends an additional column that saves Memrise course level structure in the format `course_name::level##`, which is automatically converted to [hierarchical tags](https://docs.ankiweb.net/editing.html#using-tags) during Anki import
@@ -265,13 +265,14 @@ Note, that decks can be nested inside each other (via drag-and-drop) to group co
 ![Advanced settings](https://github.com/user-attachments/assets/4ce7bee7-d903-4271-8423-c232ac745f4e)
 
 7. **Course metadata**: Enables downloading three metadata files in addition to the basic spreadsheet and media: an `info.md` file containing the text description of a course, the course's thumbnail image, and the course author's avatar. When turned off, the ".csv" spreadsheet and respective media folder (when applicable) will be placed directly into the Chrome downloads directory, instead of being bundled together with meta files in a separate course folder
-8. **Learnable IDs**: Appends an additional column to the course spreadsheet containing a unique ID for each item. Can be used to detect duplicates inside Anki (if imported into a Sort Field), or to cross-reference against other Memrise data downloaded separately, such as [archived mems](https://github.com/Eltaurus-Lt/MemDump)
+8. **Learnable IDs**: Appends an additional column to the course spreadsheet containing a unique ID for each item. Can be used to detect duplicates inside Anki (if imported into a [Sort Field](https://docs.ankiweb.net/editing.html#customizing-fields)), or to cross-reference against other Memrise data downloaded separately, such as [archived mems](https://github.com/Eltaurus-Lt/MemDump)
 9. **Learnable metadata**: Appends additional technical data to make the collection more manageable when imported into Anki using the [support add-on](https://github.com/Eltaurus-Lt/Anki-Card-Templates?tab=readme-ov-file#the-support-add-on). This includes testing directions for each level and pre-made choices for multiple-choice questions
 10. **Video files**: Allows excluding video files from a download: when turned off, overrides the `Download media` setting for video files while leaving images and audio unaffected (has no effect if the `Download media` toggle is turned off)
-11. **Skip media download**: Allows skipping media files during the file download phase. In contrast to the `Download media` setting, does not remove the respective columns from the spreadsheet when turned off. It can be helpful if a course spreadsheet needs to be recompiled with different settings without downloading the whole media folder each time
+11. **Skip media download**: Allows skipping media files during the file download phase. In contrast to the `Download media` setting, does not remove the respective columns from the spreadsheet when turned off. It can be helpful if a course spreadsheet needs to be recompiled with different settings, without downloading the whole media folder each time
 
 ## Discussion
 If you encounter errors, have further questions regarding the extension, or need any help with using the downloaded materials in Anki, please leave a comment in this thread: [An alternative to Memrise2Anki](https://forums.ankiweb.net/t/an-alternative-to-memrise2anki-support-thread/30084)
+
 
 
 
