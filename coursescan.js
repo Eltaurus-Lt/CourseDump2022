@@ -133,6 +133,10 @@ async function scanCourse(cidd, threadN) {
 
 		return temp_filename;
 	}
+
+	function isURL(str) {
+		return str.startsWith("https://static.memrise.com");
+	}
   
   //init table data
   let err_count = 0;
@@ -209,9 +213,10 @@ async function scanCourse(cidd, threadN) {
 			// Adding all entries from the level to the table and their media urls to queue
 			response_json.learnables.map(learnable => {
 
-				let row = [];
+				const row = [];
+				const meta = {};
 
-				//learning elements
+				// learnables
 				let learnable_el = `""`;
 				if (learnable.learning_element) {
 					has_learnable = true;
@@ -241,9 +246,10 @@ async function scanCourse(cidd, threadN) {
 					temp_image_learns.forEach(course_media_urls.add, course_media_urls);
 					learnable_el = `"` + temp_image_learns.map(url => `<img src='${UniqueDecodedFilename(url)}'>`).join(``) + `"`;
 				}
+				meta["learnable"] = learnable?.screens?.["1"]?.item?.label;
 				row.push(learnable_el);
 
-				//definitions
+				// definitions
 				let definition = `""`;
 				if (learnable.definition_element) {
 					has_definitions = true;
@@ -268,10 +274,20 @@ async function scanCourse(cidd, threadN) {
 					temp_image_defs.forEach(course_media_urls.add, course_media_urls);
 					definition = `"` + temp_image_defs.map(url => `<img src='${UniqueDecodedFilename(url)}'>`).join(``) + `"`;
 				}
+				meta["definition"] = learnable?.screens?.["1"]?.definition?.label;
 				row.push(definition);
 
+				// choices
+				let choices = learnable?.screens?.["2"]?.choices;
+				if (choices) {
+					meta["choices"] = choices.map(choice => isURL(choice) ? UniqueDecodedFilename(choice) : choice);
+				}
+				choices = learnable?.screens?.["3"]?.choices;
+				if (choices) {
+					meta["reverse choices"] = choices.map(choice => isURL(choice) ? UniqueDecodedFilename(choice) : choice);
+				}
 
-				//audio
+				// audio
 				let temp_audio_urls = [];
 				if (settings["download_media"] && learnable.screens["1"].audio && learnable.screens["1"].audio.value.length > 0) {
 					has_audio = true;
@@ -399,6 +415,11 @@ async function scanCourse(cidd, threadN) {
 					row.push(`"${JSON.stringify(prog_data || "new").replaceAll('"', '""')}"`);
 				}
 
+				// learnable meta
+				if (settings["learnable_meta"]) {
+					row.push(`"${JSON.stringify(meta).replaceAll('"', '""')}"`);
+				}
+
 				table.push(row);
 
 			});
@@ -452,6 +473,7 @@ async function scanCourse(cidd, threadN) {
   if (settings["level_tags"]) {course_fields.push("Level tags")};
   if (settings["learnable_ids"]) {course_fields.push("Learnable ID")};
   if (settings["learning_progress"]) {course_fields.push("Progress")};
+  if (settings["learnable_meta"]) {course_fields.push("Learnable meta")};
   meta['course fields'] = course_fields.join(" | ");
 
   // convert table to plain text (csv)
@@ -467,6 +489,7 @@ async function scanCourse(cidd, threadN) {
 		if (settings["level_tags"]) {line.push(row[4 + 3 * settings["max_extra_fields"]])};
 		if (settings["learnable_ids"]) {line.push(row[4 + 3 * settings["max_extra_fields"] + 1])};
 		if (settings["learning_progress"]) {line.push(row[4 + 3 * settings["max_extra_fields"] + 1 + settings["learnable_ids"]])};
+		if (settings["learnable_meta"]) {line.push(row[4 + 3 * settings["max_extra_fields"] + 1 + settings["learnable_ids"] + settings["learning_progress"]])};
 		return line.join(`,`);
 	}).join("\n") + "\n";
 	//add Anki headers
@@ -474,6 +497,7 @@ async function scanCourse(cidd, threadN) {
 		let tags_col = course_fields.length;
 		if (settings["learnable_ids"]) {tags_col--};
 		if (settings["learning_progress"]) {tags_col--};
+		if (settings["learnable_meta"]) {tags_col--};
 		csv_data = "#separator:comma\n" +
 				 "#html:true\n" +
 				 (settings["level_tags"] ? (`#tags column:${tags_col}\n`) : ``) +
