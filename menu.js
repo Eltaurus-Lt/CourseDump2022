@@ -4,7 +4,9 @@ const default_settings = {
   "level_tags": true,
   "anki_import_prompt": true,
 
-  "alternative_answers": false,
+  "learning_progress": true,
+  "alternative_answers": true,
+  "learnable_meta": true,
   "learnable_ids": false,
   "skip_media_download": false,
   "course_metadata": true,
@@ -46,7 +48,9 @@ class menuToggles {
     this.LevelTags = document.getElementById("setting-levelTags");
     this.AnkiPrompt = document.getElementById("setting-ankiPrompt");
 
+    this.LearningProgress = document.getElementById("setting-learningProgress");
     this.AlternativeAnswers = document.getElementById("setting-alternativeAnswers");
+    this.LearnableMeta = document.getElementById("setting-learnableMeta");
     this.LearnableIds = document.getElementById("setting-learnableIds");
     this.SkipMedia = document.getElementById("setting-skipMedia");
     this.CourseMeta = document.getElementById("setting-courseMeta");
@@ -63,7 +67,9 @@ class menuToggles {
       "level_tags": this.LevelTags.checked,
       "anki_import_prompt": this.AnkiPrompt.checked,
     
+      "learning_progress": this.LearningProgress.checked,
       "alternative_answers": this.AlternativeAnswers.checked,
+      "learnable_meta": this.LearnableMeta.checked,
       "learnable_ids": this.LearnableIds.checked,
       "skip_media_download": this.SkipMedia.checked,
       "course_metadata": this.CourseMeta.checked,
@@ -88,7 +94,9 @@ class menuToggles {
     this.LevelTags.checked = settings["level_tags"];
     this.AnkiPrompt.checked = settings["anki_import_prompt"];
   
+    this.LearningProgress.checked = settings["learning_progress"];
     this.AlternativeAnswers.checked = settings["alternative_answers"];
+    this.LearnableMeta.checked = settings["learnable_meta"];
     this.LearnableIds.checked = settings["learnable_ids"];
     this.SkipMedia.checked = settings["skip_media_download"];
     this.CourseMeta.checked = settings["course_metadata"];
