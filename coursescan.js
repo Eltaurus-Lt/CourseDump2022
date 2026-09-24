@@ -117,7 +117,7 @@ async function scanCourse(cidd, threadN) {
 		// let pad = decodeURIComponent(url.split("/").slice(-2)[0]);
 		// if (pad === 'medium') {pad = decodeURIComponent(url.split("/").slice(-3)[0])};
 		// temp_filename = meta['url name'] + "_" + pad + "_" + temp_filename;
-		temp_filename = meta['url name'] + "_" + cidd['cid'] + cidd['domain'][0] + "_" + temp_filename;
+		temp_filename = meta['url name'].slice(0,30) + "_" + cidd['cid'] + cidd['domain'][0] + "_" + temp_filename;
 		temp_filename = temp_filename.replace('[','(').replace(']',')'); //square brackets are not allowed inside Anki because of [sound: ...] etc.
 		let name_parts = temp_filename.split('.');
 		const ext = name_parts.pop().toLowerCase(); //Anki's "Check Media" is case-sensitive, since Chrome converts all extensions to lower case the csv entries have to match that

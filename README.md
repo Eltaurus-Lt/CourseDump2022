@@ -1,4 +1,4 @@
-# Memrise Community Course Downloader v9.3
+# Memrise Community Course Downloader v9.4
 This **Google Chrome** extension downloads word lists from [**Memrise community courses**](https://community-courses.memrise.com/community/courses/) as ".csv" spreadsheets along with all associated <ins>images</ins>, **<ins>audio</ins>**, and <ins>video</ins> files, **alternative answers** and **study progress**. Courses can be [downloaded in batch](https://github.com/Eltaurus-Lt/CourseDump2022?tab=readme-ov-file#batch-download). The format of the saved data is suitable for subsequent [import](https://github.com/Eltaurus-Lt/Anki-Card-Templates?tab=readme-ov-file#the-support-add-on) into [**Anki**](https://apps.ankiweb.net/). 
 
 The extension *does not* download the words you have marked as "ignored" on Memrise (as they are not exposed to fetch requests by the site). You might want to unignore them before downloading or make a separate fresh Memrise account if the learning progress data is not required.
